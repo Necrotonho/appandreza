@@ -2,5 +2,7 @@
   "name": "appandreza",
   "app_id": "378a7bfc",
   "type": "ionic-angular",
-  "integrations": {}
+  "integrations": {
+    "cordova": {}
+  }
 }
