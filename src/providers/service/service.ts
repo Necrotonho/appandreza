@@ -12,6 +12,7 @@ import { Observable } from 'rxjs/Observable';
 @Injectable()
 export class ServiceProvider {
 
+  
     private localIp = 'ws://192.168.1.32:8000';
     private externalIP = 'ws://179.184.92.74:3396';
     private tentativasIP = [];
