@@ -4,6 +4,8 @@ import { HttpModule } from '@angular/http';
 import { IonicApp, IonicModule, IonicErrorHandler } from 'ionic-angular';
 import { MyApp } from './app.component';
 
+import { DateSelectorComponent } from './../components/date-selector/date-selector';
+import { NavbarComponent } from '../components/navbar/navbar'
 import { AgendaPage } from '../pages/agenda/agenda';
 import { ContactPage } from '../pages/contact/contact';
 import { HomePage } from '../pages/home/home';
@@ -15,6 +17,8 @@ import { ServiceProvider } from '../providers/service/service';
 import { RequestProvider } from '../providers/request/request';
 import { TokenProvider } from '../providers/token/token';
 import { HeaderProvider } from '../providers/header/header';
+import { DateProvider } from '../providers/date/date';
+import { CoreProvider } from '../providers/core/core';
 
 @NgModule({
   declarations: [
@@ -22,12 +26,21 @@ import { HeaderProvider } from '../providers/header/header';
     AgendaPage,
     ContactPage,
     HomePage,
-    TabsPage
+    TabsPage,
+    NavbarComponent,
+    DateSelectorComponent
   ],
   imports: [
     BrowserModule,
     HttpModule,
-    IonicModule.forRoot(MyApp)
+    IonicModule.forRoot(MyApp, {
+
+      monthNames: ['janeiro', 'fevereiro', 'março', 'abril', 'maio', 'junho', 'julho', 'agosto', 'setembro', 'outubro', 'novembro', 'dezembro'],
+      monthShortNames: ['jan', 'fev', 'mar', 'abr', 'mai', 'jun', 'jul', 'ago', 'set', 'out', 'nov', 'dez'],
+      dayNames: ['domingo', 'segunda-feira', 'terça-feira', 'quarta-feira', 'quinta-feira', 'sexta-feira', 'sábado'],
+      dayShortNames: ['dom', 'seg', 'ter', 'qua', 'qui', 'sex', 'sáb'],
+
+    })
   ],
   bootstrap: [IonicApp],
   entryComponents: [
@@ -44,7 +57,9 @@ import { HeaderProvider } from '../providers/header/header';
     ServiceProvider,
     RequestProvider,
     TokenProvider,
-    HeaderProvider
+    HeaderProvider,
+    DateProvider,
+    CoreProvider
   ]
 })
 export class AppModule {}

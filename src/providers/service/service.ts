@@ -28,7 +28,7 @@ export class ServiceProvider {
       this.ws.onmessage = observer.next.bind(observer);
       this.ws.onerror = observer.error.bind(observer);
       this.ws.onclose = observer.complete.bind(observer);
-      return this.ws.close.bind(this.ws);
+      this.ws.close.bind(this.ws);
     });
   private ws;
 
@@ -116,16 +116,16 @@ export class ServiceProvider {
       // this.ws.onopen = (res) => '';
       // this.ws.onmessage = (res) => this.obsServer.;
       // this.ws.onclose = (res) => console.log('onClose');
-      // this.ws.onerror = (res) => {
+      this.ws.onerror = (res) => {
         
-      //   if( this.tentativasConection && !this.isConnected() ){
+        if( this.tentativasConection && !this.isConnected() ){
 
-      //     reject();
-      //   }else{
+          reject();
+        }else{
 
-      //     rejectConection();
-      //   }
-      // };
+          rejectConection();
+        }
+      };
     })
   } 
 
@@ -150,17 +150,50 @@ export class ServiceProvider {
     return new Promise( (resolve, reject) => {
 
       console.log('Chamou send');
-      if( this.isConnected() ){
 
-        this.request(data)
-          .then( res => resolve( res ) )
-          .catch( res => reject( res ) );
-      }else{
+      setTimeout( ()=>{
 
-        this.connect()
-          .then( res => this.ws.send(data) )
-          .catch( res => {} );
-      }
+      
+        resolve( [
+          { 
+            Date: '2018-01-01',
+            time: '10h00 às 11h00',
+            available: true,
+            strAvailable: "Horário disponível",
+            mySchedule: false,
+            strMySchedule: "Meu Agendamento"
+          },
+          { 
+            Date: '2018-01-01',
+            time: '10h00 às 11h00',
+            available: false,
+            strAvailable: "Horário indisponível",
+            mySchedule: false,
+            strMySchedule: "Meu Agendamento"
+          },
+          { 
+            Date: '2018-01-01',
+            time: '10h00 às 11h00',
+            available: true,
+            strAvailable: "Horário disponível",
+            mySchedule: false,
+            strMySchedule: "Meu Agendamento"
+          },
+         
+        ])
+      }, 3000);
+      
+      // if( this.isConnected() ){
+
+      //   this.request(data)
+      //     .then( res => resolve( res ) )
+      //     .catch( res => reject( res ) );
+      // }else{
+
+      //   this.connect()
+      //     .then( res => this.ws.send(data) )
+      //     .catch( res => {} );
+      // }
     });
   }
   

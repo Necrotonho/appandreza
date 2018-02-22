@@ -1,0 +1,22 @@
+<div>
+    <div style="float:left;   font-size: 50px; margin: 0px 15px;">
+
+      <ion-icon name="calendar"></ion-icon>
+    </div>
+    <div style="float:left; margin-top: -5px;">
+      <p>
+        <span style="color: orange; font-size: 22px">
+              <ion-datetime style="margin: 0px 0px -35px -18px;" 
+                            displayFormat="DD, MMMM de YYYY" 
+                            [(ngModel)]="dateStr" 
+                            cancelText="Cancelar"
+                            doneText="Ok"
+                            (ionChange)="this.upDateDate()"
+              ></ion-datetime>
+        </span><br/>
+        <span>
+          Agende uma consulta
+        </span>
+      </p>
+    </div>
+  </div>
