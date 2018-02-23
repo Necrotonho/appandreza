@@ -6,23 +6,49 @@
   <date-selector></date-selector> 
 
   <ion-list >
-    <ion-item *ngFor="let d of schedule; let i=index" text-wrap (click)="toggleGroup(i)" [ngClass]="{active: isGroupShown(i)}">
+    <div *ngFor="let d of schedule; let i=index" text-wrap>
+    <ion-item (click)="toggleGroup(i)" [ngClass]="{active: isGroupShown(i)}">
 
+      <!-- <div>
+          <span col-4>{{d.time}}</span>
+          
+          <span col-4>
+            <ion-note item-end style="margin-right: 30px;">{{ d.strAvailable }}</ion-note>
+            <ion-icon *ngIf="d.available || d.mySchedule" color="success" [name]="isGroupShown(i) ? 'arrow-down' : 'arrow-forward'" style="float: right"></ion-icon>
+          </span>
+
+      </div> -->
+      <ion-grid>
+        <ion-row>
+          <ion-col col-5 >
+            {{d.time}}
+          </ion-col>
+          <ion-col col-7 >
+            <ion-note 
+              item-end 
+              style="margin-right: 30px; font-size: 16px"
+              [style.color]="d.available ? 'seagreen' : d.mySchedule ? 'black':'gray'"
+              [style.font-weight]="d.mySchedule ? 'bold' : 'normal'"
+              >
+              {{ d.strAvailable }}
+              <ion-icon *ngIf="d.available || d.mySchedule" color="success" [name]="isGroupShown(i) ? 'arrow-down' : 'arrow-forward'" style="float: right"></ion-icon>
+            </ion-note>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+
+    </ion-item>
+    <ion-item *ngIf="( isGroupShown(i) && d.mySchedule ) || ( isGroupShown(i) && d.available )" class="transicao">
       <div>
-        <h2>{{d.time}}       
-          <ion-note *ngIf="d.available" item-end>Horário Disponível</ion-note>
-          <ion-icon *ngIf="d.available || d.mySchedule" color="success" [name]="isGroupShown(i) ? 'arrow-down' : 'arrow-forward'" style="float: right"></ion-icon>
-          <ion-icon *ngIf="d.mySchedule" style="float: right; margin-right: 10px" name="alarm"></ion-icon>
-        </h2>
-      </div>
         
-
-      <div *ngIf="( isGroupShown(i) && d.mySchedule ) || ( isGroupShown(i) && d.available )" class="transicao">
-
-        <div style="background-color: black">oi</div>
-      
+        <div>
+          
+          <button ion-button large block [color]="d.available ? 'secondary' : 'danger'">{{ d.available ? 'agendar horário ' : 'cancelar agendamento' }}</button>
+        </div>
+        
       </div>
     </ion-item>
+  </div>
   </ion-list>
 
 </ion-content>

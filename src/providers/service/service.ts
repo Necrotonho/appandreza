@@ -160,28 +160,25 @@ export class ServiceProvider {
             time: '10h00 às 11h00',
             available: true,
             strAvailable: "Horário disponível",
-            mySchedule: false,
-            strMySchedule: "Meu Agendamento"
+            mySchedule: false
           },
           { 
             Date: '2018-01-01',
             time: '10h00 às 11h00',
             available: false,
             strAvailable: "Horário indisponível",
-            mySchedule: false,
-            strMySchedule: "Meu Agendamento"
+            mySchedule: false
           },
           { 
             Date: '2018-01-01',
             time: '10h00 às 11h00',
-            available: true,
-            strAvailable: "Horário disponível",
-            mySchedule: false,
-            strMySchedule: "Meu Agendamento"
+            available: false,
+            strAvailable: "Meu horário",
+            mySchedule: true
           },
          
         ])
-      }, 3000);
+      }, 1000);
       
       // if( this.isConnected() ){
 

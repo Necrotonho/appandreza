@@ -74,8 +74,8 @@ export class AgendaPage {
   }
 
   isGroupShown(group) {
+
       return this.shownGroup === group;
   }
-
 
 }
