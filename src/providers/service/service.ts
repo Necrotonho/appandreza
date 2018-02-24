@@ -5,6 +5,7 @@ import 'rxjs/add/operator/map';
 import { Observable } from 'rxjs/Observable';
 import { Observer } from 'rxjs/Observer';
 import { Subject } from 'rxjs/Subject';
+import { LoadingController, AlertController } from 'ionic-angular';
 //import { Message } from 'rxjs/Message';
 /*
   Generated class for the ServicetesteProvider provider.
@@ -17,7 +18,7 @@ export class ServiceProvider {
 
 
   private localIp = 'ws://192.168.1.32:8000';
-  private externalIP = 'ws://179.184.92.74:3396';
+  private externalIP    = 'ws://179.184.92.74:3396';
   private tentativasIP = [];
   private tentativasConection = 0;
   private timeOutRequest = 15000;
@@ -32,15 +33,13 @@ export class ServiceProvider {
     });
   private ws;
 
-  constructor(public http: Http ) {
-
-    setTimeout( ()=> {
+  constructor(
+    public http: Http, 
+    private loadingCtrl: LoadingController,
+    private alertCtrl: AlertController
+  ) {
       
-      this.connect()
-        .then( res => console.log('conectado') )
-        .catch( res => console.log('Nenhuma conexão possível com o servidor!'));
-    }, 3000);
-  
+    this.toConnect();
   }
 
   private getRequestKey(){
@@ -58,26 +57,34 @@ export class ServiceProvider {
     return new Promise( (resolve, reject) => {
 
       let requestData = {
+        token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOiJzIn0.f3AdouopZEdhmkuFR77T023m0z1qYcem1OYCmxRzVLI',
+        request: {
             id: this.getRequestKey(),
             version: this.getVersion(),
             method: Dados.method,
-            data: Dados.data
-          };
+            data: Dados.date
+          }
+        };
 
-      this.ws.send( requestData );
+      this.ws.send( JSON.stringify(requestData) );
 
       let observer = {
 
         next: (value) => {
           
-          if( value.request.id == requestData.id ){
+          value = JSON.parse(value.data);
+
+          if( value.request.id == requestData.request.id ){
 
             obr.complete(); 
             resolve(value);
+          }else{
+
+            console.log('resposta de requisição não tem o mesmo ID');
           }
         },
         error: ( value ) => console.log('Erro no error do observer[Request]'),
-        complete: () => console.log('resquest ' + requestData.id + ' completo')
+        complete: () => console.log('resquest ' + requestData.request.id + ' completo')
       };
 
       let obr = this.obsServer.subscribe(observer);
@@ -86,11 +93,29 @@ export class ServiceProvider {
     });
   }
 
-  resquestConnected(){
-    
-      //resolve()
+  toConnect(){
 
+    let loading = this.loadingCtrl.create({
+
+      content: 'Conectando'
+    })
+    loading.present();
+    this.connect()
+      .then( res => {
+      
+        loading.dismiss();
+        console.log('conectado no endereço: ' + res ) 
+      })
+      .catch( res => {
+        
+        loading.dismiss();
+        this.presentConfirmErrorToConnect();
+        console.log( res );
+        console.log('Nenhuma conexão possível com o servidor!');
+
+      });
   }
+
   connect(){
     
     this.tentativasConection = 0;
@@ -101,7 +126,10 @@ export class ServiceProvider {
         if( this.tentativasIP.length ){
 
           this.connect()
-            .then( res => resolve() )
+            .then( res => {
+              
+              resolve( this.ws.url ) 
+            })
             .catch( res => {
               
               reject()
@@ -113,16 +141,14 @@ export class ServiceProvider {
       }
 
       this.ws = new WebSocket( this.getIpConection() );
-      // this.ws.onopen = (res) => '';
-      // this.ws.onmessage = (res) => this.obsServer.;
-      // this.ws.onclose = (res) => console.log('onClose');
+      this.ws.onopen = () => resolve( this.ws.url );
       this.ws.onerror = (res) => {
         
         if( this.tentativasConection && !this.isConnected() ){
-
+          
           reject();
         }else{
-
+          
           rejectConection();
         }
       };
@@ -149,51 +175,45 @@ export class ServiceProvider {
 
     return new Promise( (resolve, reject) => {
 
-      console.log('Chamou send');
+      if( this.isConnected() ){
 
-      setTimeout( ()=>{
+        this.request( data )
+            .then( res => resolve( res ) )
+            .catch( res => reject( res ) );
+      }else if( this.isConnecting() ){
 
-      
-        resolve( [
-          { 
-            Date: '2018-01-01',
-            time: '10h00 às 11h00',
-            available: true,
-            strAvailable: "Horário disponível",
-            mySchedule: false
-          },
-          { 
-            Date: '2018-01-01',
-            time: '10h00 às 11h00',
-            available: false,
-            strAvailable: "Horário indisponível",
-            mySchedule: false
-          },
-          { 
-            Date: '2018-01-01',
-            time: '10h00 às 11h00',
-            available: false,
-            strAvailable: "Meu horário",
-            mySchedule: true
-          },
-         
-        ])
-      }, 1000);
-      
-      // if( this.isConnected() ){
+        console.log('conectando');
+        this.ws.onopen = () =>{
 
-      //   this.request(data)
-      //     .then( res => resolve( res ) )
-      //     .catch( res => reject( res ) );
-      // }else{
+          console.log('acabou de conectar');
+          this.request( data )
+              .then( res => resolve( res ) )
+              .catch( res => reject( res ) );
+        };
+      }else{
 
-      //   this.connect()
-      //     .then( res => this.ws.send(data) )
-      //     .catch( res => {} );
-      // }
+        this.toConnect();
+      }
     });
   }
   
+  presentConfirmErrorToConnect() {
+
+    let alert = this.alertCtrl.create({
+      title: 'Erro ao conectar-se',
+      message: 'Não foi possível conectar-se ao servidor, verifique sua conexão  de internet e tente novamente',
+      buttons: [
+        {
+          text: 'Tentar novamente',
+          handler: () => {
+            this.toConnect();
+          }
+        }
+      ]
+    });
+    alert.present();
+  }
+
   isConnected(){
 
     return this.ws.readyState == this.ws.OPEN ? true : false;

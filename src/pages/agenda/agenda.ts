@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavController, LoadingController } from 'ionic-angular';
+import { NavController, LoadingController, AlertController } from 'ionic-angular';
 import { ServiceProvider } from '../../providers/service/service';
 import { CoreProvider } from '../../providers/core/core';
 import { DateProvider } from '../../providers/date/date';
@@ -12,22 +12,23 @@ import { DateProvider } from '../../providers/date/date';
 export class AgendaPage {
 
   private shownGroup = null;
-  private loading;
-  private schedule: [object];
+  private schedule: [Object];
+  private lastUpdateDateSchedule;
 
   constructor(
     public navCtrl: NavController, 
     private server: ServiceProvider, 
     private core: CoreProvider, 
     private date: DateProvider,
-    public loadingCtrl: LoadingController
+    public loadingCtrl: LoadingController,
+    private alertCtrl: AlertController
   ) {
   
     this.updateSchedule( this.date.getToday() );
     this.core.dateSelectedPgAgendaObservable.subscribe({
 
-      next: value => this.updateSchedule(value),
-      error: error => console.log(error),
+      next: value => this.updateSchedule( value ),
+      error: error => console.log( error ),
       complete: () => console.log('completo')
     });
 
@@ -43,11 +44,12 @@ export class AgendaPage {
 
   updateSchedule( date ){
 
-    this.loading = this.loadingCtrl.create({
+    this.lastUpdateDateSchedule = date;
+    let loading = this.loadingCtrl.create({
 
       content: 'Carregando agenda'
     })
-    this.loading.present();
+    loading.present();
     this.server.send({
 
       method: 'loadAgendaDay',
@@ -55,14 +57,39 @@ export class AgendaPage {
     })
       .then( res => {
         
-        this.loading.dismiss();
+        loading.dismiss();
         this.core.setScheduleLoaded( res ) 
       })
       .catch( res => {
         
-        this.loading.dismiss();
-        console.log( 'error' )
+        loading.dismiss();
+        this.presentConfirmErrorUpdateSchedule();
       })
+  }
+
+  presentConfirmErrorUpdateSchedule() {
+
+    let alert = this.alertCtrl.create({
+      title: 'Erro ao carregar agenda',
+      message: 'Não foi possível carregar agenda, verifique sua conexão  de internet e tente novamente',
+      buttons: [
+        {
+          text: 'Tentar novamente',
+          handler: () => {
+            this.updateSchedule( this.lastUpdateDateSchedule );
+          }
+        },
+        {
+          text: 'Cancelar',
+          role: 'cancel',
+          handler: () => {
+            console.log('Cancel clicked');
+          }
+        }
+
+      ]
+    });
+    alert.present();
   }
 
   toggleGroup(group) {

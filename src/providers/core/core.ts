@@ -31,7 +31,7 @@ export class CoreProvider {
   setScheduleLoaded( value ){
 
     this.scheduleLoaded = value;
-    this.scheduleLoadedObservable.next( value );
+    this.scheduleLoadedObservable.next( value ); 
   }
 
 }
