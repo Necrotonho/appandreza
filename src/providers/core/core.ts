@@ -3,6 +3,7 @@ import { Http } from '@angular/http';
 import 'rxjs/add/operator/map';
 import { Subject } from 'rxjs/Subject';
 import { DateProvider } from '../date/date';
+import { ServiceProvider } from '../service/service';
 
 /*
   Generated class for the CoreProvider provider.
@@ -19,8 +20,29 @@ export class CoreProvider {
   private scheduleLoaded;
   public scheduleLoadedObservable: Subject<any> = new Subject();
 
-  constructor(public http: Http, private date: DateProvider) {
-    console.log('Hello CoreProvider Provider');
+  constructor(public http: Http, private date: DateProvider, private server: ServiceProvider ) {
+
+    this.updateCore();
+    console.log('classe core criada');
+  }
+
+  updateCore(){
+
+    let observer = {
+
+      next: ( value ) => {
+        
+        if( value.request.method == 'updateScheduleByDay' ){
+          
+          this.setScheduleLoaded( value.request.data );
+          console.log( 'resquest server: ' + value.request.method );
+        }
+      },
+      error: ( value ) => console.log('Erro no error do observer[Request] da class core'),
+      complete: () => console.log( 'atualização core completo' )
+    };
+
+    this.server.observableServerWS.subscribe( observer );
   }
 
   setDateSelectedPgAgenda( value: string ){
@@ -33,5 +55,7 @@ export class CoreProvider {
     this.scheduleLoaded = value;
     this.scheduleLoadedObservable.next( value ); 
   }
+
+
 
 }

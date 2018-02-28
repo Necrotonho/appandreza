@@ -42,6 +42,11 @@ export class AgendaPage {
     })
   }
 
+  clique(){
+
+    this.server.toClosed();
+  }
+
   updateSchedule( date ){
 
     this.lastUpdateDateSchedule = date;
@@ -52,13 +57,13 @@ export class AgendaPage {
     loading.present();
     this.server.send({
 
-      method: 'loadAgendaDay',
+      method: 'updateScheduleByDay',
       date: date
     })
-      .then( res => {
+      .then( (res: any) => {
         
         loading.dismiss();
-        this.core.setScheduleLoaded( res ) 
+        this.core.setScheduleLoaded( res.request.data ) 
       })
       .catch( res => {
         

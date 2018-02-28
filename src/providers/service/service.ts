@@ -4,15 +4,15 @@ import 'rxjs/add/operator/map';
 
 import { Observable } from 'rxjs/Observable';
 import { Observer } from 'rxjs/Observer';
-import { Subject } from 'rxjs/Subject';
 import { LoadingController, AlertController } from 'ionic-angular';
+import { Subject } from 'rxjs/Subject';
 //import { Message } from 'rxjs/Message';
 /*
   Generated class for the ServicetesteProvider provider.
 
   See https://angular.io/guide/dependency-injection for more info on providers
   and Angular DI.
-*/
+*/ 
 @Injectable()
 export class ServiceProvider {
 
@@ -22,21 +22,13 @@ export class ServiceProvider {
   private tentativasIP = [];
   private tentativasConection = 0;
   private timeOutRequest = 15000;
-  private observer: Subject<any>;
-
-  private obsServer = Observable.create(
-    (observer: Observer<MessageEvent>) => {
-      this.ws.onmessage = observer.next.bind(observer);
-      this.ws.onerror = observer.error.bind(observer);
-      this.ws.onclose = observer.complete.bind(observer);
-      this.ws.close.bind(this.ws);
-    });
-  private ws;
+  private ws: WebSocket;
+  public observableServerWS: Subject<any> = new Subject();
 
   constructor(
     public http: Http, 
     private loadingCtrl: LoadingController,
-    private alertCtrl: AlertController
+    private alertCtrl: AlertController,
   ) {
       
     this.toConnect();
@@ -70,24 +62,21 @@ export class ServiceProvider {
 
       let observer = {
 
-        next: (value) => {
+        next: ( value ) => {
           
-          value = JSON.parse(value.data);
-
           if( value.request.id == requestData.request.id ){
 
-            obr.complete(); 
-            resolve(value);
+            resolve( value );
           }else{
 
-            console.log('resposta de requisição não tem o mesmo ID');
+            console.log( 'resposta de requisição não tem o mesmo ID' );
           }
         },
-        error: ( value ) => console.log('Erro no error do observer[Request]'),
-        complete: () => console.log('resquest ' + requestData.request.id + ' completo')
+        error: ( value ) => console.log( 'Erro no error do observer[Request]' ),
+        complete: () => console.log( 'resquest ' + requestData.request.id + ' completo' )
       };
 
-      let obr = this.obsServer.subscribe(observer);
+      this.observableServerWS.subscribe( observer );
   
       setTimeout( () => reject(), this.timeOutRequest );
     });
@@ -95,25 +84,30 @@ export class ServiceProvider {
 
   toConnect(){
 
-    let loading = this.loadingCtrl.create({
+    return new Promise( (resolve, reject) => {
 
-      content: 'Conectando'
-    })
-    loading.present();
-    this.connect()
-      .then( res => {
-      
-        loading.dismiss();
-        console.log('conectado no endereço: ' + res ) 
+      let loading = this.loadingCtrl.create({
+  
+        content: 'Conectando'
       })
-      .catch( res => {
+      loading.present();
+      this.connect()
+        .then( res => {
         
-        loading.dismiss();
-        this.presentConfirmErrorToConnect();
-        console.log( res );
-        console.log('Nenhuma conexão possível com o servidor!');
-
-      });
+          resolve();
+          loading.dismiss();
+          console.log('conectado no endereço: ' + res ) 
+        })
+        .catch( res => {
+          
+          reject();
+          loading.dismiss();
+          this.presentConfirmErrorToConnect();
+          console.log( res );
+          console.log('Nenhuma conexão possível com o servidor!');
+  
+        });
+    })
   }
 
   connect(){
@@ -142,6 +136,7 @@ export class ServiceProvider {
 
       this.ws = new WebSocket( this.getIpConection() );
       this.ws.onopen = () => resolve( this.ws.url );
+      this.ws.onmessage = ( msg:MessageEvent ) => this.observableServerWS.next( JSON.parse( msg.data ) );
       this.ws.onerror = (res) => {
         
         if( this.tentativasConection && !this.isConnected() ){
@@ -182,17 +177,22 @@ export class ServiceProvider {
             .catch( res => reject( res ) );
       }else if( this.isConnecting() ){
 
-        console.log('conectando');
         this.ws.onopen = () =>{
 
-          console.log('acabou de conectar');
           this.request( data )
               .then( res => resolve( res ) )
               .catch( res => reject( res ) );
         };
       }else{
 
-        this.toConnect();
+        this.toConnect()
+            .then( res => {
+
+              this.request( data )
+              .then( res => resolve( res ) )
+              .catch( res => reject( res ) );
+            })
+            .catch( res => reject( res ));
       }
     });
   }
@@ -212,6 +212,11 @@ export class ServiceProvider {
       ]
     });
     alert.present();
+  }
+
+  toClosed(){
+
+    this.ws.close();
   }
 
   isConnected(){
