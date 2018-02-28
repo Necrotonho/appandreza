@@ -54,7 +54,7 @@ export class ServiceProvider {
             id: this.getRequestKey(),
             version: this.getVersion(),
             method: Dados.method,
-            data: Dados.date
+            date: Dados.date
           }
         };
 
@@ -76,9 +76,14 @@ export class ServiceProvider {
         complete: () => console.log( 'resquest ' + requestData.request.id + ' completo' )
       };
 
-      this.observableServerWS.subscribe( observer );
+      let obs = this.observableServerWS.subscribe( observer );
   
-      setTimeout( () => reject(), this.timeOutRequest );
+      setTimeout( () => {
+        
+        console.log('setTimeOut da requisição: ' + requestData.request.id);
+        obs.unsubscribe();
+        reject()
+      }, this.timeOutRequest );
     });
   }
 
@@ -122,7 +127,9 @@ export class ServiceProvider {
           this.connect()
             .then( res => {
               
-              resolve( this.ws.url ) 
+              this.tentativasIP = [];
+              localStorage.setItem('lastIpConnected', this.ws.url);
+              resolve( this.ws.url );
             })
             .catch( res => {
               
@@ -135,7 +142,11 @@ export class ServiceProvider {
       }
 
       this.ws = new WebSocket( this.getIpConection() );
-      this.ws.onopen = () => resolve( this.ws.url );
+      this.ws.onopen = () => {
+        
+        this.tentativasIP = [];
+        resolve( this.ws.url );
+      }
       this.ws.onmessage = ( msg:MessageEvent ) => this.observableServerWS.next( JSON.parse( msg.data ) );
       this.ws.onerror = (res) => {
         
@@ -152,12 +163,14 @@ export class ServiceProvider {
 
   getIpConection(){
 
-    if( this.tentativasIP.indexOf(this.externalIP) > -1 ){
+    if( localStorage.getItem('lastIpConnected') ){
 
-        this.tentativasIP.push(this.localIp);
-        console.log( this.tentativasIP );
-        this.tentativasIP = [];
-        return this.localIp; 
+      return localStorage.getItem('lastIpConnected')
+    }else if( this.tentativasIP.indexOf(this.externalIP) > -1 ){
+
+      this.tentativasIP.push(this.localIp);
+      console.log( this.tentativasIP );
+      return this.localIp;
     }else{
 
       this.tentativasIP.push(this.externalIP);
