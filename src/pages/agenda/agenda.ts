@@ -14,6 +14,7 @@ export class AgendaPage {
   private shownGroup = null;
   private schedule: [Object];
   private lastUpdateDateSchedule;
+  private observer;
 
   constructor(
     public navCtrl: NavController, 
@@ -24,6 +25,7 @@ export class AgendaPage {
     private alertCtrl: AlertController
   ) {
   
+    this.initOberserServer();
     this.updateSchedule( this.date.getToday() );
     this.core.dateSelectedPgAgendaObservable.subscribe({
 
@@ -40,6 +42,25 @@ export class AgendaPage {
       error: error => console.log(error),
       complete: () => console.log('completo')
     })
+  }
+
+  initOberserServer(){
+
+    let observer = {
+
+      next: ( value ) => {
+
+        if( value.request.method == 'updateScheduleByDay' && value.request.data[0].Date == this.core.dateSelectedPgAgenda ){
+
+          this.core.setScheduleLoaded( value.request.data );
+          console.log( 'Chegou atualização da agenda' );
+        }
+      },
+      error: ( error ) => console.log( 'error oberserver agenda: ' + error ),
+      complete: () => console.log('observer agenda completo')
+    }
+
+    this.observer = this.server.observableServerWS.subscribe( observer );
   }
 
   clique(){
@@ -63,7 +84,7 @@ export class AgendaPage {
       .then( (res: any) => {
         
         loading.dismiss();
-        this.core.setScheduleLoaded( res.request.data ) 
+        //this.core.setScheduleLoaded( res.request.data ) 
       })
       .catch( res => {
         

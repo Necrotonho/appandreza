@@ -54,7 +54,7 @@ export class ServiceProvider {
             id: this.getRequestKey(),
             version: this.getVersion(),
             method: Dados.method,
-            date: Dados.date
+            data: Dados
           }
         };
 
@@ -163,9 +163,10 @@ export class ServiceProvider {
 
   getIpConection(){
 
-    if( localStorage.getItem('lastIpConnected') ){
+    if( localStorage.getItem('lastIpConnected') && !this.tentativasIP.length ){
 
-      return localStorage.getItem('lastIpConnected')
+      this.tentativasIP.push( localStorage.getItem('lastIpConnected') );
+      return localStorage.getItem('lastIpConnected');
     }else if( this.tentativasIP.indexOf(this.externalIP) > -1 ){
 
       this.tentativasIP.push(this.localIp);

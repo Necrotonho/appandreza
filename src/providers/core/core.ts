@@ -14,7 +14,7 @@ import { ServiceProvider } from '../service/service';
 @Injectable()
 export class CoreProvider {
 
-  private dateSelectedPgAgenda = this.date.getToday();
+  public dateSelectedPgAgenda = this.date.getToday();
   public dateSelectedPgAgendaObservable: Subject<any> = new Subject();
 
   private scheduleLoaded;
@@ -22,27 +22,7 @@ export class CoreProvider {
 
   constructor(public http: Http, private date: DateProvider, private server: ServiceProvider ) {
 
-    this.updateCore();
     console.log('classe core criada');
-  }
-
-  updateCore(){
-
-    let observer = {
-
-      next: ( value ) => {
-        
-        if( value.request.method == 'updateScheduleByDay' ){
-          
-          this.setScheduleLoaded( value.request.data );
-          console.log( 'resquest server: ' + value.request.method );
-        }
-      },
-      error: ( value ) => console.log('Erro no error do observer[Request] da class core'),
-      complete: () => console.log( 'atualização core completo' )
-    };
-
-    this.server.observableServerWS.subscribe( observer );
   }
 
   setDateSelectedPgAgenda( value: string ){
