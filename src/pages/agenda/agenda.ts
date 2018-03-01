@@ -12,7 +12,7 @@ import { DateProvider } from '../../providers/date/date';
 export class AgendaPage {
 
   private shownGroup = null;
-  private schedule: [Object];
+  private schedule: [any];
   private lastUpdateDateSchedule;
   private observer;
 
@@ -63,9 +63,69 @@ export class AgendaPage {
     this.observer = this.server.observableServerWS.subscribe( observer );
   }
 
-  clique(){
+  getChangeSchedule( index ){
 
-    this.server.toClosed();
+    if( this.schedule[ index ].available ){
+
+      this.setSchedule( this.schedule[ index ] );
+    }else{
+
+      this.cancelSchedule( this.schedule[ index ] );
+    }
+  }
+
+  setSchedule( schedule ){
+
+    let loading = this.loadingCtrl.create({
+
+      content: 'Confirmando agendamento'
+    })
+    loading.present();
+    this.server.send({
+
+      method: 'setSchedule',
+      data: {
+        date: schedule.Date,
+        hour: schedule.time
+      }
+    })
+      .then( (res: any) => {
+        
+        loading.dismiss();
+        alert('agendado com sucesso');
+      })
+      .catch( res => {
+        
+        loading.dismiss();
+        this.presentConfirmErrorUpdateSchedule();
+      })
+  }
+
+  cancelSchedule( schedule ){
+
+    let loading = this.loadingCtrl.create({
+
+      content: 'Cancelando agendamento'
+    })
+    loading.present();
+    this.server.send({
+
+      method: 'cancelSchedule',
+      data: {
+        id: schedule.id,
+        date: schedule.Date
+      }
+    })
+      .then( (res: any) => {
+        
+        loading.dismiss();
+        alert('agendamento cancelado com sucesso');
+      })
+      .catch( res => {
+        
+        loading.dismiss();
+        this.presentConfirmErrorUpdateSchedule();
+      })
   }
 
   updateSchedule( date ){
@@ -79,7 +139,9 @@ export class AgendaPage {
     this.server.send({
 
       method: 'updateScheduleByDay',
-      date: date
+      data: { 
+        date: date
+      }
     })
       .then( (res: any) => {
         
@@ -89,7 +151,7 @@ export class AgendaPage {
       .catch( res => {
         
         loading.dismiss();
-        this.presentConfirmErrorUpdateSchedule();
+        this.presentConfirmErrorSetSchedule( res );
       })
   }
 
@@ -113,6 +175,23 @@ export class AgendaPage {
           }
         }
 
+      ]
+    });
+    alert.present();
+  }
+
+  presentConfirmErrorSetSchedule( msg ) {
+
+    let alert = this.alertCtrl.create({
+      title: 'Erro ao realizar agendamento',
+      message: msg,
+      buttons: [
+        {
+          text: 'Ok',
+          handler: () => {
+            this.updateSchedule( this.lastUpdateDateSchedule );
+          }
+        }
       ]
     });
     alert.present();

@@ -44,7 +44,7 @@ export class ServiceProvider {
     return '1.0.0';
   }
   
-  request( Dados ){
+  request( dados ){
 
     return new Promise( (resolve, reject) => {
 
@@ -53,8 +53,8 @@ export class ServiceProvider {
         request: {
             id: this.getRequestKey(),
             version: this.getVersion(),
-            method: Dados.method,
-            data: Dados
+            method: dados.method,
+            data: dados.data
           }
         };
 

@@ -43,7 +43,7 @@
         
         <div>
           
-          <button (click)="clique()" ion-button large block [color]="d.available ? 'secondary' : 'danger'">{{ d.available ? 'agendar horário ' : 'cancelar agendamento' }}</button>
+          <button (click)="getChangeSchedule(i)" ion-button large block [color]="d.available ? 'secondary' : 'danger'">{{ d.available ? 'agendar horário ' : 'cancelar agendamento' }}</button>
         </div>
         
       </div>
