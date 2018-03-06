@@ -3,6 +3,7 @@ import { NavController, LoadingController, AlertController } from 'ionic-angular
 import { ServiceProvider } from '../../providers/service/service';
 import { CoreProvider } from '../../providers/core/core';
 import { DateProvider } from '../../providers/date/date';
+import { UserProvider } from '../../providers/user/user';
 
 
 @Component({
@@ -22,7 +23,8 @@ export class AgendaPage {
     private core: CoreProvider, 
     private date: DateProvider,
     public loadingCtrl: LoadingController,
-    private alertCtrl: AlertController
+    private alertCtrl: AlertController,
+    private user: UserProvider
   ) {
   
     this.initOberserServer();
@@ -53,6 +55,7 @@ export class AgendaPage {
         if( value.request.method == 'updateScheduleByDay' && value.request.data[0].Date == this.core.dateSelectedPgAgenda ){
 
           this.core.setScheduleLoaded( value.request.data );
+          this.shownGroup = null;
           console.log( 'Chegou atualização da agenda' );
         }
       },
@@ -76,29 +79,34 @@ export class AgendaPage {
 
   setSchedule( schedule ){
 
-    let loading = this.loadingCtrl.create({
+    this.user.signIn()
+      .then( res => {
 
-      content: 'Confirmando agendamento'
-    })
-    loading.present();
-    this.server.send({
-
-      method: 'setSchedule',
-      data: {
-        date: schedule.Date,
-        hour: schedule.time
-      }
-    })
-      .then( (res: any) => {
-        
-        loading.dismiss();
-        alert('agendado com sucesso');
+        let loading = this.loadingCtrl.create({
+    
+          content: 'Confirmando agendamento'
+        })
+        loading.present();
+        this.server.send({
+    
+          method: 'setSchedule',
+          data: {
+            date: schedule.Date,
+            hour: schedule.time
+          }
+        })
+          .then( (res: any) => {
+            
+            loading.dismiss();
+            alert('agendado com sucesso');
+          })
+          .catch( res => {
+            
+            loading.dismiss();
+            this.presentConfirmErrorUpdateSchedule();
+          })
       })
-      .catch( res => {
-        
-        loading.dismiss();
-        this.presentConfirmErrorUpdateSchedule();
-      })
+      .catch( res => console.log('não está logado'));
   }
 
   cancelSchedule( schedule ){

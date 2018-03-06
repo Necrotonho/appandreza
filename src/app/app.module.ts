@@ -19,6 +19,8 @@ import { TokenProvider } from '../providers/token/token';
 import { HeaderProvider } from '../providers/header/header';
 import { DateProvider } from '../providers/date/date';
 import { CoreProvider } from '../providers/core/core';
+import { UserProvider } from '../providers/user/user';
+import { ErrorsProvider } from '../providers/errors/errors';
 
 @NgModule({
   declarations: [
@@ -59,7 +61,9 @@ import { CoreProvider } from '../providers/core/core';
     TokenProvider,
     HeaderProvider,
     DateProvider,
-    CoreProvider
+    CoreProvider,
+    UserProvider,
+    ErrorsProvider
   ]
 })
 export class AppModule {}

@@ -18,7 +18,7 @@ export class ServiceProvider {
 
 
   private localIp = 'ws://192.168.1.32:8000';
-  private externalIP    = 'ws://179.184.92.74:3396';
+  private externalIP = 'ws://179.184.92.74:3396';
   private tentativasIP = [];
   private tentativasConection = 0;
   private timeOutRequest = 15000;
@@ -66,7 +66,15 @@ export class ServiceProvider {
           
           if( value.request.id == requestData.request.id ){
 
-            resolve( value );
+            if( value.request.status.cod == '200' ){
+
+              resolve( value );
+              obs.unsubscribe();
+            }else{
+
+              resolve( value );
+              obs.unsubscribe();
+            }
           }else{
 
             console.log( 'resposta de requisição não tem o mesmo ID' );
@@ -180,7 +188,7 @@ export class ServiceProvider {
     }
   }
 
-  send(data){
+  send( data ){
 
     return new Promise( (resolve, reject) => {
 

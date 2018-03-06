@@ -12,6 +12,7 @@
                             cancelText="Cancelar"
                             doneText="Ok"
                             (ionChange)="this.upDateDate()"
+                            [min]="this.date.getToday()" 
               ></ion-datetime>
         </span><br/>
         <span>
