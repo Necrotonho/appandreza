@@ -20,7 +20,15 @@ export class UserProvider {
                 private service: ServiceProvider
   ){
 
-    console.log('Hello UserProvider Provider');
+    localStorage.setItem('isLoggedIn', 'false' );
+    this.service.toConnect()
+      .then( res => {
+        
+        this.startSignIn('')
+          .then( res => localStorage.setItem('isLoggedIn', 'true' ) )
+          .catch( res => console.log('erro ao conectar constructor class userprovider') )
+      })
+      .catch( res => console.log ('erro ao conectar ao servidor, no constructos da classe UserProvider') );
 
   }
 
@@ -79,7 +87,8 @@ export class UserProvider {
             handler: data => {
               
               this.startSignIn( data )
-                .then( res => console.log( data ));
+                .then( res => resolve( data ))
+                .catch( res => reject( res ));
             }
           },
         ]
@@ -101,7 +110,18 @@ export class UserProvider {
           password: data.password
         }
       })
-        .then( res => resolve() );
+        .then( (res:any) => {
+          
+          if( res.request.data.isSignIn ){
+
+            localStorage.setItem('token', res.request.data.token );
+            resolve() 
+          }else{
+
+            console.log( res.request.status.message );
+            reject()
+          }
+        });
     });
   }
   signUp(){
@@ -114,13 +134,12 @@ export class UserProvider {
 
   isLoggedIn(){
 
-    return false;
-    // if( atob('dGVzdGU=') == 'teste' ){
+    if( this.service.isConnected && ( localStorage.getItem('isLoggedIn') == 'true' ) ){
 
-    //   return true;
-    // }else{
-
-    //   return false;
-    // }
+      return true;
+    }else{
+      
+      return false;
+    }
   }
 }

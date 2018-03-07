@@ -2,11 +2,9 @@ import { Injectable } from '@angular/core';
 import { Http } from '@angular/http';
 import 'rxjs/add/operator/map';
 
-import { Observable } from 'rxjs/Observable';
-import { Observer } from 'rxjs/Observer';
 import { LoadingController, AlertController } from 'ionic-angular';
 import { Subject } from 'rxjs/Subject';
-//import { Message } from 'rxjs/Message';
+
 /*
   Generated class for the ServicetesteProvider provider.
 
@@ -31,7 +29,6 @@ export class ServiceProvider {
     private alertCtrl: AlertController,
   ) {
       
-    this.toConnect();
   }
 
   private getRequestKey(){
@@ -44,13 +41,25 @@ export class ServiceProvider {
     return '1.0.0';
   }
   
+  private getToken(){
+
+    if( localStorage.getItem('token') ){
+
+      return localStorage.getItem('token');
+    }else{
+
+      return localStorage.getItem('visitorToken');
+    }
+  }
+
   request( dados ){
 
     return new Promise( (resolve, reject) => {
 
       let requestData = {
-        token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOiJzIn0.f3AdouopZEdhmkuFR77T023m0z1qYcem1OYCmxRzVLI',
+        token: this.getToken(),
         request: {
+            client: 1,
             id: this.getRequestKey(),
             version: this.getVersion(),
             method: dados.method,
@@ -150,22 +159,32 @@ export class ServiceProvider {
       }
 
       this.ws = new WebSocket( this.getIpConection() );
-      this.ws.onopen = () => {
+      this.ws.onopen = (res) => {
         
         this.tentativasIP = [];
         resolve( this.ws.url );
       }
-      this.ws.onmessage = ( msg:MessageEvent ) => this.observableServerWS.next( JSON.parse( msg.data ) );
+      this.ws.onmessage = ( msg:MessageEvent ) => {
+
+        this.observableServerWS.next( JSON.parse( msg.data ) );
+
+        if( JSON.parse( msg.data ).request.method == 'firstConnection' ){
+
+          localStorage.setItem( 'visitorToken', JSON.parse( msg.data ).request.data.token );
+        };
+      };
       this.ws.onerror = (res) => {
         
         if( this.tentativasConection && !this.isConnected() ){
           
+          localStorage.setItem('isLoggedIn', 'false' );
           reject();
         }else{
           
           rejectConection();
         }
       };
+      this.ws.onclose = ( res ) => localStorage.setItem('isLoggedIn', 'false' );
     })
   } 
 
