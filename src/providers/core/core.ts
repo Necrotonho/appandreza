@@ -46,4 +46,8 @@ export class CoreProvider {
     this.userDataObservable.next( value );
   }
 
+  getUserData(){
+
+    return this.userData;
+  }
 }

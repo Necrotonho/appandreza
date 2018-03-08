@@ -13,9 +13,10 @@ import { CoreProvider } from '../../providers/core/core';
 })
 export class NavbarComponent {
 
-  name: string;
+  name: String;
   constructor(private core: CoreProvider) {
 
+    this.initName();
     this.core.userDataObservable.subscribe({
 
       next: ( res ) => {
@@ -23,6 +24,18 @@ export class NavbarComponent {
         this.name = res.name
       }
     })
+  }
+
+  initName(){
+
+    if( this.core.getUserData() && this.core.getUserData().name ){
+
+      this.name = this.core.getUserData().name;
+    }else{
+
+      this.name = undefined;
+      return false;
+    }
   }
 
 }
