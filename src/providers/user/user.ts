@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Http } from '@angular/http';
 import 'rxjs/add/operator/map';
 import { CoreProvider } from '../core/core';
-import { AlertController } from 'ionic-angular';
+import { AlertController, ToastController } from 'ionic-angular';
 import { ServiceProvider } from '../service/service';
 
 /*
@@ -17,7 +17,8 @@ export class UserProvider {
   constructor(  public http: Http, 
                 private core: CoreProvider, 
                 private alertCtrl: AlertController, 
-                private service: ServiceProvider
+                private service: ServiceProvider,
+                private toastCtrl: ToastController
   ){
 
     localStorage.setItem('isLoggedIn', 'false' );
@@ -79,7 +80,7 @@ export class UserProvider {
             text: 'Cadastrar-se',
             handler: data => {
               
-              this.signUp();
+              this.signUp( {} );
             }
           },
           {
@@ -98,13 +99,28 @@ export class UserProvider {
     });
   }
 
+  presentToast( msg ) {
+
+    let toast = this.toastCtrl.create({
+      message: msg,
+      duration: 3000,
+      position: 'top'
+    });
+  
+    toast.onDidDismiss(() => {
+      console.log('Dismissed toast');
+    });
+  
+    toast.present();
+  }
+
   startSignIn( data ){
 
     return new Promise( (resolve, reject) => {
 
       this.service.send({
 
-        method: 'signin',
+        method: 'signIn',
         data: {
           user: data.cpf,
           password: data.password
@@ -129,7 +145,7 @@ export class UserProvider {
     });
   }
 
-  signUp(){
+  signUp( dados ){
 
     return new Promise( (resolve, reject) => {
 
@@ -138,27 +154,27 @@ export class UserProvider {
         inputs: [
           {
             name: 'name',
-            placeholder: 'Nome',
+            placeholder: dados.name? dados.name: 'Nome',
             type: 'text'
           },
           {
             name: 'cpf',
-            placeholder: 'CPF',
+            placeholder: dados.cpf? dados.cpf: 'CPF',
             type: 'number'
           },
           {
             name: 'phone',
-            placeholder: 'Telefone',
+            placeholder: dados.phone? dados.phone: 'Telefone',
             type: 'tel'
           },
           {
             name: 'email',
-            placeholder: 'Email',
+            placeholder: dados.email? dados.email: 'Email',
             type: 'email'
           },
           {
             name: 'password',
-            placeholder: 'Senha',
+            placeholder: dados.password? dados.password: 'Senha',
             type: 'password'
           },
         ],
@@ -179,8 +195,28 @@ export class UserProvider {
 
   startSignUp( data ){
 
-    //this.service.send(  )
-    console.log( data );
+    return new Promise( (resolve, reject) => {
+
+      this.service.send({
+  
+        method: 'setUser',
+          data: data
+      })
+      .then( (res:any) => {
+        
+        if( res.request.data.isUser ){
+  
+          this.presentToast( 'Usuário cadastrado com sucesso' );
+          resolve();
+        }else{
+
+          this.presentToast( res.request.status.message );
+          this.signUp( data );
+        }
+      })
+      .catch( res => console.log('deu merda no cadstro'))
+      console.log( data );
+    })
   }
 
   isLoggedIn(){

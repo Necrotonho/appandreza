@@ -53,7 +53,7 @@ export class AgendaPage {
 
       next: ( value ) => {
 
-        if( value.request.method == 'updateScheduleByDay' && value.request.data[0].Date == this.core.dateSelectedPgAgenda ){
+        if( value.request.method == 'updateScheduleByDay' && value.request.data[0].date == this.core.dateSelectedPgAgenda ){
 
           this.core.setScheduleLoaded( value.request.data );
           this.shownGroup = null;
@@ -92,7 +92,7 @@ export class AgendaPage {
     
           method: 'setSchedule',
           data: {
-            date: schedule.Date,
+            date: schedule.date,
             hour: schedule.time
           }
         })
@@ -122,7 +122,7 @@ export class AgendaPage {
       method: 'cancelSchedule',
       data: {
         id: schedule.id,
-        date: schedule.Date
+        date: schedule.date
       }
     })
       .then( (res: any) => {
