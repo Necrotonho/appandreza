@@ -162,7 +162,17 @@ export class ServiceProvider {
       this.ws.onopen = (res) => {
         
         this.tentativasIP = [];
-        resolve( this.ws.url );
+        let obs = this.observableServerWS.subscribe({
+
+          next: (res) => {
+
+            if( res.request.method == 'firstConnection' ){
+
+              obs.unsubscribe();
+              resolve( this.ws.url );
+            }
+          }
+        });
       }
       this.ws.onmessage = ( msg:MessageEvent ) => {
 
@@ -213,6 +223,7 @@ export class ServiceProvider {
 
       if( this.isConnected() ){
 
+        console.log('está conectado');
         this.request( data )
             .then( res => resolve( res ) )
             .catch( res => reject( res ) );
@@ -226,6 +237,7 @@ export class ServiceProvider {
         };
       }else{
 
+        this.tentativasIP = [];
         this.toConnect()
             .then( res => {
 

@@ -79,7 +79,7 @@ export class UserProvider {
             text: 'Cadastrar-se',
             handler: data => {
               
-              console.log('chamou login');
+              this.signUp();
             }
           },
           {
@@ -87,7 +87,7 @@ export class UserProvider {
             handler: data => {
               
               this.startSignIn( data )
-                .then( res => resolve( data ))
+                .then( res => resolve() )
                 .catch( res => reject( res ));
             }
           },
@@ -114,22 +114,73 @@ export class UserProvider {
           
           if( res.request.data.isSignIn ){
 
+            this.core.setUserData( res.request.data.user );
+            localStorage.setItem('isLoggedIn', 'true' );
             localStorage.setItem('token', res.request.data.token );
-            resolve() 
+            resolve();
           }else{
 
+            console.log('caiu no reject do start signin');
             console.log( res.request.status.message );
             reject()
           }
-        });
+        })
+        .catch( res => console.log( 'erro no catch do Start Sign In'));
     });
   }
+
   signUp(){
 
     return new Promise( (resolve, reject) => {
 
+      let alert = this.alertCtrl.create({
+        title: 'Cadastro',
+        inputs: [
+          {
+            name: 'name',
+            placeholder: 'Nome',
+            type: 'text'
+          },
+          {
+            name: 'cpf',
+            placeholder: 'CPF',
+            type: 'number'
+          },
+          {
+            name: 'phone',
+            placeholder: 'Telefone',
+            type: 'tel'
+          },
+          {
+            name: 'email',
+            placeholder: 'Email',
+            type: 'email'
+          },
+          {
+            name: 'password',
+            placeholder: 'Senha',
+            type: 'password'
+          },
+        ],
+        buttons: [
+          {
+            text: 'Cadastrar',
+            handler: data => {
+              
+              this.startSignUp( data );
+            }
+          }
+        ]
+      });
       
+      alert.present();
     });
+  }
+
+  startSignUp( data ){
+
+    //this.service.send(  )
+    console.log( data );
   }
 
   isLoggedIn(){

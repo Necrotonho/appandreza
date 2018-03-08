@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { CoreProvider } from '../../providers/core/core';
 
 /**
  * Generated class for the ToolbarComponent component.
@@ -12,11 +13,16 @@ import { Component } from '@angular/core';
 })
 export class NavbarComponent {
 
-  text: string;
+  name: string;
+  constructor(private core: CoreProvider) {
 
-  constructor() {
+    this.core.userDataObservable.subscribe({
 
-
+      next: ( res ) => {
+      
+        this.name = res.name
+      }
+    })
   }
 
 }

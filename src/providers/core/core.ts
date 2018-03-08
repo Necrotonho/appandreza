@@ -20,6 +20,9 @@ export class CoreProvider {
   private scheduleLoaded;
   public scheduleLoadedObservable: Subject<any> = new Subject();
 
+  private userData;
+  public userDataObservable: Subject<any> = new Subject();
+
   constructor(public http: Http, private date: DateProvider, private server: ServiceProvider ) {
 
     console.log('classe core criada');
@@ -36,6 +39,11 @@ export class CoreProvider {
     this.scheduleLoadedObservable.next( value ); 
   }
 
+  setUserData( value ){
 
+    console.log('chamou atualização de user');
+    this.userData = value;
+    this.userDataObservable.next( value );
+  }
 
 }

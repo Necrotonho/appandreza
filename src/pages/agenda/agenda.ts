@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavController, LoadingController, AlertController } from 'ionic-angular';
+import { NavController, LoadingController, AlertController, ToastController } from 'ionic-angular';
 import { ServiceProvider } from '../../providers/service/service';
 import { CoreProvider } from '../../providers/core/core';
 import { DateProvider } from '../../providers/date/date';
@@ -24,7 +24,8 @@ export class AgendaPage {
     private date: DateProvider,
     public loadingCtrl: LoadingController,
     private alertCtrl: AlertController,
-    private user: UserProvider
+    private user: UserProvider,
+    private toastCtrl: ToastController
   ) {
   
     this.initOberserServer();
@@ -98,7 +99,7 @@ export class AgendaPage {
           .then( (res: any) => {
             
             loading.dismiss();
-            alert('agendado com sucesso');
+            this.presentToast( 'Agendamento realizado com sucesso' );
           })
           .catch( res => {
             
@@ -127,7 +128,7 @@ export class AgendaPage {
       .then( (res: any) => {
         
         loading.dismiss();
-        alert('agendamento cancelado com sucesso');
+        this.presentToast( 'Agendamento cancelado com sucesso' );
       })
       .catch( res => {
         
@@ -203,6 +204,21 @@ export class AgendaPage {
       ]
     });
     alert.present();
+  }
+
+  presentToast( msg ) {
+
+    let toast = this.toastCtrl.create({
+      message: msg,
+      duration: 3000,
+      position: 'top'
+    });
+  
+    toast.onDidDismiss(() => {
+      console.log('Dismissed toast');
+    });
+  
+    toast.present();
   }
 
   toggleGroup(group) {
