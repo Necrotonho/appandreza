@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { CoreProvider } from '../../providers/core/core';
+import { MenuController } from 'ionic-angular';
 
 /**
  * Generated class for the ToolbarComponent component.
@@ -14,7 +15,10 @@ import { CoreProvider } from '../../providers/core/core';
 export class NavbarComponent {
 
   name: String;
-  constructor(private core: CoreProvider) {
+  constructor(
+    private core: CoreProvider,
+    public menuCtrl: MenuController
+  ) {
 
     this.initName();
     this.core.userDataObservable.subscribe({
@@ -36,6 +40,12 @@ export class NavbarComponent {
       this.name = undefined;
       return false;
     }
+  }
+
+  toggleMenu() {
+
+    console.log('tentou abrir o menu');
+    this.menuCtrl.toggle();
   }
 
 }

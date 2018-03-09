@@ -14,6 +14,9 @@ import { ServiceProvider } from '../service/service';
 @Injectable()
 export class UserProvider {
 
+  private attemptsConfirmUser: number;
+  private limitattemptsConfirmUser: number = 5;
+
   constructor(  public http: Http, 
                 private core: CoreProvider, 
                 private alertCtrl: AlertController, 
@@ -22,6 +25,8 @@ export class UserProvider {
   ){
 
     localStorage.setItem('isLoggedIn', 'false' );
+    //localStorage.removeItem('token');
+    //localStorage.removeItem('visitorToken');
     this.service.toConnect()
       .then( res => {
         
@@ -73,14 +78,21 @@ export class UserProvider {
             text: 'Esqueci a senha',
             handler: data => {
               
-              this.isLoggedIn();
+              console.log('Clicou em "Esqueci a senha"');
             }
           },
           {
             text: 'Cadastrar-se',
             handler: data => {
               
-              this.signUp( {} );
+              this.signUp( {} )
+                  .then( res => {
+                    
+                    this.startSignIn( '' )
+                        .then( res => resolve() )
+                        .catch( res => reject( res ) )
+                  })
+                  .catch( res => reject() );
             }
           },
           {
@@ -136,8 +148,6 @@ export class UserProvider {
             resolve();
           }else{
 
-            console.log('caiu no reject do start signin');
-            console.log( res.request.status.message );
             reject()
           }
         })
@@ -183,7 +193,9 @@ export class UserProvider {
             text: 'Cadastrar',
             handler: data => {
               
-              this.startSignUp( data );
+              this.startSignUp( data )
+                .then( res => resolve() )
+                .catch( res => reject() )
             }
           }
         ]
@@ -206,17 +218,104 @@ export class UserProvider {
         
         if( res.request.data.isUser ){
   
-          this.presentToast( 'Usuário cadastrado com sucesso' );
-          resolve();
+          localStorage.setItem('token', res.request.data.token );
+          this.attemptsConfirmUser = 0;
+          this.confirmUser()
+              .then( res =>{
+
+                resolve();
+              })
+              .catch( res => {
+
+                //this.presentToast( 'Erro na confirmação do usuário' )
+                reject();  
+              })
         }else{
 
           this.presentToast( res.request.status.message );
           this.signUp( data );
         }
       })
-      .catch( res => console.log('deu merda no cadstro'))
-      console.log( data );
+      .catch( res => console.log('deu merda no cadastro'))
     })
+  }
+
+  confirmUser( ){
+
+    return new Promise ( (resolve, reject) =>{
+
+      let alert = this.alertCtrl.create({
+        title: 'Confirmação de email',
+        subTitle: 'Foi enviado para seu email um código de 4 digitos, informe-o abaixo',
+        inputs: [
+          {
+            name: 'cod',
+            placeholder: '4 dígitos',
+            type: 'number'
+          }
+        ],
+        buttons: [
+          {
+
+            text: 'Cancelar',
+            handler: data => {
+
+              reject();
+            }
+          },
+          {
+            text: 'Finalizar cadastro',
+            handler: data => {
+              
+              this.startConfirmUser( data )
+                  .then( res => resolve() )
+                  .catch( res => {
+
+                    if( ( this.attemptsConfirmUser <= this.limitattemptsConfirmUser ) ){
+
+                      this.attemptsConfirmUser ++;
+                      this.presentToast( res.request.status.message );
+                      this.confirmUser()
+                        .then( res => resolve() )
+                        .catch( res => reject( res ) )
+                    }else{
+
+                      this.presentToast( 'Número se tentativas excedidas, refaça o login' );
+                      reject();
+                    }
+                  });
+            }
+          }
+        ]
+      });
+      
+      alert.present();
+    })
+  }
+
+  startConfirmUser( dados ){
+
+    return new Promise ( (resolve, reject) =>{
+
+      this.service.send({
+
+        method: 'confirmUser',
+        data: dados
+      })
+        .then( (res:any) => {
+
+          if( res.request.data.isConfirmed ){
+
+            this.presentToast( 'Cadastro finalizado com sucesso' );
+            resolve();
+          }else{
+            
+            reject( res );
+          }
+        })
+        .catch( res => console.log( res ) )
+    })
+
   }
 
   isLoggedIn(){
@@ -229,4 +328,5 @@ export class UserProvider {
       return false;
     }
   }
+
 }

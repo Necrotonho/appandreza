@@ -1,11 +1,23 @@
+<ion-menu [content]="mycontent">
+  <ion-content>
+    <ion-list>
+      <p>Aqui terá alguma coisa</p>
+    </ion-list>
+  </ion-content>
+</ion-menu>
+
+<ion-nav #mycontent [root]="rootPage"></ion-nav>
+
+
+
 <ion-header>
   <ion-navbar color="light">
     <ion-buttons start>
-      <button ion-button icon-only>
-        <ion-icon name="contact"></ion-icon>
+      <button ion-button icon-only (click)="this.toggleMenu()">
+        <ion-icon name="menu"></ion-icon>
       </button>
     </ion-buttons>
-    <ion-title> Olá, {{ this.name? this.name : 'visitante' }}</ion-title>
+    <ion-title> Olá, {{ this.name? this.name : 'visitante' }} </ion-title>
     <ion-buttons end>
       <button ion-button icon-only>
         <ion-icon name="time"></ion-icon>

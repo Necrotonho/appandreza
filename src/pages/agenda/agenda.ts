@@ -107,7 +107,7 @@ export class AgendaPage {
             this.presentConfirmErrorUpdateSchedule();
           })
       })
-      .catch( res => console.log('não está logado'));
+      .catch( res => this.presentToast( 'Você precisa estar logado' ) );
   }
 
   cancelSchedule( schedule ){
