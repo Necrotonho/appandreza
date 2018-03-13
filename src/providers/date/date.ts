@@ -17,12 +17,13 @@ export class DateProvider {
 
   getToday(){
 
-    var currentDate = new Date()
-    var day = currentDate.getDate().toString.length ? '0' + currentDate.getDate() : currentDate.getDate();
-    var month = (currentDate.getMonth() + 1).toString.length ? '0' + (currentDate.getMonth() + 1): currentDate.getMonth() + 1 
-    var year = currentDate.getFullYear()
-    return year + "-" + month + "-" + day
+    let currentDate = new Date()
+    let day = currentDate.getDate().toString().length == 1 ? '0' + currentDate.getDate() : currentDate.getDate();
+    let month = (currentDate.getMonth() + 1).toString.length ? '0' + (currentDate.getMonth() + 1): currentDate.getMonth() + 1 
+    let year = currentDate.getFullYear()
+    let date = year + "-" + month + "-" + day;
 
+    return date;
   }
 
 }

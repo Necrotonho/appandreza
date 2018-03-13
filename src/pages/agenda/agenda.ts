@@ -26,6 +26,7 @@ export class AgendaPage {
     private alertCtrl: AlertController,
     private user: UserProvider,
     private toastCtrl: ToastController
+    
   ) {
   
     this.initOberserServer();
