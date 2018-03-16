@@ -81,6 +81,8 @@ export class AgendaPage {
 
   setSchedule( schedule ){
 
+    console.log('set Schedule');
+    console.log(schedule);
     this.user.signIn()
       .then( res => {
 
