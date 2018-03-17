@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Http } from '@angular/http';
 import 'rxjs/add/operator/map';
 import { CoreProvider } from '../core/core';
-import { AlertController, ToastController } from 'ionic-angular';
+import { AlertController, ToastController, LoadingController } from 'ionic-angular';
 import { ServiceProvider } from '../service/service';
 
 /*
@@ -21,7 +21,8 @@ export class UserProvider {
                 private core: CoreProvider, 
                 private alertCtrl: AlertController, 
                 private service: ServiceProvider,
-                private toastCtrl: ToastController
+                private toastCtrl: ToastController,
+                public loadingCtrl: LoadingController,
   ){
 
     localStorage.setItem('isLoggedIn', 'false' );
@@ -79,7 +80,11 @@ export class UserProvider {
             handler: data => {
               
               this.forgotPassword()
-                .then( res => this.presentToast( 'Senha recuperada com sucesso' ))
+                .then( res => {
+                  
+                  this.presentToast( 'Senha recuperada com sucesso' )
+                  resolve();
+                })
                 .catch( res => this.presentToast( 'Erro ao recuperar senha' ));
             }
           },
@@ -162,6 +167,12 @@ export class UserProvider {
 
   startforgotPassword( data ){
 
+    let loading = this.loadingCtrl.create({
+
+      content: 'Enviando email de confirmação'
+    })
+    loading.present();
+
     return new Promise( (resolve, reject) => {
 
       this.service.send({
@@ -173,15 +184,16 @@ export class UserProvider {
       })
         .then( (res:any) => {
           
+          loading.dismiss();
           if( res.request.data.isKey ){
 
             this.verifyCodPassword( res.request.data.email )
               .then( res => {
                 
                 this.presentToast( 'Senha recuperada com sucesso' );
-                this.signIn()
+                this.startSignIn( {} )
                   .then( res => resolve() )
-                  .catch( res => reject() )//Verificar isso mais tarde
+                  .catch( res => reject() )//Verificar isso mais tardes
               })
               .catch( res => console.log('cod incorreto') )
           }else{
@@ -189,7 +201,11 @@ export class UserProvider {
             reject()
           }
         })
-        .catch( res => console.log( 'erro no catch do Start Sign In'));
+        .catch( res => {
+         
+          loading.dismiss();
+          console.log( 'erro no catch do Start Sign In')
+        });
     });
   }
 
