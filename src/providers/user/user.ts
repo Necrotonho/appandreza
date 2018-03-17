@@ -78,7 +78,9 @@ export class UserProvider {
             text: 'Esqueci a senha',
             handler: data => {
               
-              console.log('Clicou em "Esqueci a senha"');
+              this.forgotPassword()
+                .then( res => this.presentToast( 'Senha recuperada com sucesso' ))
+                .catch( res => this.presentToast( 'Erro ao recuperar senha' ));
             }
           },
           {
@@ -124,6 +126,140 @@ export class UserProvider {
     });
   
     toast.present();
+  }
+
+  forgotPassword(){
+
+    return new Promise( (resolve, reject) => {
+
+      let alert = this.alertCtrl.create({
+        title: 'Esqueci a senha',
+        subTitle: 'Informa abaixo seu CPF',
+        inputs: [
+          {
+            name: 'cpf',
+            placeholder: 'CPF',
+            type: 'number'
+          }
+        ],
+        buttons: [
+          {
+            text: 'recuperar senha',
+            handler: data => {
+              
+              this.startforgotPassword( data )
+                .then( res => resolve() )
+                .catch( res => reject() )
+            }
+          }
+        ]
+      });
+      
+      alert.present();
+    });
+    
+  }
+
+  startforgotPassword( data ){
+
+    return new Promise( (resolve, reject) => {
+
+      this.service.send({
+
+        method: 'generateNewKey',
+        data: {
+          cpf: data.cpf,
+        }
+      })
+        .then( (res:any) => {
+          
+          if( res.request.data.isKey ){
+
+            this.verifyCodPassword( res.request.data.email )
+              .then( res => {
+                
+                this.presentToast( 'Senha recuperada com sucesso' );
+                this.signIn()
+                  .then( res => resolve() )
+                  .catch( res => reject() )//Verificar isso mais tarde
+              })
+              .catch( res => console.log('cod incorreto') )
+          }else{
+
+            reject()
+          }
+        })
+        .catch( res => console.log( 'erro no catch do Start Sign In'));
+    });
+  }
+
+  verifyCodPassword( email ){
+
+    return new Promise( (resolve, reject) => {
+
+      let alert = this.alertCtrl.create({
+        title: 'Esqueci a senha',
+        subTitle: 'Foi enviado para o email ' + email + ' um código com 4 dígitos,  informe-o abaixo, juntamente com sua nova senha',
+        inputs: [
+          {
+            name: 'cod',
+            placeholder: 'Código',
+            type: 'number'
+          },
+          {
+            name: 'password',
+            placeholder: 'Nova senha',
+            type: 'text'
+          },
+        ],
+        buttons: [
+          {
+            text: 'Confirmar nova senha',
+            handler: data => {
+              
+              this.startConfirmNewPassword( data )
+                .then( res => resolve() )
+                .catch( res => {
+                  
+                  this.verifyCodPassword( email )
+                    .then( res => resolve() )
+                    .catch( res => reject() )
+                })
+            }
+          }
+        ]
+      });
+      
+      alert.present();
+    });
+
+  }
+
+  startConfirmNewPassword( data ){
+
+    return new Promise( (resolve, reject) => {
+
+      this.service.send({
+
+        method: 'recoverPassword',
+        data: {
+          cod: data.cod,
+          password: data.password
+        }
+      })
+        .then( (res:any) => {
+          
+          if( res.request.data.isRecovered ){
+
+            localStorage.setItem('token', res.request.data.token );
+            resolve();
+          }else{
+
+            reject()
+          }
+        })
+        .catch( res => console.log( 'erro no startConfirmNewPassword'));
+    });
   }
 
   startSignIn( data ){
