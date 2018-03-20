@@ -31,7 +31,7 @@ export class UserProvider {
     this.service.toConnect()
       .then( res => {
         
-        this.startSignIn('')
+        this.startSignIn( {restartSignIn: false} )
           .then( res => localStorage.setItem('isLoggedIn', 'true' ) )
           .catch( res => console.log('erro ao conectar constructor class userprovider') )
       })
@@ -48,7 +48,7 @@ export class UserProvider {
         resolve();
       }else{
         
-        this.presentPrompt()
+        this.presentPrompt( {} )
           .then( res => resolve() )
           .catch( res => reject() );
       }
@@ -56,7 +56,7 @@ export class UserProvider {
 
   }
 
-  presentPrompt() {
+  presentPrompt( data ) {
 
     return new Promise( (resolve, reject) => {
 
@@ -66,12 +66,14 @@ export class UserProvider {
           {
             name: 'cpf',
             placeholder: 'CPF',
-            type: 'number'
+            type: 'number',
+            value: data.cpf? data.cpf: false
           },
           {
             name: 'password',
             placeholder: 'Senha',
-            type: 'password'
+            type: 'password',
+            value: data.password? data.password: false
           }
         ],
         buttons: [
@@ -95,7 +97,7 @@ export class UserProvider {
               this.signUp( {} )
                   .then( res => {
                     
-                    this.startSignIn( '' )
+                    this.startSignIn( {restartSignIn: true} )
                         .then( res => resolve() )
                         .catch( res => reject( res ) )
                   })
@@ -106,6 +108,7 @@ export class UserProvider {
             text: 'Entrar',
             handler: data => {
               
+              data.restartSignIn = true;
               this.startSignIn( data )
                 .then( res => resolve() )
                 .catch( res => reject( res ));
@@ -191,7 +194,7 @@ export class UserProvider {
               .then( res => {
                 
                 this.presentToast( 'Senha recuperada com sucesso' );
-                this.startSignIn( {} )
+                this.startSignIn( {restartSignIn: true} )
                   .then( res => resolve() )
                   .catch( res => reject() )//Verificar isso mais tardes
               })
@@ -311,7 +314,12 @@ export class UserProvider {
             resolve();
           }else{
 
-            reject()
+            if( data.restartSignIn ){
+
+              this.presentPrompt( data )
+                .then( res => resolve() )
+                .catch( res => reject() );
+            }
           }
         })
         .catch( res => console.log( 'erro no catch do Start Sign In'));
