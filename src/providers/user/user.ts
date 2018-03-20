@@ -253,6 +253,12 @@ export class UserProvider {
 
   startConfirmNewPassword( data ){
 
+    let loading = this.loadingCtrl.create({
+
+      content: 'Verificando'
+    })
+    loading.present();
+
     return new Promise( (resolve, reject) => {
 
       this.service.send({
@@ -265,16 +271,21 @@ export class UserProvider {
       })
         .then( (res:any) => {
           
+          loading.dismiss();
           if( res.request.data.isRecovered ){
 
             localStorage.setItem('token', res.request.data.token );
             resolve();
           }else{
-
+            
             reject()
           }
         })
-        .catch( res => console.log( 'erro no startConfirmNewPassword'));
+        .catch( res => {
+          
+          loading.dismiss();
+          console.log( 'erro no startConfirmNewPassword')
+        });
     });
   }
 

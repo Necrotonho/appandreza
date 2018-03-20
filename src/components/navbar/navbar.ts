@@ -44,7 +44,7 @@ export class NavbarComponent {
 
   toggleMenu() {
 
-    console.log('tentou abrir o menu');
+    // (click)="this.toggleMenu()"
     this.menuCtrl.toggle();
   }
 

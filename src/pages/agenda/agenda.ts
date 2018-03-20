@@ -117,6 +117,83 @@ export class AgendaPage {
 
     let loading = this.loadingCtrl.create({
 
+      content: 'Carregando'
+    })
+    loading.present();
+
+    this.server.send({
+
+      method: 'reasonForCancellation',
+      data:{}
+    })
+      .then( res => {
+
+        loading.dismiss();
+        if( res ){
+
+          //schedule.listReasonForCancellation = res;
+          schedule.listReasonForCancellation = [
+            {
+              type: 'radio',
+              label: 'Opt1',
+              value: 'Opt1',
+              checked: true
+            },
+            {
+              type: 'radio',
+              label: 'Opt2',
+              value: 'Opt2',
+              checked: false
+            },
+            {
+              type: 'radio',
+              label: 'Opt3',
+              value: 'Opt3',
+              checked: false
+            },
+          ];
+          this.presentReasonForCancellation( schedule );
+        }
+      })
+      .catch( res => {
+
+        loading.dismiss();
+        console.log( 'erro no chamado do cancelamento');
+      })
+
+  }
+
+  presentReasonForCancellation( schedule ){
+
+    let alert = this.alertCtrl.create();
+          alert.setTitle('Motivo do cancelamento');
+      
+          schedule.listReasonForCancellation.forEach( element => {
+            
+            alert.addInput({
+              type: element.type,
+              label: element.label,
+              value: element.value,
+              checked: element.checked
+            });
+          });      
+          alert.addButton('Cancel');
+          alert.addButton({
+            text: 'OK',
+            handler: data => {
+      
+              schedule.reasonForCancellation = data;
+              this.startCancelSchedule( schedule );
+            }
+          });
+          alert.present();
+
+  }
+
+  startCancelSchedule( data ){
+
+    let loading = this.loadingCtrl.create({
+
       content: 'Cancelando agendamento'
     })
     loading.present();
@@ -124,8 +201,9 @@ export class AgendaPage {
 
       method: 'cancelSchedule',
       data: {
-        id: schedule.id,
-        date: schedule.date
+        id: data.id,
+        date: data.date,
+        reasonForCancellation: data.reasonForCancellation 
       }
     })
       .then( (res: any) => {
