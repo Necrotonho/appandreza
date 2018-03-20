@@ -26,8 +26,8 @@ export class UserProvider {
   ){
 
     localStorage.setItem('isLoggedIn', 'false' );
-    //localStorage.removeItem('token');
-    //localStorage.removeItem('visitorToken');
+    localStorage.removeItem('token');
+    localStorage.removeItem('visitorToken');
     this.service.toConnect()
       .then( res => {
         
