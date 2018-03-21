@@ -21,6 +21,7 @@ import { DateProvider } from '../providers/date/date';
 import { CoreProvider } from '../providers/core/core';
 import { UserProvider } from '../providers/user/user';
 import { ErrorsProvider } from '../providers/errors/errors';
+import { SideMenuPage } from '../pages/side-menu/side-menu';
 
 @NgModule({
   declarations: [
@@ -30,7 +31,8 @@ import { ErrorsProvider } from '../providers/errors/errors';
     HomePage,
     TabsPage,
     NavbarComponent,
-    DateSelectorComponent
+    DateSelectorComponent,
+    SideMenuPage
   ],
   imports: [
     BrowserModule,
@@ -50,7 +52,8 @@ import { ErrorsProvider } from '../providers/errors/errors';
     AgendaPage,
     ContactPage,
     HomePage,
-    TabsPage
+    TabsPage,
+    SideMenuPage
   ],
   providers: [
     StatusBar,

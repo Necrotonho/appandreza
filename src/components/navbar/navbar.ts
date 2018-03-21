@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { CoreProvider } from '../../providers/core/core';
 import { MenuController } from 'ionic-angular';
+import { TabsPage } from '../../pages/tabs/tabs';
 
 /**
  * Generated class for the ToolbarComponent component.
@@ -13,7 +14,7 @@ import { MenuController } from 'ionic-angular';
   templateUrl: 'navbar.html'
 })
 export class NavbarComponent {
-
+  
   name: String;
   constructor(
     private core: CoreProvider,

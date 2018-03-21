@@ -13,7 +13,11 @@ export class HomePage {
 
   constructor(public navCtrl: NavController, public service: ServiceProvider, private core: CoreProvider, private user: UserProvider) {
 
-    
   } 
 
+  doLogin(){
+
+    
+    
+  }
 }
