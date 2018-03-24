@@ -41,7 +41,6 @@ export class CoreProvider {
 
   setUserData( value ){
 
-    console.log('chamou atualização de user');
     this.userData = value;
     this.userDataObservable.next( value );
   }

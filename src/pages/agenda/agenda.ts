@@ -126,32 +126,14 @@ export class AgendaPage {
       method: 'reasonForCancellation',
       data:{}
     })
-      .then( res => {
+      .then( (res:any) => {
 
         loading.dismiss();
         if( res ){
 
-          //schedule.listReasonForCancellation = res;
-          schedule.listReasonForCancellation = [
-            {
-              type: 'radio',
-              label: 'Opt1',
-              value: 'Opt1',
-              checked: true
-            },
-            {
-              type: 'radio',
-              label: 'Opt2',
-              value: 'Opt2',
-              checked: false
-            },
-            {
-              type: 'radio',
-              label: 'Opt3',
-              value: 'Opt3',
-              checked: false
-            },
-          ];
+          console.log('retorno do servidor')
+          console.log( res );
+          schedule.listReasonForCancellation = res.request.data;
           this.presentReasonForCancellation( schedule );
         }
       })
@@ -168,20 +150,26 @@ export class AgendaPage {
     let alert = this.alertCtrl.create();
           alert.setTitle('Motivo do cancelamento');
       
+          
           schedule.listReasonForCancellation.forEach( element => {
             
+
             alert.addInput({
-              type: element.type,
-              label: element.label,
-              value: element.value,
-              checked: element.checked
+              type: 'radio',
+              label: element.description,
+              value: element.id,
+              checked: false,
             });
           });      
           alert.addButton('Cancel');
           alert.addButton({
             text: 'OK',
             handler: data => {
-      
+              
+              data = {
+                id: data,
+                description: 'asasd'
+              }
               schedule.reasonForCancellation = data;
               this.startCancelSchedule( schedule );
             }

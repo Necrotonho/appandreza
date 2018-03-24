@@ -2,10 +2,12 @@
   <ion-content padding style="background-color: #f28500">
 
     <ion-item text-center style="background-color: #f28500">
+      
       <img width="80" height="80" src="img/avatar.png" style="border-radius: 100%; border: 3px solid #d97700; ">
-      <h2 ion-text color="light" style="font-size: 20px;">Júlio César da Silva</h2>
+      <h2 ion-text color="light">{{ this.name ? this.name : 'Visitante' }}</h2>
     </ion-item>
     <ion-list>
+    
       <button ion-item menuClose *ngFor="let p of pages" (click)="openPage(p)" style="background-color: #f28500; color: white">
         <ion-icon item-start [name]="p.icon" color="light"></ion-icon>
         {{ p.title }}

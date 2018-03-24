@@ -1,6 +1,8 @@
 import { Component, ViewChild } from '@angular/core';
 import { IonicPage, NavController, NavParams, Nav } from 'ionic-angular';
 import { TabsPage } from '../tabs/tabs';
+import { MyProfilePage } from '../my-profile/my-profile';
+import { CoreProvider } from '../../providers/core/core';
 
 export interface PageInterface {
 
@@ -18,31 +20,64 @@ export interface PageInterface {
 })
 export class SideMenuPage {
 
+  name: any;  
   rootPage = TabsPage;
   
-  @ViewChild( Nav ) nav: Nav;
+  @ViewChild( Nav ) navCtrl: NavController;
 
   pages: PageInterface[] = [
 
-    {title:'Botão 1', pageName: 'tabsPagesss', tabComponent: 'Tab1Page', index: 0, icon: 'home'},
-    {title:'Botão 2', pageName: 'tabsPagesss', tabComponent: 'Tab2Page', index: 1, icon: 'home'},
-    {title:'Agenda', pageName: 'AgendaPage', icon: 'home'},
+    { title:'Meu dados', pageName: 'tabsPagesss', tabComponent: 'Tab1Page', index: 0, icon: 'person' },
+    { title:'Cadastrar-se', pageName: 'tabsPagesss', tabComponent: 'Tab2Page', index: 1, icon: 'create' },
+    { title:'Sair', pageName: 'tabsPagesss', tabComponent: 'Tab2Page', index: 1, icon: 'exit' },
 
   ]
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
+  constructor( 
+    public navParams: NavParams,
+    private core: CoreProvider
+  ) {
 
-    console.log('carregou o side-menu');
+    this.initName();
+    this.core.userDataObservable.subscribe({
+
+      next: ( res ) => {
+      
+        this.name = res.name
+      }
+    })
   }
 
   ionViewDidLoad() {
+
     console.log('ionViewDidLoad SideMenuPage');
   }
 
-    openPage( page: PageInterface ){
+  openPage( page: PageInterface ){
+  
+    this.navCtrl.push( MyProfilePage );
+  }
+
+  isActive( page: PageInterface ){
+  }
+
+  initName(){
+
+    if( this.core.getUserData() && this.core.getUserData().name ){
+
+      this.name = this.core.getUserData().name;
+    }else{
+
+      this.name = undefined;
+      return false;
     }
 
-    isActive( page: PageInterface ){
-    }
+    
+  }
 
+
+  switchEnableButton(  ){
+
+    return false
+  }
 }

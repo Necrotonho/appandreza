@@ -1,0 +1,31 @@
+<navbarComponent>zdsdfsd</navbarComponent>
+
+<ion-content style="background-color:#efe9e5">
+  <br/><br/><br/><br/>
+  <ion-item text-center style="background-color: white;" >
+    <img width="80" height="80" src="img/avatar.png" style="border-radius: 100%; border: 3px solid #f28500;">
+    <h2 ion-text>{{ this.userData && this.userData.name?  this.userData.name : 'visitante' }}</h2>
+  </ion-item>
+  <form >
+      <ion-item>
+        <ion-label>Email</ion-label>
+        <ion-input type="text"  name="title" value="julio_cs31@hotmail.com" (click)="switchDisable(this)"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label>Description</ion-label>
+        <ion-textarea  name="description" disabled> </ion-textarea>
+      </ion-item>
+      <button ion-button type="submit" block>Add Todo</button>
+    </form>
+  <ion-list>
+    <ion-list-header>Nome do usuário</ion-list-header>
+    <ion-item>
+      <ion-icon name="ionic" item-left></ion-icon>
+      nome
+    </ion-item>
+    <ion-item>
+      <ion-icon name="ionic" item-left></ion-icon>
+      email
+    </ion-item>
+  </ion-list>
+</ion-content>

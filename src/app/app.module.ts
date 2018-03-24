@@ -22,6 +22,7 @@ import { CoreProvider } from '../providers/core/core';
 import { UserProvider } from '../providers/user/user';
 import { ErrorsProvider } from '../providers/errors/errors';
 import { SideMenuPage } from '../pages/side-menu/side-menu';
+import { MyProfilePage } from '../pages/my-profile/my-profile';
 
 @NgModule({
   declarations: [
@@ -32,12 +33,13 @@ import { SideMenuPage } from '../pages/side-menu/side-menu';
     TabsPage,
     NavbarComponent,
     DateSelectorComponent,
-    SideMenuPage
+    SideMenuPage,
+    MyProfilePage
   ],
   imports: [
     BrowserModule,
     HttpModule,
-    IonicModule.forRoot(MyApp, {
+    IonicModule.forRoot( MyApp, {
 
       monthNames: ['janeiro', 'fevereiro', 'março', 'abril', 'maio', 'junho', 'julho', 'agosto', 'setembro', 'outubro', 'novembro', 'dezembro'],
       monthShortNames: ['jan', 'fev', 'mar', 'abr', 'mai', 'jun', 'jul', 'ago', 'set', 'out', 'nov', 'dez'],
@@ -53,7 +55,8 @@ import { SideMenuPage } from '../pages/side-menu/side-menu';
     ContactPage,
     HomePage,
     TabsPage,
-    SideMenuPage
+    SideMenuPage,
+    MyProfilePage
   ],
   providers: [
     StatusBar,
