@@ -3,6 +3,7 @@ import { IonicPage, NavController, NavParams, Nav } from 'ionic-angular';
 import { TabsPage } from '../tabs/tabs';
 import { MyProfilePage } from '../my-profile/my-profile';
 import { CoreProvider } from '../../providers/core/core';
+import { UserProvider } from '../../providers/user/user';
 
 export interface PageInterface {
 
@@ -29,14 +30,15 @@ export class SideMenuPage {
   pages: PageInterface[] = [
 
     { title:'Meu dados', pageName: 'tabsPagesss', tabComponent: 'Tab1Page', index: 0, icon: 'person', show: false },
-    { title:'Cadastrar-se', pageName: 'tabsPagesss', tabComponent: 'Tab2Page', index: 1, icon: 'create', show: true },
-    { title:'Sair', pageName: 'tabsPagesss', tabComponent: 'Tab2Page', index: 1, icon: 'exit', show: true  },
+    { title:'Entrar', pageName: 'tabsPagesss', tabComponent: 'Tab2Page', index: 1, icon: 'create', show: true },
+    { title:'Sair', pageName: 'tabsPagesss', tabComponent: 'Tab2Page', index: 1, icon: 'exit', show: false  },
 
   ]
 
   constructor( 
     public navParams: NavParams,
-    private core: CoreProvider
+    private core: CoreProvider,
+    private user: UserProvider,
   ) {
 
     this.initName();
@@ -44,13 +46,17 @@ export class SideMenuPage {
 
       next: ( res ) => {
         
-        if( res.name ){
+        if( res && res.name ){
 
           this.name = res.name;
           this.pages.find( page => page.title == 'Meu dados' ).show = true;
+          this.pages.find( page => page.title == 'Sair' ).show = true;
+          this.pages.find( page => page.title == 'Entrar' ).show = false;
         }else{
           
           this.pages.find( page => page.title == 'Meu dados' ).show = false;
+          this.pages.find( page => page.title == 'Sair' ).show = false;
+          this.pages.find( page => page.title == 'Entrar' ).show = true;
           this.name = undefined;
         }
       }
@@ -64,7 +70,16 @@ export class SideMenuPage {
 
   openPage( page: PageInterface ){
   
-    this.navCtrl.push( MyProfilePage );
+    if( page.title == 'Entrar' ){
+
+      this.user.signIn()
+    }else if( page.title == 'Sair' ){
+
+      this.user.sginOut()
+        .then( res => {})
+        .catch( res => {})
+    }
+    //this.navCtrl.push( MyProfilePage );
   }
 
   isActive( page: PageInterface ){

@@ -26,7 +26,13 @@ export class NavbarComponent {
 
       next: ( res ) => {
       
-        this.name = res.name
+        if( res && res.name ){
+
+          this.name = res.name.split(' ')[0];
+        }else{
+          
+          this.name = undefined;
+        }
       }
     })
   }

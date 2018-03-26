@@ -56,6 +56,48 @@ export class UserProvider {
 
   }
 
+  sginOut(){
+
+    return new Promise( (resolve, reject) => {
+
+      let alert = this.alertCtrl.create({
+        title: 'Sair',
+        subTitle: 'Você tem certeza que deseja sair?',
+        buttons: [
+          {
+            text: 'Cancelar',
+            handler: data => {
+              
+            }
+          },
+          {
+            text: 'Sim',
+            handler: data => {
+              
+              this.core.setUserData( null );
+              localStorage.removeItem( 'token' );
+              localStorage.setItem( 'isLoggedIn', 'false' );
+              resolve();
+            }
+          }
+        ]
+      });
+      
+      alert.present();
+    })
+  }
+
+  starSignOut(){
+
+    return new Promise( (resolve, reject) => {
+
+      this.core.setUserData( null )
+      localStorage.removeItem( 'token' );
+      localStorage.setItem( 'isLoggedIn', 'false' );
+      resolve();
+    })
+  }
+
   presentPrompt( data ) {
 
     return new Promise( (resolve, reject) => {
