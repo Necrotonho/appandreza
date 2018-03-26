@@ -28,7 +28,7 @@ export class NavbarComponent {
       
         if( res && res.name ){
 
-          this.name = res.name.split(' ')[0];
+          this.name = this.ajustName( res.name );
         }else{
           
           this.name = undefined;
@@ -41,12 +41,17 @@ export class NavbarComponent {
 
     if( this.core.getUserData() && this.core.getUserData().name ){
 
-      this.name = this.core.getUserData().name;
+      this.name = this.name = this.ajustName( this.core.getUserData().name );;
     }else{
 
       this.name = undefined;
       return false;
     }
+  }
+
+  ajustName( name ){
+
+    return name ? name.split(' ')[0] : undefined;
   }
 
   toggleMenu() {

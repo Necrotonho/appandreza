@@ -78,8 +78,10 @@ export class SideMenuPage {
       this.user.sginOut()
         .then( res => {})
         .catch( res => {})
+    }else if( page.title == 'Meu dados' ){
+
+      this.navCtrl.push( MyProfilePage );
     }
-    //this.navCtrl.push( MyProfilePage );
   }
 
   isActive( page: PageInterface ){
