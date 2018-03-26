@@ -165,17 +165,73 @@ export class AgendaPage {
           alert.addButton({
             text: 'OK',
             handler: data => {
-              
+            
+              let reasonForCancellation;
+              let idOtherCancellation = '-1';
               data = {
                 id: data,
-                description: 'asasd'
+                description: 'Default'
               }
-              schedule.reasonForCancellation = data;
-              this.startCancelSchedule( schedule );
+
+              if( parseInt( data.id ) == parseInt( idOtherCancellation )){
+
+                this.presentReasonForCancellationOther()
+                  .then( (res:any) => {
+                    
+                    data.description = res.other;
+                    schedule.reasonForCancellation = data;
+                    this.startCancelSchedule( schedule );
+                  })
+                  .catch( res => {
+
+                    console.log( 'deu merda no recebimento do motivo do cancelamento' );
+                  })
+              }else{
+
+                schedule.reasonForCancellation = data;
+                this.startCancelSchedule( schedule );
+              }
             }
           });
           alert.present();
 
+  }
+
+  presentReasonForCancellationOther(){
+
+    return new Promise( (resolve, reject) => {
+
+      let alert = this.alertCtrl.create({
+  
+        title: 'Cancelamento',
+        subTitle: 'Descreva abaixo o motivo do seu cancelamento',
+        inputs: [
+          {
+            type: 'text',
+            name: 'other',
+          },
+        ],
+        buttons:[
+          {
+            text: 'Cancelar',
+            handler: data => {
+  
+              if( data.other ){
+
+                resolve( data );
+              }else{
+
+                this.presentReasonForCancellationOther()
+                  .then( res => resolve( res ))
+                  .catch( res => reject( res ))
+              }
+            }
+          },
+        ]
+      });
+
+      alert.present();
+    })
   }
 
   startCancelSchedule( data ){
@@ -202,7 +258,7 @@ export class AgendaPage {
       .catch( res => {
         
         loading.dismiss();
-        this.presentConfirmErrorUpdateSchedule();
+        this.presentConfirmErrorUpdateSchedule();//Corrigir essa mensagem  pra erro ao cancelar agendamento
       })
   }
 

@@ -28,7 +28,7 @@ export class NavbarComponent {
       
         if( res && res.name ){
 
-          this.name = this.ajustName( res.name );
+          this.name = this.adjustName( res.name );
         }else{
           
           this.name = undefined;
@@ -41,7 +41,7 @@ export class NavbarComponent {
 
     if( this.core.getUserData() && this.core.getUserData().name ){
 
-      this.name = this.name = this.ajustName( this.core.getUserData().name );;
+      this.name = this.name = this.adjustName( this.core.getUserData().name );;
     }else{
 
       this.name = undefined;
@@ -49,7 +49,7 @@ export class NavbarComponent {
     }
   }
 
-  ajustName( name ){
+  adjustName( name ){
 
     return name ? name.split(' ')[0] : undefined;
   }
