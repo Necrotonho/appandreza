@@ -11,6 +11,7 @@ export interface PageInterface {
   tabComponent?: any;
   index?: number;
   icon: string;
+  show?: boolean;
 }
 
 @IonicPage()
@@ -27,9 +28,9 @@ export class SideMenuPage {
 
   pages: PageInterface[] = [
 
-    { title:'Meu dados', pageName: 'tabsPagesss', tabComponent: 'Tab1Page', index: 0, icon: 'person' },
-    { title:'Cadastrar-se', pageName: 'tabsPagesss', tabComponent: 'Tab2Page', index: 1, icon: 'create' },
-    { title:'Sair', pageName: 'tabsPagesss', tabComponent: 'Tab2Page', index: 1, icon: 'exit' },
+    { title:'Meu dados', pageName: 'tabsPagesss', tabComponent: 'Tab1Page', index: 0, icon: 'person', show: false },
+    { title:'Cadastrar-se', pageName: 'tabsPagesss', tabComponent: 'Tab2Page', index: 1, icon: 'create', show: true },
+    { title:'Sair', pageName: 'tabsPagesss', tabComponent: 'Tab2Page', index: 1, icon: 'exit', show: true  },
 
   ]
 
@@ -42,8 +43,16 @@ export class SideMenuPage {
     this.core.userDataObservable.subscribe({
 
       next: ( res ) => {
-      
-        this.name = res.name
+        
+        if( res.name ){
+
+          this.name = res.name;
+          this.pages.find( page => page.title == 'Meu dados' ).show = true;
+        }else{
+          
+          this.pages.find( page => page.title == 'Meu dados' ).show = false;
+          this.name = undefined;
+        }
       }
     })
   }
@@ -70,14 +79,7 @@ export class SideMenuPage {
 
       this.name = undefined;
       return false;
-    }
-
-    
+    }    
   }
 
-
-  switchEnableButton(  ){
-
-    return false
-  }
 }
