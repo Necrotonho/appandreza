@@ -209,6 +209,7 @@ export class AgendaPage {
           {
             type: 'text',
             name: 'other',
+            placeholder: 'Descrição'
           },
         ],
         buttons:[
