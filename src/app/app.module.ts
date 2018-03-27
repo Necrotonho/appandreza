@@ -23,6 +23,7 @@ import { UserProvider } from '../providers/user/user';
 import { ErrorsProvider } from '../providers/errors/errors';
 import { SideMenuPage } from '../pages/side-menu/side-menu';
 import { MyProfilePage } from '../pages/my-profile/my-profile';
+import { FoodPlanPage } from '../pages/food-plan/food-plan';
 
 @NgModule({
   declarations: [
@@ -34,7 +35,8 @@ import { MyProfilePage } from '../pages/my-profile/my-profile';
     NavbarComponent,
     DateSelectorComponent,
     SideMenuPage,
-    MyProfilePage
+    MyProfilePage,
+    FoodPlanPage
   ],
   imports: [
     BrowserModule,
@@ -56,7 +58,8 @@ import { MyProfilePage } from '../pages/my-profile/my-profile';
     HomePage,
     TabsPage,
     SideMenuPage,
-    MyProfilePage
+    MyProfilePage,
+    FoodPlanPage
   ],
   providers: [
     StatusBar,

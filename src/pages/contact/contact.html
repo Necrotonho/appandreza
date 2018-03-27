@@ -3,15 +3,33 @@
 <ion-content class="card-background-page" padding style="background-color:#efe9e5">
 
 <br/><br/><br/><br/>
+  <div>
+    <div style="float:left;   font-size: 50px; margin: 0px 15px;">
+  
+      <ion-icon name="clipboard"></ion-icon>
+    </div>
+    <div style="float:left; margin-top: -5px;">
+      <p>
+        <span style="color: orange; font-size: 22px">
+              Atividades
+        </span><br/>
+        <span>
+          Pensar em alguma frase para por aqui
+        </span>
+      </p>
+    </div>
+  </div>
+
+
   <ion-card>
     <img src="img/minhasMedidas.jpg"/>
     <div class="card-title">Minhas medidas</div>
     <div class="card-subtitle">Última atualização em 21/03/2018</div>
   </ion-card>
-  <ion-card>
+  <ion-card (click)="openPage('foodPlan')">
     <img src="img/planoAlimentar.jpg"/>
     <div class="card-title">Plano Alimentar</div>
-    <div class="card-subtitle">Sua próxima refeição é em 2 horas</div>
+    <div class="card-subtitle">Sua próxima refeição será em 2 horas</div>
   </ion-card>
 
 </ion-content>
