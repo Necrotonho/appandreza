@@ -17,8 +17,6 @@ export class FoodPlanContentPage {
 
   @ViewChild(Slides) slides: Slides;
 
-  private sliderOptions = { pager: true, autoHeight: true };
-
   constructor(public navCtrl: NavController, public navParams: NavParams) {
   }
 
@@ -27,7 +25,13 @@ export class FoodPlanContentPage {
   }
 
   ngAfterViewInit(){
+
     this.slides.autoHeight = true;
+    this.slides.pager = true;
+    this.slides.parallax = true;
+    this.slides.paginationType = 'progress';
+    this.slides.effect = 'coverflow';
+    this.slides.spaceBetween = -10;
 }
 
 }
