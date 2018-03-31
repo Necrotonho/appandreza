@@ -33,7 +33,7 @@
     </ion-card-header>
   
     <ion-list>
-        <button ion-item *ngFor="let d of foddPlanSelected; let i=index"> 
+        <button ion-item *ngFor="let d of foddPlanSelected; let i=index" (click)="openFoodPlanContent(d)"> 
           {{ d.description }}
           <ion-note item-end>
             {{ d.hour }}

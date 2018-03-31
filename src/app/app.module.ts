@@ -24,6 +24,7 @@ import { ErrorsProvider } from '../providers/errors/errors';
 import { SideMenuPage } from '../pages/side-menu/side-menu';
 import { MyProfilePage } from '../pages/my-profile/my-profile';
 import { FoodPlanPage } from '../pages/food-plan/food-plan';
+import { FoodPlanContentPage } from '../pages/food-plan-content/food-plan-content';
 
 @NgModule({
   declarations: [
@@ -36,7 +37,8 @@ import { FoodPlanPage } from '../pages/food-plan/food-plan';
     DateSelectorComponent,
     SideMenuPage,
     MyProfilePage,
-    FoodPlanPage
+    FoodPlanPage,
+    FoodPlanContentPage
   ],
   imports: [
     BrowserModule,
@@ -59,7 +61,8 @@ import { FoodPlanPage } from '../pages/food-plan/food-plan';
     TabsPage,
     SideMenuPage,
     MyProfilePage,
-    FoodPlanPage
+    FoodPlanPage,
+    FoodPlanContentPage
   ],
   providers: [
     StatusBar,

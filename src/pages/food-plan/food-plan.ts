@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { CoreProvider } from '../../providers/core/core';
+import { FoodPlanContentPage } from '../food-plan-content/food-plan-content';
 
 /**
  * Generated class for the FoodPlanPage page.
@@ -40,7 +41,7 @@ export class FoodPlanPage {
           title: 'Normal',
           foodPlan: [
             {
-              hour: '10h',
+              hour: '09h00',
               description: 'Desjejum',
               content: {
                 imgFood: 'img/food.jpg',
@@ -50,7 +51,17 @@ export class FoodPlanPage {
               }
             },
             {
-              hour: '11h',
+              hour: '10h00',
+              description: 'Lanche',
+              content: {
+                imgFood: 'img/food.jpg',
+                ingredients: ['item', 'item', 'item', 'item','item'],
+                modePrepare: 'modo de preparo vai aqui',
+                obs: 'obs vai aqui'
+              }
+            },
+            {
+              hour: '12h00',
               description: 'Almoço',
               content: {
                 imgFood: 'img/food.jpg',
@@ -60,7 +71,7 @@ export class FoodPlanPage {
               }
             },
             {
-              hour: '12h',
+              hour: '12h00',
               description: 'Café',
               content: {
                 imgFood: 'img/food.jpg',
@@ -70,18 +81,8 @@ export class FoodPlanPage {
               }
             },
             {
-              hour: '12h',
-              description: 'Café',
-              content: {
-                imgFood: 'img/food.jpg',
-                ingredients: ['item', 'item', 'item', 'item','item'],
-                modePrepare: 'modo de preparo vai aqui',
-                obs: 'obs vai aqui'
-              }
-            },
-            {
-              hour: '12h',
-              description: 'Café',
+              hour: '15h00',
+              description: 'Lanche',
               content: {
                 imgFood: 'img/food.jpg',
                 ingredients: ['item', 'item', 'item', 'item','item'],
@@ -95,8 +96,8 @@ export class FoodPlanPage {
           title: 'Treino 1',
           foodPlan: [
             {
-              hour: '09h',
-              description: 'Pré treino',
+              hour: '08h30',
+              description: 'Pré-treino',
               content: {
                 imgFood: 'img/food.jpg',
                 ingredients: ['item', 'item', 'item', 'item','item'],
@@ -105,8 +106,8 @@ export class FoodPlanPage {
               }
             },
             {
-              hour: '11h',
-              description: 'Pós treino',
+              hour: '10h00',
+              description: 'Pós-treino',
               content: {
                 imgFood: 'img/food.jpg',
                 ingredients: ['item', 'item', 'item', 'item','item'],
@@ -115,7 +116,17 @@ export class FoodPlanPage {
               }
             },
             {
-              hour: '16h',
+              hour: '12h00',
+              description: 'Almoço',
+              content: {
+                imgFood: 'img/food.jpg',
+                ingredients: ['item', 'item', 'item', 'item','item'],
+                modePrepare: 'modo de preparo vai aqui',
+                obs: 'obs vai aqui'
+              }
+            },
+            {
+              hour: '15h00',
               description: 'Lanche da tarde',
               content: {
                 imgFood: 'img/food.jpg',
@@ -125,8 +136,8 @@ export class FoodPlanPage {
               }
             },
             {
-              hour: '16h',
-              description: 'Lanche da tarde',
+              hour: '18h00',
+              description: 'Café da tarde',
               content: {
                 imgFood: 'img/food.jpg',
                 ingredients: ['item', 'item', 'item', 'item','item'],
@@ -135,18 +146,8 @@ export class FoodPlanPage {
               }
             },
             {
-              hour: '16h',
-              description: 'Lanche da tarde',
-              content: {
-                imgFood: 'img/food.jpg',
-                ingredients: ['item', 'item', 'item', 'item','item'],
-                modePrepare: 'modo de preparo vai aqui',
-                obs: 'obs vai aqui'
-              }
-            },
-            {
-              hour: '16h',
-              description: 'Lanche da tarde',
+              hour: '20h00',
+              description: 'Jantar',
               content: {
                 imgFood: 'img/food.jpg',
                 ingredients: ['item', 'item', 'item', 'item','item'],
@@ -160,8 +161,8 @@ export class FoodPlanPage {
           title: 'Treino 2',
           foodPlan: [
             {
-              hour: '09h',
-              description: 'Pré treino3',
+              hour: '08h30',
+              description: 'Pré-treino 2',
               content: {
                 imgFood: 'img/food.jpg',
                 ingredients: ['item', 'item', 'item', 'item','item'],
@@ -170,8 +171,8 @@ export class FoodPlanPage {
               }
             },
             {
-              hour: '11h',
-              description: 'Pós treino3',
+              hour: '10h00',
+              description: 'Pós-treino 2',
               content: {
                 imgFood: 'img/food.jpg',
                 ingredients: ['item', 'item', 'item', 'item','item'],
@@ -180,8 +181,8 @@ export class FoodPlanPage {
               }
             },
             {
-              hour: '16h',
-              description: 'Lanche da tarde3',
+              hour: '12h00',
+              description: 'Almoço 2',
               content: {
                 imgFood: 'img/food.jpg',
                 ingredients: ['item', 'item', 'item', 'item','item'],
@@ -190,8 +191,8 @@ export class FoodPlanPage {
               }
             },
             {
-              hour: '16h',
-              description: 'Lanche da tarde3',
+              hour: '15h00',
+              description: 'Lanche da tarde 2',
               content: {
                 imgFood: 'img/food.jpg',
                 ingredients: ['item', 'item', 'item', 'item','item'],
@@ -200,8 +201,8 @@ export class FoodPlanPage {
               }
             },
             {
-              hour: '16h',
-              description: 'Lanche da tarde3',
+              hour: '18h00',
+              description: 'Café da tarde 2',
               content: {
                 imgFood: 'img/food.jpg',
                 ingredients: ['item', 'item', 'item', 'item','item'],
@@ -210,18 +211,8 @@ export class FoodPlanPage {
               }
             },
             {
-              hour: '16h',
-              description: 'Lanche da tarde3',
-              content: {
-                imgFood: 'img/food.jpg',
-                ingredients: ['item', 'item', 'item', 'item','item'],
-                modePrepare: 'modo de preparo vai aqui',
-                obs: 'obs vai aqui'
-              }
-            },
-            {
-              hour: '16h',
-              description: 'Lanche da tarde3',
+              hour: '20h00',
+              description: 'Jantar 2',
               content: {
                 imgFood: 'img/food.jpg',
                 ingredients: ['item', 'item', 'item', 'item','item'],
@@ -231,81 +222,7 @@ export class FoodPlanPage {
             },
         ]
         },
-        {
-          title: 'Treino 2s',
-          foodPlan: [
-            {
-              hour: '09h',
-              description: 'Pré treino3',
-              content: {
-                imgFood: 'img/food.jpg',
-                ingredients: ['item', 'item', 'item', 'item','item'],
-                modePrepare: 'modo de preparo vai aqui',
-                obs: 'obs vai aqui'
-              }
-            },
-            {
-              hour: '11h',
-              description: 'Pós treino3',
-              content: {
-                imgFood: 'img/food.jpg',
-                ingredients: ['item', 'item', 'item', 'item','item'],
-                modePrepare: 'modo de preparo vai aqui',
-                obs: 'obs vai aqui'
-              }
-            },
-            {
-              hour: '16h',
-              description: 'Lanche da tarde3',
-              content: {
-                imgFood: 'img/food.jpg',
-                ingredients: ['item', 'item', 'item', 'item','item'],
-                modePrepare: 'modo de preparo vai aqui',
-                obs: 'obs vai aqui'
-              }
-            },
-            {
-              hour: '16h',
-              description: 'Lanche da tarde3',
-              content: {
-                imgFood: 'img/food.jpg',
-                ingredients: ['item', 'item', 'item', 'item','item'],
-                modePrepare: 'modo de preparo vai aqui',
-                obs: 'obs vai aqui'
-              }
-            },
-            {
-              hour: '16h',
-              description: 'Lanche da tarde3',
-              content: {
-                imgFood: 'img/food.jpg',
-                ingredients: ['item', 'item', 'item', 'item','item'],
-                modePrepare: 'modo de preparo vai aqui',
-                obs: 'obs vai aqui'
-              }
-            },
-            {
-              hour: '16h',
-              description: 'Lanche da tarde3',
-              content: {
-                imgFood: 'img/food.jpg',
-                ingredients: ['item', 'item', 'item', 'item','item'],
-                modePrepare: 'modo de preparo vai aqui',
-                obs: 'obs vai aqui'
-              }
-            },
-            {
-              hour: '16h',
-              description: 'Lanche da tarde3',
-              content: {
-                imgFood: 'img/food.jpg',
-                ingredients: ['item', 'item', 'item', 'item','item'],
-                modePrepare: 'modo de preparo vai aqui',
-                obs: 'obs vai aqui'
-              }
-            },
-        ]
-      },
+        
     ]
     
     );
@@ -329,5 +246,9 @@ export class FoodPlanPage {
     }
   }
 
+  openFoodPlanContent( food ){
+
+    this.navCtrl.push( FoodPlanContentPage );
+  }
 
 }
