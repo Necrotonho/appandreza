@@ -30,8 +30,7 @@ export class FoodPlanContentPage {
     this.slides.pager = true;
     this.slides.parallax = true;
     this.slides.paginationType = 'progress';
-    this.slides.effect = 'coverflow';
-    this.slides.spaceBetween = -10;
+    this.slides.spaceBetween = -15;
 }
 
 }
