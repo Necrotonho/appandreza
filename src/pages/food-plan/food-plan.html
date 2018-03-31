@@ -2,7 +2,7 @@
 
 <ion-content padding style="background-color:#efe9e5">
 
-  <br/><br/><br/><br/>
+  <br/><br/><br/> 
   <div>
     <div style="float:left;   font-size: 50px; margin: 0px 15px;">
   
@@ -14,10 +14,34 @@
           Plano Alimentar
         </span><br/>
         <span>
-          Pensar em alguma frase para por aqui
+          Pensar em alguma frase qui
         </span>
       </p>
     </div>
   </div>
+
+
+  <ion-card>
+    <ion-card-header *ngIf="foodPlan.length - 1">
+
+      <ion-segment [(ngModel)]="relationship" color="orange" (ionChange)="segmentChanged($event)">
+        <ion-segment-button *ngFor="let z of foodPlan; let i=index" [value]="z.title" ng-selected=" i? true: false">
+          {{ z.title }}
+        </ion-segment-button> 
+      </ion-segment>   
+
+    </ion-card-header>
+  
+    <ion-list>
+        <button ion-item *ngFor="let d of foddPlanSelected; let i=index"> 
+          {{ d.description }}
+          <ion-note item-end>
+            {{ d.hour }}
+          </ion-note>
+        </button>
+    </ion-list>
+  </ion-card>
+
+
 
 </ion-content>

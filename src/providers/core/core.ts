@@ -23,6 +23,9 @@ export class CoreProvider {
   private userData;
   public userDataObservable: Subject<any> = new Subject();
 
+  private foodPlan;
+  public foodPlanObservable: Subject<any> = new Subject();
+
   constructor(public http: Http, private date: DateProvider, private server: ServiceProvider ) {
 
     console.log('classe core criada');
@@ -48,5 +51,16 @@ export class CoreProvider {
   getUserData(){
 
     return this.userData;
+  }
+
+  setFoodPlan( value ){
+
+    this.foodPlan = value;
+    this.foodPlanObservable.next( value );
+  }
+
+  getFoodPlan(){
+
+    return this.foodPlan;
   }
 }
