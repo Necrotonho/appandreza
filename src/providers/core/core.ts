@@ -4,13 +4,30 @@ import 'rxjs/add/operator/map';
 import { Subject } from 'rxjs/Subject';
 import { DateProvider } from '../date/date';
 import { ServiceProvider } from '../service/service';
+import { HtmlParser, HtmlTagDefinition } from '@angular/compiler';
 
-/*
-  Generated class for the CoreProvider provider.
+export interface FoodPlanItemContentInterface{
 
-  See https://angular.io/guide/dependency-injection for more info on providers
-  and Angular DI.
-*/
+  imgFood: string;
+  ingredients: Array<string>;
+  modePrepare: string;
+  obs: string;
+
+}
+export interface FoodPlanItemInterface{
+
+  hour: string;
+  description: string;
+  content: Array<FoodPlanItemContentInterface>;
+
+}
+export interface FoodPlanInterface{
+
+  title: string;
+  foodPlan: Array<FoodPlanItemInterface>;
+
+}
+
 @Injectable()
 export class CoreProvider {
 
@@ -25,6 +42,9 @@ export class CoreProvider {
 
   private foodPlan;
   public foodPlanObservable: Subject<any> = new Subject();
+
+  private foodPlanContentSelected: FoodPlanItemInterface;
+  public foodPlanContentSelectedObservable: Subject<any> = new Subject();
 
   constructor(public http: Http, private date: DateProvider, private server: ServiceProvider ) {
 
@@ -53,7 +73,7 @@ export class CoreProvider {
     return this.userData;
   }
 
-  setFoodPlan( value ){
+  setFoodPlan( value: Array<FoodPlanInterface> ){
 
     this.foodPlan = value;
     this.foodPlanObservable.next( value );
@@ -61,6 +81,20 @@ export class CoreProvider {
 
   getFoodPlan(){
 
-    return this.foodPlan;
+    let foodplan = [].concat(this.foodPlan);
+    return foodplan;
   }
+
+  setFoodPlanContentSelected( foodPlanContent: FoodPlanItemInterface ){
+
+    this.foodPlanContentSelected = foodPlanContent;
+    this.foodPlanContentSelectedObservable.next( foodPlanContent );
+  }
+
+  getFoodPlanContentSelected(){
+
+    return this.foodPlanContentSelected;
+  }
+
+  
 }

@@ -12,115 +12,44 @@
     <div style="float:left; margin-top: -5px;">
       <p text-left>
         <span style="color: orange; font-size: 22px">
-          Desjejum
+          {{ foodPlanContent.description }}
         </span><br/>
         <span >
-          10h00
+          {{ foodPlanContent.hour }}
         </span>
       </p>
     </div>
-  </div>
-  <ion-slides pager color="orange">
-    <ion-slide >
-        
+  </div >
+  <ion-slides pager color="orange" >
+    
+    <ion-slide *ngFor=" let d of foodPlanContent.content ">
         <ion-card>
             
-            <img src="img/juiceGreen.jpg"/>
-            <div class="card-title2">Suco Verde</div>
+            <img [src]="d.imgFood"/>
+            <div class="card-title2">{{ foodPlanContent.description }}</div>
             <ion-card-content text-left>
               <ion-card-title>
                 Ingredientes
               </ion-card-title>
               <ul>
-                  <li>
-                      1 fatia média de abacaxi.
-                  </li>
-                  <li>
-                      1 folha grande de couve.
-                  </li>
-                  <li>
-                      pedaço de pepino.
-                  </li>
-                  <li>
-                      fatia de gengibre (bem fina) + 200 ml de água gelada ou água de coco.
+                  <li *ngFor=" let z of d.ingredients ">
+                      {{ z }}
                   </li>
                 </ul>
                 <br/>
               <ion-card-title>
                 Modo de preparo
               </ion-card-title>
-              <p style="text-indent: 25px;" text-justify>Retire as sementes e o filamento branco do limão. Bata no liquidificador com os outros ingredientes. Beba sem coar. · Modo de fazer: Passe os ingredientes na centrífuga e junte ao suco de limão (ou bata tudo no liquidificador com um pouco de água – apenas o suficiente para bater)</p>
+              <p style="text-indent: 25px;" text-justify>{{ d.modePrepare }}</p>
                 <br/>
-              <ion-card-title>
-                Observações
-              </ion-card-title>
-              <p style="text-indent: 25px;"  text-justify>Em caso de observações sobre a forma de consumo ou aspecto que queira ser salientado, esse espaço estará disponível.</p>
-                <br/>
-      
-      
-            </ion-card-content>
-            <ion-row no-padding>
-                <ion-col>
-                  <button ion-button clear small color="danger" icon-start>
-                    <ion-icon name='star'></ion-icon>
-                    Favorito
-                  </button>
-                </ion-col>
-                <ion-col text-center>
-                  <button ion-button clear small color="danger" icon-start>
-                    <ion-icon name='checkbox-outline'></ion-icon>
-                    Marcar como  consumido
-                  </button>
-                </ion-col>
-              </ion-row>
-          </ion-card>
-    </ion-slide>
-    <ion-slide>
-        <ion-card>
-            <img src="img/redJuice.jpg"/>
-            <div class="card-title2">Suco de frutas vermelhas</div>
-            <ion-card-content text-left>
-              <ion-card-title>
-                Ingredientes
-              </ion-card-title>
-              <ul>
-                <li>
-                  1 laranja
-                </li>
-                <li>
-                    3 fatias médias de melancia
-                </li>
-                <li>
-                    1/2 dúzia de morangos
-                </li>
-                <li>
-                    2 ameixas sem casca
-                </li>
-                <li>
-                    1/2 copo de água
-                </li>
-                <li>
-                    1 kiwi
-                </li>
-                <li>
-                    1/2 limão espremido
-                </li>
-                <li>
-                    açúcar a gosto
-                </li>
-              </ul>
-              <br/>
-              <ion-card-title>
-                Modo de preparo
-              </ion-card-title>
-              <p style="text-indent: 25px;" text-justify>Corte todas as frutas, coloque no liquidificador juntamente com o açúcar. Bata tudo por aproximadamente 1 minuto. Adicione pedras de gelo e sirva</p>
-                <br/>
-              <ion-card-title>
-                Observações
-              </ion-card-title>
-              <p style="text-indent: 25px;">Em caso de observações sobre a forma de consumo ou aspecto que queira ser salientado, esse espaço estará disponível.</p>
-                <br/>
-      
+
+              <div *ngIf="d.obs.length">
+                <ion-card-title>
+                  Observações
+                </ion-card-title>
+                <p style="text-indent: 25px;"  text-justify>{{ d.obs }}</p>
+                  <br/>
+              </div>
       
             </ion-card-content>
             <ion-row no-padding>
@@ -139,6 +68,7 @@
               </ion-row>
           </ion-card>
     </ion-slide>
+  
   </ion-slides>
 
   

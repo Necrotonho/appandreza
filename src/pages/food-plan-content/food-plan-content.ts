@@ -1,12 +1,7 @@
 import { Component, ViewChild } from '@angular/core';
 import { IonicPage, NavController, NavParams, Slides } from 'ionic-angular';
-
-/**
- * Generated class for the FoodPlanContentPage page.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
- */
+import { CoreProvider, FoodPlanItemInterface } from '../../providers/core/core';
+import { ServiceProvider } from '../../providers/service/service';
 
 @IonicPage()
 @Component({
@@ -17,11 +12,16 @@ export class FoodPlanContentPage {
 
   @ViewChild(Slides) slides: Slides;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
+  private foodPlanContent: FoodPlanItemInterface;
+
+  constructor( public navCtrl: NavController, public navParams: NavParams, private core: CoreProvider, private serve: ServiceProvider ) {
+
+    this.foodPlanContent = this.core.getFoodPlanContentSelected();
   }
 
   ionViewDidLoad() {
-    console.log('ionViewDidLoad FoodPlanContentPage');
+
+    
   }
 
   ngAfterViewInit(){

@@ -25,9 +25,9 @@ export class UserProvider {
                 public loadingCtrl: LoadingController,
   ){
 
-    localStorage.setItem('isLoggedIn', 'false' );
-    localStorage.removeItem('token');
-    localStorage.removeItem('visitorToken');
+    //localStorage.setItem('isLoggedIn', 'false' );
+    // localStorage.removeItem('token');
+    // localStorage.removeItem('visitorToken');
     this.service.toConnect()
       .then( res => {
         

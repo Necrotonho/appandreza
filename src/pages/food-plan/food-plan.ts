@@ -1,14 +1,8 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
-import { CoreProvider } from '../../providers/core/core';
+import { IonicPage, NavController, NavParams, LoadingController } from 'ionic-angular';
+import { CoreProvider, FoodPlanItemContentInterface, FoodPlanInterface, FoodPlanItemInterface } from '../../providers/core/core';
 import { FoodPlanContentPage } from '../food-plan-content/food-plan-content';
-
-/**
- * Generated class for the FoodPlanPage page.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
- */
+import { ServiceProvider } from '../../providers/service/service';
 
 @IonicPage()
 @Component({
@@ -17,237 +11,95 @@ import { FoodPlanContentPage } from '../food-plan-content/food-plan-content';
 })
 export class FoodPlanPage {
 
-  private foodPlan;
-  private foddPlanSelected;
+  private foodPlan: Array<FoodPlanInterface>;
+  private foodPlanSelected: Array<FoodPlanItemInterface>;
   private relationship;
 
   constructor(public navCtrl: NavController, 
               public navParams: NavParams,
               private core: CoreProvider, 
-            ){
+              private serve: ServiceProvider,
+              private loadingCtrl: LoadingController
+            )
+    {
 
-    this.core.foodPlanObservable.subscribe({
+      this.initOberserServer();
+      this.foodPlan = [{
+        title: '',
+        foodPlan: [{
+          hour: '',
+          description: '',
+          content: [{
+            imgFood: '',
+            ingredients: [''],
+            modePrepare: '',
+            obs: ''
+          }]
+        }]
+      }];
+      let loading = this.loadingCtrl.create({
 
-      next: (res) => {
+        content: 'Carregando'
+      })
+      loading.present();
+      this.serve.send({
+
+        method: 'updateFoodPlan',
+        data:{}
+      })
+      .then( ( res: any ) => {
+      
+        loading.dismiss();
+        this.foodPlan = res.request.data;
+        this.foodPlanSelected = res.request.data[0].foodPlan;
+        this.relationship = res.request.data[0].title;
+      })
+      .catch( res => {
         
-        this.foodPlan = res;
-        this.segmentChanged( false );
-      }
-    });
-    this.core.setFoodPlan(
-
-      [
-        {
-          title: 'Normal',
-          foodPlan: [
-            {
-              hour: '09h00',
-              description: 'Desjejum',
-              content: {
-                imgFood: 'img/food.jpg',
-                ingredients: ['item', 'item', 'item', 'item','item'],
-                modePrepare: 'modo de preparo vai aqui',
-                obs: 'obs vai aqui'
-              }
-            },
-            {
-              hour: '10h00',
-              description: 'Lanche',
-              content: {
-                imgFood: 'img/food.jpg',
-                ingredients: ['item', 'item', 'item', 'item','item'],
-                modePrepare: 'modo de preparo vai aqui',
-                obs: 'obs vai aqui'
-              }
-            },
-            {
-              hour: '12h00',
-              description: 'Almoço',
-              content: {
-                imgFood: 'img/food.jpg',
-                ingredients: ['item', 'item', 'item', 'item','item'],
-                modePrepare: 'modo de preparo vai aqui',
-                obs: 'obs vai aqui'
-              }
-            },
-            {
-              hour: '12h00',
-              description: 'Café',
-              content: {
-                imgFood: 'img/food.jpg',
-                ingredients: ['item', 'item', 'item', 'item','item'],
-                modePrepare: 'modo de preparo vai aqui',
-                obs: 'obs vai aqui'
-              }
-            },
-            {
-              hour: '15h00',
-              description: 'Lanche',
-              content: {
-                imgFood: 'img/food.jpg',
-                ingredients: ['item', 'item', 'item', 'item','item'],
-                modePrepare: 'modo de preparo vai aqui',
-                obs: 'obs vai aqui'
-              }
-            },
-        ]
-        },
-        {
-          title: 'Treino 1',
-          foodPlan: [
-            {
-              hour: '08h30',
-              description: 'Pré-treino',
-              content: {
-                imgFood: 'img/food.jpg',
-                ingredients: ['item', 'item', 'item', 'item','item'],
-                modePrepare: 'modo de preparo vai aqui',
-                obs: 'obs vai aqui'
-              }
-            },
-            {
-              hour: '10h00',
-              description: 'Pós-treino',
-              content: {
-                imgFood: 'img/food.jpg',
-                ingredients: ['item', 'item', 'item', 'item','item'],
-                modePrepare: 'modo de preparo vai aqui',
-                obs: 'obs vai aqui'
-              }
-            },
-            {
-              hour: '12h00',
-              description: 'Almoço',
-              content: {
-                imgFood: 'img/food.jpg',
-                ingredients: ['item', 'item', 'item', 'item','item'],
-                modePrepare: 'modo de preparo vai aqui',
-                obs: 'obs vai aqui'
-              }
-            },
-            {
-              hour: '15h00',
-              description: 'Lanche da tarde',
-              content: {
-                imgFood: 'img/food.jpg',
-                ingredients: ['item', 'item', 'item', 'item','item'],
-                modePrepare: 'modo de preparo vai aqui',
-                obs: 'obs vai aqui'
-              }
-            },
-            {
-              hour: '18h00',
-              description: 'Café da tarde',
-              content: {
-                imgFood: 'img/food.jpg',
-                ingredients: ['item', 'item', 'item', 'item','item'],
-                modePrepare: 'modo de preparo vai aqui',
-                obs: 'obs vai aqui'
-              }
-            },
-            {
-              hour: '20h00',
-              description: 'Jantar',
-              content: {
-                imgFood: 'img/food.jpg',
-                ingredients: ['item', 'item', 'item', 'item','item'],
-                modePrepare: 'modo de preparo vai aqui',
-                obs: 'obs vai aqui'
-              }
-            },
-        ]
-        },
-        {
-          title: 'Treino 2',
-          foodPlan: [
-            {
-              hour: '08h30',
-              description: 'Pré-treino 2',
-              content: {
-                imgFood: 'img/food.jpg',
-                ingredients: ['item', 'item', 'item', 'item','item'],
-                modePrepare: 'modo de preparo vai aqui',
-                obs: 'obs vai aqui'
-              }
-            },
-            {
-              hour: '10h00',
-              description: 'Pós-treino 2',
-              content: {
-                imgFood: 'img/food.jpg',
-                ingredients: ['item', 'item', 'item', 'item','item'],
-                modePrepare: 'modo de preparo vai aqui',
-                obs: 'obs vai aqui'
-              }
-            },
-            {
-              hour: '12h00',
-              description: 'Almoço 2',
-              content: {
-                imgFood: 'img/food.jpg',
-                ingredients: ['item', 'item', 'item', 'item','item'],
-                modePrepare: 'modo de preparo vai aqui',
-                obs: 'obs vai aqui'
-              }
-            },
-            {
-              hour: '15h00',
-              description: 'Lanche da tarde 2',
-              content: {
-                imgFood: 'img/food.jpg',
-                ingredients: ['item', 'item', 'item', 'item','item'],
-                modePrepare: 'modo de preparo vai aqui',
-                obs: 'obs vai aqui'
-              }
-            },
-            {
-              hour: '18h00',
-              description: 'Café da tarde 2',
-              content: {
-                imgFood: 'img/food.jpg',
-                ingredients: ['item', 'item', 'item', 'item','item'],
-                modePrepare: 'modo de preparo vai aqui',
-                obs: 'obs vai aqui'
-              }
-            },
-            {
-              hour: '20h00',
-              description: 'Jantar 2',
-              content: {
-                imgFood: 'img/food.jpg',
-                ingredients: ['item', 'item', 'item', 'item','item'],
-                modePrepare: 'modo de preparo vai aqui',
-                obs: 'obs vai aqui'
-              }
-            },
-        ]
-        },
-        
-    ]
-    
-    );
-            
+        loading.dismiss();  
+        console.log( res ) ;
+      });
   }
 
   ionViewDidLoad() {
-    console.log('ionViewDidLoad FoodPlanPage');
+
+    
   }
 
+  initOberserServer(){
+
+    let observer = {
+
+      next: ( value ) => {
+
+        if( value.request.method == 'updateFoodPlan ' ){
+
+          this.core.setFoodPlan( value.request.data );
+          console.log( 'Chegou atualização food plan' );
+        }
+      },
+      error: ( error ) => console.log( 'error oberserver foodPlan: ' + error ),
+      complete: () => console.log('observer foodplan completo')
+    }
+
+    this.serve.observableServerWS.subscribe( observer );
+  }
 
   segmentChanged( event ){
 
     if( event ){
 
-      this.foddPlanSelected = this.foodPlan.find( res => res.title == event.value ).foodPlan;
+      this.foodPlanSelected = this.foodPlan.find( res => res.title == event.value ).foodPlan;
     }else{
 
-      this.foddPlanSelected = this.foodPlan[0].foodPlan;
+      this.foodPlanSelected = this.foodPlan[0].foodPlan;
       this.relationship = this.foodPlan[0].title;
     }
   }
 
   openFoodPlanContent( food ){
 
+    this.core.setFoodPlanContentSelected( food );
     this.navCtrl.push( FoodPlanContentPage );
   }
 
