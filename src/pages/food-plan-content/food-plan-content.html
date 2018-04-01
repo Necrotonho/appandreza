@@ -26,22 +26,28 @@
         <ion-card>
             
             <img [src]="d.imgFood"/>
-            <div class="card-title2">{{ foodPlanContent.description }}</div>
+            <div class="card-title2">{{ d.foodName }}</div>
             <ion-card-content text-left>
-              <ion-card-title>
-                Ingredientes
-              </ion-card-title>
-              <ul>
+
+              <div *ngIf="d.ingredients.length">
+                <ion-card-title>
+                  Ingredientes
+                </ion-card-title>
+                <ul>
                   <li *ngFor=" let z of d.ingredients ">
                       {{ z }}
                   </li>
                 </ul>
                 <br/>
-              <ion-card-title>
-                Modo de preparo
-              </ion-card-title>
-              <p style="text-indent: 25px;" text-justify>{{ d.modePrepare }}</p>
-                <br/>
+              </div>
+
+              <div *ngIf="d.modePrepare.length">
+                <ion-card-title>
+                  Modo de preparo
+                </ion-card-title>
+                <p style="text-indent: 25px;" text-justify>{{ d.modePrepare }}</p>
+                  <br/>
+              </div>
 
               <div *ngIf="d.obs.length">
                 <ion-card-title>

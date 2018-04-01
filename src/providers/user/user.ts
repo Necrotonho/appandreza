@@ -342,8 +342,8 @@ export class UserProvider {
 
         method: 'signIn',
         data: {
-          user: data.cpf,
-          password: data.password
+          user: data.cpf? data.cpf: 'x',
+          password: data.password? data.password: 'x'
         }
       })
         .then( (res:any) => {
@@ -353,6 +353,7 @@ export class UserProvider {
             this.core.setUserData( res.request.data.user );
             localStorage.setItem('isLoggedIn', 'true' );
             localStorage.setItem('token', res.request.data.token );
+
             resolve();
           }else{
 
