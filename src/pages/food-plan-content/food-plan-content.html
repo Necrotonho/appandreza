@@ -25,8 +25,8 @@
     <ion-slide *ngFor=" let d of foodPlanContent.content ">
         <ion-card>
             
-            <div style="height: 200px">
-              <img [src]="d.imgFood"/>
+            <div>
+              <img [src]="d.imgFood" width="auto;"/>
             </div>
             <div class="card-title2" style="text-shadow: 1px 1px 1px #000000;">{{ d.foodName }}</div>
             <ion-card-content text-left>
