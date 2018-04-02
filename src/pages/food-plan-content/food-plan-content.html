@@ -20,12 +20,14 @@
       </p>
     </div>
   </div >
-  <ion-slides pager color="orange" >
+  <ion-slides pager color="orange">
     
     <ion-slide *ngFor=" let d of foodPlanContent.content ">
         <ion-card>
             
-            <img [src]="d.imgFood"/>
+            <div style="height: 200px">
+              <img [src]="d.imgFood"/>
+            </div>
             <div class="card-title2">{{ d.foodName }}</div>
             <ion-card-content text-left>
 
@@ -34,7 +36,7 @@
                   Ingredientes
                 </ion-card-title>
                 <ul>
-                  <li *ngFor=" let z of d.ingredients ">
+                  <li *ngFor=" let z of d.ingredients " style="margin-top: 10px;">
                       {{ z }}
                   </li>
                 </ul>
@@ -45,8 +47,10 @@
                 <ion-card-title>
                   Modo de preparo
                 </ion-card-title>
-                <p style="text-indent: 25px;" text-justify>{{ d.modePrepare }}</p>
-                  <br/>
+                <div [innerHTML]="d.modePrepare"></div>
+
+
+                <br/>
               </div>
 
               <div *ngIf="d.obs.length">
