@@ -11,7 +11,7 @@
     </div>
     <div style="float:left; margin-top: -5px;">
       <p text-left>
-        <span style="color: orange; font-size: 22px">
+        <span style="color: orange; font-size: 22px;">
           {{ foodPlanContent.description }}
         </span><br/>
         <span >
@@ -28,7 +28,7 @@
             <div style="height: 200px">
               <img [src]="d.imgFood"/>
             </div>
-            <div class="card-title2">{{ d.foodName }}</div>
+            <div class="card-title2" style="text-shadow: 1px 1px 1px #000000;">{{ d.foodName }}</div>
             <ion-card-content text-left>
 
               <div *ngIf="d.ingredients.length">
@@ -36,9 +36,7 @@
                   Ingredientes
                 </ion-card-title>
                 <ul>
-                  <li *ngFor=" let z of d.ingredients " style="margin-top: 10px;">
-                      {{ z }}
-                  </li>
+                  <li *ngFor=" let z of d.ingredients " style="margin-top: 10px; margin-left: -25px;" text-justify [innerHTML]="z"></li>
                 </ul>
                 <br/>
               </div>
@@ -47,7 +45,7 @@
                 <ion-card-title>
                   Modo de preparo
                 </ion-card-title>
-                <div [innerHTML]="d.modePrepare"></div>
+                <div text-justify [innerHTML]="d.modePrepare"></div>
 
 
                 <br/>
@@ -57,7 +55,7 @@
                 <ion-card-title>
                   Observações
                 </ion-card-title>
-                <p style="text-indent: 25px;"  text-justify>{{ d.obs }}</p>
+                <p style="text-indent: 25px;"  text-justify [innerHTML]="d.obs"></p>
                   <br/>
               </div>
       
