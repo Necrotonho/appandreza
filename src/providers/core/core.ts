@@ -8,10 +8,12 @@ import { HtmlParser, HtmlTagDefinition } from '@angular/compiler';
 
 export interface FoodPlanItemContentInterface{
 
+  foodId: string;
   imgFood: string;
   ingredients: Array<string>;
   modePrepare: string;
   obs: string;
+  loadingConsumption?: boolean;
 
 }
 export interface FoodPlanItemInterface{

@@ -32,6 +32,16 @@
             <ion-card-content text-left>
 
               <div *ngIf="d.ingredients.length">
+                <ion-row no-padding text-center>
+                  <ion-col >
+                    <ion-spinner *ngIf="d.loadingConsumption" name="bubbles" color=orange ></ion-spinner>
+                    
+                    <button *ngIf="!d.loadingConsumption" ion-button clear small color="danger" icon-start (click)="switchConsumption( foodPlanContent ,d )">
+                      <ion-icon [name]=" d.consumption ? 'checkbox' : 'checkbox-outline' "></ion-icon>
+                      {{ d.consumption? 'Cancelar consumo' : 'Marcar como consumido' }}
+                    </button>
+                  </ion-col>
+                </ion-row>
                 <ion-card-title>
                   Alimentos
                 </ion-card-title>
@@ -60,15 +70,7 @@
               </div>
       
             </ion-card-content>
-            <ion-row no-padding>
-                <ion-col text-center>
-                  <button ion-button clear small color="danger" icon-start (click)="switchConsumption( foodPlanContent ,d )">
-                    <ion-icon [name]=" d.consumption ? 'checkbox' : 'checkbox-outline' "></ion-icon>
-                    <ion-spinner name="bubbles" color=orange></ion-spinner>
-                    {{ d.consumption? 'Cancelar consumo' : 'Marcar como consumido' }}
-                  </button>
-                </ion-col>
-              </ion-row>
+            
           </ion-card>
     </ion-slide>
   

@@ -32,6 +32,7 @@ export class FoodPlanPage {
           hour: '',
           description: '', 
           content: [{
+            foodId: '',
             imgFood: '',
             ingredients: [''],
             modePrepare: '',

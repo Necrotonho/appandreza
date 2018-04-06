@@ -37,11 +37,7 @@ export class FoodPlanContentPage {
 
   switchConsumption( meal, food ){
 
-    let loading = this.loadingCtrl.create({
-
-      content: 'Carregando'
-    })
-    loading.present();
+    this.foodPlanContent.content.find( content => content.foodId == food.foodId ).loadingConsumption = true;
 
     this.serve.send( {
 
@@ -55,7 +51,6 @@ export class FoodPlanContentPage {
     })
     .then( (res: any) => {
 
-      loading.dismiss();
       if ( res.request.data.isConsumption ){
 
         console.log( 'deu certo' );
@@ -65,11 +60,7 @@ export class FoodPlanContentPage {
       }
 
     })
-    .catch( res => {
-      
-      loading.dismiss();
-      console.log( res ) 
-    });
+    .catch( res => console.log( res ) );
   }
 
 
