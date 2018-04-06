@@ -25,7 +25,7 @@ export interface FoodPlanInterface{
 
   title: string;
   foodPlan: Array<FoodPlanItemInterface>;
-
+  planId: string;
 }
 
 @Injectable()
@@ -42,6 +42,9 @@ export class CoreProvider {
 
   private foodPlan;
   public foodPlanObservable: Subject<any> = new Subject();
+
+  private foodPlanSelected: FoodPlanInterface;
+  public foodPlanSelectedObservable: Subject<any> = new Subject();
 
   private foodPlanContentSelected: FoodPlanItemInterface;
   public foodPlanContentSelectedObservable: Subject<any> = new Subject();
@@ -96,5 +99,14 @@ export class CoreProvider {
     return this.foodPlanContentSelected;
   }
 
-  
+  setFoodPlanSelected( foodPlan: FoodPlanInterface ){
+
+    this.foodPlanSelected = foodPlan;
+    this.foodPlanSelectedObservable.next( foodPlan );
+  }
+
+  getFoodPlanSelected(){
+
+    return this.foodPlanSelected;
+  }
 }

@@ -25,6 +25,7 @@ export class FoodPlanPage {
 
       this.initOberserServer();
       this.foodPlan = [{
+        planId: '',
         title: '',
         foodPlan: [{
           hour: '',
@@ -52,6 +53,7 @@ export class FoodPlanPage {
         loading.dismiss();
         this.foodPlan = res.request.data;
         this.foodPlanSelected = res.request.data[0].foodPlan;
+        this.core.setFoodPlanSelected( res.request.data[0] );
         this.relationship = res.request.data[0].title;
       })
       .catch( res => {
@@ -59,6 +61,7 @@ export class FoodPlanPage {
         loading.dismiss();  
         console.log( res ) ;
       });
+
   }
 
   ionViewDidLoad() {
@@ -89,9 +92,11 @@ export class FoodPlanPage {
 
     if( event ){
 
+      this.core.setFoodPlanSelected( this.foodPlan.find( res => res.title == event.value ) );
       this.foodPlanSelected = this.foodPlan.find( res => res.title == event.value ).foodPlan;
     }else{
-
+      
+      this.core.setFoodPlanSelected( this.foodPlan[0] );
       this.foodPlanSelected = this.foodPlan[0].foodPlan;
       this.relationship = this.foodPlan[0].title;
     }

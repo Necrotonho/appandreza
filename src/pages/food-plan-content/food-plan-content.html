@@ -33,7 +33,7 @@
 
               <div *ngIf="d.ingredients.length">
                 <ion-card-title>
-                  Ingredientes
+                  Alimentos
                 </ion-card-title>
                 <ul>
                   <li *ngFor=" let z of d.ingredients " style="margin-top: 10px; margin-left: -25px;" text-justify [innerHTML]="z"></li>
@@ -68,7 +68,7 @@
                   </button>
                 </ion-col>
                 <ion-col text-center>
-                  <button ion-button clear small color="danger" icon-start>
+                  <button ion-button clear small color="danger" icon-start (click)="addConsumption( foodPlanContent,d )">
                     <ion-icon name='checkbox-outline'></ion-icon>
                     Marcar como  consumido
                   </button>

@@ -77,10 +77,12 @@ export class ServiceProvider {
 
             if( value.request.status.cod == '200' ){
 
+              clearTimeout( setTime );
               resolve( value );
               obs.unsubscribe();
             }else{
-
+              
+              clearTimeout( setTime );
               resolve( value );
               obs.unsubscribe();
             }
@@ -95,7 +97,7 @@ export class ServiceProvider {
 
       let obs = this.observableServerWS.subscribe( observer );
   
-      setTimeout( () => {
+      let setTime = setTimeout( () => {
         
         console.log('setTimeOut da requisição: ' + requestData.request.id);
         obs.unsubscribe();

@@ -22,7 +22,8 @@
 
 
   <ion-card>
-    <ion-card-header *ngIf="foodPlan.length - 1">
+      <!-- *ngIf="foodPlan.length - 1" -->
+    <ion-card-header >
 
       <ion-segment [(ngModel)]="relationship" color="orange" (ionChange)="segmentChanged($event)">
         <ion-segment-button *ngFor="let z of foodPlan; let i=index" [value]="z.title" ng-selected=" i? true: false">

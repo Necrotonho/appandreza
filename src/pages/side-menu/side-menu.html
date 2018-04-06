@@ -1,14 +1,14 @@
 <ion-menu [content]="content">
-  <ion-content padding style="background-color: #f28500">
+  <ion-content padding style="background: linear-gradient(to right, #f15a2a, #ef3f6b);">
 
-    <ion-item text-center style="background-color: #f28500">
+    <ion-item text-center style="background-color: transparent">
       
-      <img width="80" height="80" src="img/avatar.png" style="border-radius: 100%; border: 3px solid #d97700; ">
+      <img width="80" height="80" src="img/avatar.png" style="border-radius: 100%; border: 3px solid #ef3f6b; ">
       <h2 ion-text color="light">{{ this.name ? this.name : 'Visitante' }}</h2>
     </ion-item>
     <ion-list>
       <div *ngFor="let p of pages">
-        <button ion-item menuClose  (click)="openPage(p)" *ngIf="p.show" style="background-color: #f28500; color: white">
+        <button ion-item menuClose  (click)="openPage(p)" *ngIf="p.show" style="background-color: transparent; color: white">
           <ion-icon item-start [name]="p.icon" color="light"></ion-icon>
           {{ p.title }}
         </button>
