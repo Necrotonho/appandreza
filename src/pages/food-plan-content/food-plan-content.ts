@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { IonicPage, NavController, NavParams, Slides, LoadingController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, Slides, LoadingController, Platform } from 'ionic-angular';
 import { CoreProvider, FoodPlanItemInterface } from '../../providers/core/core';
 import { ServiceProvider } from '../../providers/service/service';
 
@@ -17,6 +17,7 @@ export class FoodPlanContentPage {
   constructor(  public navCtrl: NavController, 
                 public navParams: NavParams, 
                 public loadingCtrl: LoadingController,
+                private platform: Platform,
                 private core: CoreProvider, private serve: ServiceProvider ) {
 
     this.foodPlanContent = this.core.getFoodPlanContentSelected();
