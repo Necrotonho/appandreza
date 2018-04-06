@@ -35,7 +35,13 @@
   
     <ion-list>
         <button ion-item *ngFor="let d of foodPlanSelected; let i=index" (click)="openFoodPlanContent(d)"> 
-          {{ d.description }}
+          <span *ngIf="isConsumptioned( d )" style="text-decoration: line-through">
+            <ion-icon name="checkmark-circle" color="pink"></ion-icon>
+            {{ d.description }}
+          </span>
+          <span *ngIf="!isConsumptioned( d )">
+            {{ d.description }}
+          </span>
           <ion-note item-end>
             {{ d.hour }}
           </ion-note>

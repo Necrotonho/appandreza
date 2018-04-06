@@ -49,17 +49,7 @@ export class FoodPlanContentPage {
         foodId: food.foodId,
       }
     })
-    .then( (res: any) => {
-
-      if ( res.request.data.isConsumption ){
-
-        console.log( 'deu certo' );
-      }else{
-
-        console.log( 'Não deu certo' );
-      }
-
-    })
+    .then( (res: any) => {})
     .catch( res => console.log( res ) );
   }
 

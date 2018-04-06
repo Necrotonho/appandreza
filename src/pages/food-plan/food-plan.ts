@@ -57,6 +57,7 @@ export class FoodPlanPage {
         this.foodPlanSelected = res.request.data[0].foodPlan;
         this.core.setFoodPlanSelected( res.request.data[0] );
         this.relationship = res.request.data[0].title;
+
       })
       .catch( res => {
         
@@ -64,11 +65,30 @@ export class FoodPlanPage {
         console.log( res ) ;
       });
 
+      this.core.foodPlanObservable.subscribe({
+
+        next: res => {
+
+          this.foodPlan = res;
+          if( this.relationship ) {
+            
+            this.foodPlanSelected = res.find( foodPlan => foodPlan.title == this.relationship).foodPlan;
+          }else{
+
+            console.log('sem foodplan selecionado');
+          } 
+        }
+      })
   }
 
   ionViewDidLoad() {
 
     
+  }
+
+  isConsumptioned( food ){
+
+    return food.content.filter( food => food.consumption ).length;
   }
 
   initOberserServer(){
