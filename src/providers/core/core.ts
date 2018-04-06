@@ -16,6 +16,7 @@ export interface FoodPlanItemContentInterface{
 }
 export interface FoodPlanItemInterface{
 
+  mealId: string;
   hour: string;
   description: string;
   content: Array<FoodPlanItemContentInterface>;

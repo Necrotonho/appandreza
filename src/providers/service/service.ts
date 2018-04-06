@@ -225,7 +225,6 @@ export class ServiceProvider {
 
       if( this.isConnected() ){
 
-        console.log('está conectado');
         this.request( data )
             .then( res => resolve( res ) )
             .catch( res => reject( res ) );

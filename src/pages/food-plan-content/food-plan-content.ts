@@ -20,6 +20,14 @@ export class FoodPlanContentPage {
                 private core: CoreProvider, private serve: ServiceProvider ) {
 
     this.foodPlanContent = this.core.getFoodPlanContentSelected();
+    this.core.foodPlanObservable.subscribe({
+
+      next: ( res ) => {
+
+        this.foodPlanContent = res.find( foodplan => foodplan.title == this.core.getFoodPlanSelected().title ).foodPlan
+                                  .find( foodPlanContent => foodPlanContent.mealId == this.foodPlanContent.mealId );
+      }
+    })
   }
 
   ionViewDidLoad() {
@@ -27,7 +35,7 @@ export class FoodPlanContentPage {
     
   }
 
-  addConsumption( meal, food ){
+  switchConsumption( meal, food ){
 
     let loading = this.loadingCtrl.create({
 
@@ -37,7 +45,7 @@ export class FoodPlanContentPage {
 
     this.serve.send( {
 
-      method: 'addConsumption',
+      method: food.consumption? 'cancelConsumption' : 'addConsumption',
       data: {
 
         planId: this.core.getFoodPlanSelected().planId,
@@ -63,6 +71,7 @@ export class FoodPlanContentPage {
       console.log( res ) 
     });
   }
+
 
   ngAfterViewInit(){
 

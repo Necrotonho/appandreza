@@ -28,8 +28,9 @@ export class FoodPlanPage {
         planId: '',
         title: '',
         foodPlan: [{
+          mealId: '',
           hour: '',
-          description: '',
+          description: '', 
           content: [{
             imgFood: '',
             ingredients: [''],
@@ -75,10 +76,10 @@ export class FoodPlanPage {
 
       next: ( value ) => {
 
-        if( value.request.method == 'updateFoodPlan ' ){
+
+        if( value.request.method == 'updateFoodPlan' ){
 
           this.core.setFoodPlan( value.request.data );
-          console.log( 'Chegou atualização food plan' );
         }
       },
       error: ( error ) => console.log( 'error oberserver foodPlan: ' + error ),

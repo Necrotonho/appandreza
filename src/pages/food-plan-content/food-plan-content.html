@@ -2,7 +2,7 @@
 
 <ion-content padding style="background-color:#efe9e5" class="card-background-page">
 
-  <br/><br/><br/> 
+  <br/><br/><br/><br/>
 
   <div>
     <div style="float:left;   font-size: 50px; margin: 0px 15px;">
@@ -10,14 +10,14 @@
       <ion-icon name="nutrition"></ion-icon>
     </div>
     <div style="float:left; margin-top: -5px;">
-      <p text-left>
-        <span style="color: orange; font-size: 22px;">
+      <div text-left>
+        <span style="color: #f15a2a; font-size: 22px;">
           {{ foodPlanContent.description }}
         </span><br/>
         <span >
           {{ foodPlanContent.hour }}
         </span>
-      </p>
+      </div>
     </div>
   </div >
   <ion-slides pager color="orange">
@@ -61,16 +61,11 @@
       
             </ion-card-content>
             <ion-row no-padding>
-                <ion-col>
-                  <button ion-button clear small color="danger" icon-start>
-                    <ion-icon name='star'></ion-icon>
-                    Favorito
-                  </button>
-                </ion-col>
                 <ion-col text-center>
-                  <button ion-button clear small color="danger" icon-start (click)="addConsumption( foodPlanContent,d )">
-                    <ion-icon name='checkbox-outline'></ion-icon>
-                    Marcar como  consumido
+                  <button ion-button clear small color="danger" icon-start (click)="switchConsumption( foodPlanContent ,d )">
+                    <ion-icon [name]=" d.consumption ? 'checkbox' : 'checkbox-outline' "></ion-icon>
+                    <ion-spinner name="bubbles" color=orange></ion-spinner>
+                    {{ d.consumption? 'Cancelar consumo' : 'Marcar como consumido' }}
                   </button>
                 </ion-col>
               </ion-row>
