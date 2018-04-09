@@ -11,6 +11,7 @@ import { ContactPage } from '../pages/contact/contact';
 import { HomePage } from '../pages/home/home';
 import { TabsPage } from '../pages/tabs/tabs';
 
+import { HeaderColor  } from '@ionic-native/header-color';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { ServiceProvider } from '../providers/service/service';
@@ -65,6 +66,7 @@ import { FoodPlanContentPage } from '../pages/food-plan-content/food-plan-conten
     FoodPlanContentPage
   ],
   providers: [
+    HeaderColor,
     StatusBar,
     SplashScreen,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
