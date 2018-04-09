@@ -4,7 +4,7 @@ import { FoodPlanContentPage } from './food-plan-content';
 
 @NgModule({
   declarations: [
-    FoodPlanContentPage,
+    
   ],
   imports: [
     IonicPageModule.forChild(FoodPlanContentPage),

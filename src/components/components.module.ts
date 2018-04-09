@@ -1,11 +1,7 @@
 import { NgModule } from '@angular/core';
-import { NavbarComponent } from './navbar/navbar';
-import { DateSelectorComponent } from './date-selector/date-selector';
 @NgModule({
-	declarations: [NavbarComponent,
-    DateSelectorComponent],
+	declarations: [],
 	imports: [],
-	exports: [NavbarComponent,
-    DateSelectorComponent]
+	exports: []
 })
 export class ComponentsModule {}

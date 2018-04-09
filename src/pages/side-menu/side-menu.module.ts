@@ -4,7 +4,6 @@ import { SideMenuPage } from './side-menu';
 
 @NgModule({
   declarations: [
-    SideMenuPage,
   ],
   imports: [
     IonicPageModule.forChild(SideMenuPage),

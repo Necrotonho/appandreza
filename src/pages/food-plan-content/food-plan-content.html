@@ -37,8 +37,11 @@
                   <ion-col >
                     <ion-spinner *ngIf="d.loadingConsumption" name="bubbles" color=orange ></ion-spinner>
                     
-                    <button *ngIf="!d.loadingConsumption" ion-button clear small color="danger" icon-start (click)="switchConsumption( foodPlanContent ,d )">
-                      <ion-icon [name]=" d.consumption ? 'checkbox' : 'checkbox-outline' "></ion-icon>
+                    <button *ngIf="!d.loadingConsumption" 
+                            ion-button clear small color="danger"
+                            [color]="d.consumption ? 'danger' : 'green'"
+                            icon-start (click)="switchConsumption( foodPlanContent ,d )">
+                      <ion-icon [name]=" d.consumption ? 'checkbox' : 'checkbox-outline' " ></ion-icon>
                       {{ d.consumption? 'Cancelar consumo' : 'Marcar como consumido' }}
                     </button>
                   </ion-col>
