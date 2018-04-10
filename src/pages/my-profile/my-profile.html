@@ -1,31 +1,46 @@
 <navbarComponent></navbarComponent>
 
-<ion-content style="background-color:#efe9e5">
+<ion-content style="background-color:#efe9e5" padding>
   <br/><br/><br/><br/>
-  <ion-item text-center style="background-color: white;" >
-    <img width="80" height="80" src="img/avatar.png" style="border-radius: 100%; border: 3px solid #f28500;">
-    <h2 ion-text>{{ this.userData && this.userData.name?  this.userData.name : 'visitante' }}</h2>
-  </ion-item>
-  <form >
+  <div>
+    <div style="float:left;   font-size: 50px; margin: 0px 15px;">
+  
+      <ion-icon name="information-circle"></ion-icon>
+    </div>
+    <div style="float:left; margin-top: -5px;">
+      <p>
+        <span style="color: #f15a2a; font-size: 22px">
+          Informações cadastrais
+        </span><br/>
+        <span>
+          Mantenha seus dados atualizados
+        </span>
+      </p>
+    </div>
+  </div>
+  <ion-card>
+
+    <img src="img/avatar.png" style="max-height: 150px;">
+    <form text-center>
       <ion-item>
-        <ion-label>Email</ion-label>
-        <ion-input type="text"  name="title" value="julio_cs31@hotmail.com" (click)="switchDisable(this)"></ion-input>
+        <ion-label stacked>Nome:</ion-label>
+        <ion-input type="text"  name="name" [value]="this.core.getUserData().name" (input)="onChangeUserData()"></ion-input>
       </ion-item>
       <ion-item>
-        <ion-label>Description</ion-label>
-        <ion-textarea  name="description" disabled> </ion-textarea>
+        <ion-label stacked>CPF:</ion-label>
+        <ion-input type="number"  name="cpf" [value]="this.core.getUserData().cpf"></ion-input>
       </ion-item>
-      <button ion-button type="submit" block>Add Todo</button>
+      <ion-item>
+        <ion-label stacked>Telefone:</ion-label>
+        <ion-input type="tel"  name="tel" [value]="this.core.getUserData().phone"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label stacked>Email:</ion-label>
+        <ion-input type="text"  name="email" [value]="this.core.getUserData().email"></ion-input>
+      </ion-item>
+      <ion-item>
+        <button ion-button type="submit" block color="pink" large>Salvar alteração</button>
+      </ion-item>
     </form>
-  <ion-list>
-    <ion-list-header>Nome do usuário</ion-list-header>
-    <ion-item>
-      <ion-icon name="ionic" item-left></ion-icon>
-      nome
-    </ion-item>
-    <ion-item>
-      <ion-icon name="ionic" item-left></ion-icon>
-      email
-    </ion-item>
-  </ion-list>
+  </ion-card>
 </ion-content>

@@ -31,6 +31,16 @@ export interface FoodPlanInterface{
   planId: string;
 }
 
+
+export interface UserInterface{
+
+  cpf: string;
+  email: string;
+  id: number;
+  name: string;
+  phone: string;
+}
+
 @Injectable()
 export class CoreProvider {
 
@@ -68,7 +78,7 @@ export class CoreProvider {
     this.scheduleLoadedObservable.next( value ); 
   }
 
-  setUserData( value ){
+  setUserData( value: UserInterface ){
 
     this.userData = value;
     this.userDataObservable.next( value );
