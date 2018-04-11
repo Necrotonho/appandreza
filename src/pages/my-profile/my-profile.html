@@ -23,23 +23,20 @@
     <img src="img/avatar.png" style="max-height: 150px;">
     <form text-center>
       <ion-item>
-        <ion-label stacked>Nome:</ion-label>
+        <ion-label floating color="orange">Nome:</ion-label>
         <ion-input type="text"  name="name" [value]="this.core.getUserData().name" (input)="onChangeUserData()"></ion-input>
       </ion-item>
       <ion-item>
-        <ion-label stacked>CPF:</ion-label>
+        <ion-label floating color="orange">CPF:</ion-label>
         <ion-input type="number"  name="cpf" [value]="this.core.getUserData().cpf"></ion-input>
       </ion-item>
       <ion-item>
-        <ion-label stacked>Telefone:</ion-label>
+        <ion-label floating color="orange">Telefone:</ion-label>
         <ion-input type="tel"  name="tel" [value]="this.core.getUserData().phone"></ion-input>
       </ion-item>
       <ion-item>
-        <ion-label stacked>Email:</ion-label>
+        <ion-label floating color="orange">Email:</ion-label>
         <ion-input type="text"  name="email" [value]="this.core.getUserData().email"></ion-input>
-      </ion-item>
-      <ion-item>
-        <button ion-button type="submit" block color="pink" large>Salvar alteração</button>
       </ion-item>
     </form>
   </ion-card>
