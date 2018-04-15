@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
-import { CoreProvider, UserInterface } from '../../providers/core/core';
+import { IonicPage, NavController, NavParams, ToastController } from 'ionic-angular';
+import { CoreProvider, UserInterface, RequestInterface } from '../../providers/core/core';
 import { Observer } from 'rxjs/Observer';
+import { ServiceProvider } from '../../providers/service/service';
 
 /**
  * Generated class for the MyProfilePage page.
@@ -21,7 +22,9 @@ export class MyProfilePage {
 
   constructor(
     public navCtrl: NavController, 
+    private toastCtrl: ToastController,
     public navParams: NavParams,
+    private service: ServiceProvider,
     private core: CoreProvider,
   ) {
     
@@ -39,13 +42,44 @@ export class MyProfilePage {
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad MyProfilePage');
+    
   }
 
   onChangeUserData(){
 
-    console.log( this.userData );
-    console.log( this.core.getUserData() );
-    console.log( this.userData === this.core.getUserData() );
+    if( JSON.stringify( this.userData ) !== JSON.stringify( this.core.getUserData() ) ){
+      
+      this.service.send({
+        
+        method:'updateUserData',
+        data: this.userData
+      }).then( ( res: RequestInterface ) => {
+        
+        if( res.request.data.isUpdateUserData ){
+          
+          this.core.setUserData( this.userData );
+        }else{
+
+          this.presentToast( 'Erro ao atualizar dados' );
+        }
+      }).catch( res => console.log('falha na requisição de atualização dos dados do usuario'))
+    }
+
+  }
+
+  presentToast( msg ) {
+
+    let toast = this.toastCtrl.create({
+      message: msg,
+      duration: 3000,
+      position: 'top'
+    });
+  
+    toast.onDidDismiss(() => {
+      console.log('Dismissed toast');
+    });
+  
+    toast.present();
   }
 
 

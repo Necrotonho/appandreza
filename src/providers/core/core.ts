@@ -31,7 +31,6 @@ export interface FoodPlanInterface{
   planId: string;
 }
 
-
 export interface UserInterface{
 
   cpf: string;
@@ -40,6 +39,25 @@ export interface UserInterface{
   name: string;
   phone: string;
 }
+
+export interface RequestStatusInterface{
+
+  cod: number;
+  message: string;
+}
+export interface RequestContentInterface{
+
+  data: any;
+  id: number;
+  lastVersion: string;
+  status: RequestStatusInterface;
+}
+export interface RequestInterface{
+
+  request: RequestContentInterface;
+  
+}
+
 
 @Injectable()
 export class CoreProvider {
@@ -50,7 +68,7 @@ export class CoreProvider {
   private scheduleLoaded;
   public scheduleLoadedObservable: Subject<any> = new Subject();
 
-  private userData;
+  private userData: UserInterface = {cpf: '', email: '', id: 0, name: '', phone: ''};
   public userDataObservable: Subject<any> = new Subject();
 
   private foodPlan;
@@ -86,7 +104,15 @@ export class CoreProvider {
 
   getUserData(){
 
-    return this.userData;
+    let newUserdata: UserInterface = {
+      cpf: '' + this.userData.cpf,
+      email: '' + this.userData.email,
+      id: 0 + this.userData.id,
+      name: '' + this.userData.name,
+      phone: '' + this.userData.phone,
+    };
+
+    return newUserdata;
   }
 
   setFoodPlan( value: Array<FoodPlanInterface> ){

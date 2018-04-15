@@ -1,7 +1,7 @@
-import { NgModule, ErrorHandler } from '@angular/core';
+import { NgModule, ErrorHandler, Injectable, Injector } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpModule } from '@angular/http';
-import { IonicApp, IonicModule, IonicErrorHandler } from 'ionic-angular';
+import { IonicApp, IonicModule, IonicErrorHandler,  } from 'ionic-angular';
 import { MyApp } from './app.component';
 
 import { DateSelectorComponent } from './../components/date-selector/date-selector';
@@ -26,6 +26,33 @@ import { SideMenuPage } from '../pages/side-menu/side-menu';
 import { MyProfilePage } from '../pages/my-profile/my-profile';
 import { FoodPlanPage } from '../pages/food-plan/food-plan';
 import { FoodPlanContentPage } from '../pages/food-plan-content/food-plan-content';
+
+import { Pro } from '@ionic/pro';
+
+Pro.init('378a7bfc', {
+  appVersion: '3bd4f1'
+})
+
+@Injectable()
+export class MyErrorHandler implements ErrorHandler {
+  ionicErrorHandler: IonicErrorHandler;
+
+  constructor(injector: Injector) {
+    try {
+      this.ionicErrorHandler = injector.get(IonicErrorHandler);
+    } catch(e) {
+      // Unable to get the IonicErrorHandler provider, ensure
+      // IonicErrorHandler has been added to the providers list below
+    }
+  }
+
+  handleError(err: any): void {
+    Pro.monitoring.handleNewError(err);
+    // Remove this if you want to disable Ionic's auto exception handling
+    // in development mode.
+    this.ionicErrorHandler && this.ionicErrorHandler.handleError(err);
+  }
+}
 
 @NgModule({
   declarations: [

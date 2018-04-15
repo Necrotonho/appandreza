@@ -21,22 +21,22 @@
   <ion-card>
 
     <img src="img/avatar.png" style="max-height: 150px;">
-    <form text-center>
+    <form text-center (change)="onChangeUserData()">
       <ion-item>
-        <ion-label floating color="orange">Nome:</ion-label>
-        <ion-input type="text"  name="name" [value]="this.core.getUserData().name" (input)="onChangeUserData()"></ion-input>
+        <ion-label floating color="orange" >Nome:</ion-label>
+        <ion-input type="text" #testevariavel name="name" [(ngModel)]="this.userData.name"></ion-input>
       </ion-item>
       <ion-item>
         <ion-label floating color="orange">CPF:</ion-label>
-        <ion-input type="number"  name="cpf" [value]="this.core.getUserData().cpf"></ion-input>
+        <ion-input type="number"  name="cpf" [(ngModel)]="this.userData.cpf"></ion-input>
       </ion-item>
       <ion-item>
         <ion-label floating color="orange">Telefone:</ion-label>
-        <ion-input type="tel"  name="tel" [value]="this.core.getUserData().phone"></ion-input>
+        <ion-input type="tel"  name="tel" [(ngModel)]="this.userData.phone"></ion-input>
       </ion-item>
       <ion-item>
         <ion-label floating color="orange">Email:</ion-label>
-        <ion-input type="text"  name="email" [value]="this.core.getUserData().email"></ion-input>
+        <ion-input type="text"  name="email" [(ngModel)]="this.userData.email"></ion-input>
       </ion-item>
     </form>
   </ion-card>

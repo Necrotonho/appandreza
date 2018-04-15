@@ -1,7 +1,8 @@
 import { Component, ViewChild } from '@angular/core';
 import { IonicPage, NavController, NavParams, Slides, LoadingController, Platform } from 'ionic-angular';
-import { CoreProvider, FoodPlanItemInterface } from '../../providers/core/core';
+import { CoreProvider, FoodPlanItemInterface, RequestInterface } from '../../providers/core/core';
 import { ServiceProvider } from '../../providers/service/service';
+import { Img } from 'ionic-angular/components/img/img-interface';
 
 @IonicPage()
 @Component({
@@ -13,6 +14,7 @@ export class FoodPlanContentPage {
   @ViewChild(Slides) slides: Slides;
 
   private foodPlanContent: FoodPlanItemInterface;
+  private imgTeste: any;
 
   constructor(  public navCtrl: NavController, 
                 public navParams: NavParams, 
@@ -33,7 +35,15 @@ export class FoodPlanContentPage {
 
   ionViewDidLoad() {
 
-    
+    // this.serve.send({
+
+    //   method: 'getImage',
+    //   data:{img:''}
+    // })
+    // .then( (res: RequestInterface) =>{
+
+    //   this.imgTeste = 'data:image/png;base64,' + res.request.data.img;
+    // });
   }
 
   switchConsumption( meal, food ){

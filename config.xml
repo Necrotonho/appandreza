@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget android-versionCode="10004" id="com.zarcaosoftware.andrezamatteussi" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget android-versionCode="10005" id="com.zarcaosoftware.andrezamatteussi" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>Andreza Matteussi</name>
     <description>Aplicativo para clientes da Nutricionista Andreza Matteussi</description>
     <author email="julio_cs31@hotmail.com" href="http://nossosite.com/">Nome da empresa Julio Andreson</author>
@@ -29,6 +29,7 @@
     <preference name="SplashScreenDelay" value="3000" />
     <preference name="HeaderColor" value="#ef3f6b" />
     <preference name="StatusBarBackgroundColor" value="#cccccc" />
+    <preference name="StatusBarOverlaysWebView" value="false" />
     <platform name="android">
         <allow-intent href="market:*" />
         <icon density="ldpi" src="resources/android/icon/drawable-ldpi-icon.png" />

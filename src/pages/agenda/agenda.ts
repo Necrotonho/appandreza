@@ -131,8 +131,6 @@ export class AgendaPage {
         loading.dismiss();
         if( res ){
 
-          console.log('retorno do servidor')
-          console.log( res );
           schedule.listReasonForCancellation = res.request.data;
           this.presentReasonForCancellation( schedule );
         }
@@ -140,7 +138,6 @@ export class AgendaPage {
       .catch( res => {
 
         loading.dismiss();
-        console.log( 'erro no chamado do cancelamento');
       })
 
   }

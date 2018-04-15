@@ -32,7 +32,7 @@ export class UserProvider {
       .then( res => {
         
         this.startSignIn( {restartSignIn: false} )
-          .then( res => localStorage.setItem('isLoggedIn', 'true' ) )
+          .then( res => localStorage.setItem( 'isLoggedIn', 'true' ) )
           .catch( res => console.log('erro ao conectar constructor class userprovider') )
       })
       .catch( res => console.log ('erro ao conectar ao servidor, no constructos da classe UserProvider') );

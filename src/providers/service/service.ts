@@ -4,6 +4,7 @@ import 'rxjs/add/operator/map';
 
 import { LoadingController, AlertController } from 'ionic-angular';
 import { Subject } from 'rxjs/Subject';
+import { RequestInterface } from '../core/core';
 
 /*
   Generated class for the ServicetesteProvider provider.
@@ -20,7 +21,7 @@ export class ServiceProvider {
   private tentativasIP = [];
   private tentativasConection = 0;
   private timeOutRequest = 15000;
-  private ws: WebSocket;
+  public ws: WebSocket;
   public observableServerWS: Subject<any> = new Subject();
 
   constructor(
@@ -136,47 +137,109 @@ export class ServiceProvider {
 
   connect(){
     
-    this.tentativasConection = 0;
     return new Promise( (resolve, reject) => {
 
-      let rejectConection = () => {
+      this.initWS( this.localIp )
+        .then( (res:WebSocket) => {
+          this.ws = res 
+          resolve( this.localIp );
+        })
+        .catch( res => reject() );
 
-        if( this.tentativasIP.length ){
+      this.initWS( this.externalIP )
+        .then( (res:WebSocket) => {
+          this.ws = res 
+          resolve( this.externalIP );
+        })
+        .catch( res => reject() );
 
-          this.connect()
-            .then( res => {
+
+      // let rejectConection = () => {
+
+      //   if( this.tentativasIP.length ){
+
+      //     this.connect()
+      //       .then( res => {
               
-              this.tentativasIP = [];
-              localStorage.setItem('lastIpConnected', this.ws.url);
-              resolve( this.ws.url );
-            })
-            .catch( res => {
+      //         this.tentativasIP = [];
+      //         localStorage.setItem('lastIpConnected', this.ws.url);
+      //         resolve( this.ws.url );
+      //       })
+      //       .catch( res => {
               
-              reject()
-            });
-        }else{
+      //         reject()
+      //       });
+      //   }else{
 
-          reject();
-        }
-      }
+      //     reject();
+      //   }
+      // }
 
-      this.ws = new WebSocket( this.getIpConection() );
-      this.ws.onopen = (res) => {
+
+      // this.ws.onopen = (res) => {
         
-        this.tentativasIP = [];
+      //   this.tentativasIP = [];
+      //   let obs = this.observableServerWS.subscribe({
+          
+      //     next: (res) => {
+            
+      //       if( res.request.method == 'firstConnection' ){
+
+      //         obs.unsubscribe();
+      //         resolve( this.ws.url );
+      //       }
+      //     }
+      //   });
+      // }
+
+      // this.ws.onmessage = ( msg:MessageEvent ) => {
+
+      //   this.observableServerWS.next( JSON.parse( msg.data ) );
+
+      //   if( JSON.parse( msg.data ).request.method == 'firstConnection' ){
+
+      //     localStorage.setItem( 'visitorToken', JSON.parse( msg.data ).request.data.token );
+      //   };
+      // };
+
+      // this.ws.onerror = (res) => {
+        
+      //   if( this.tentativasConection && !this.isConnected() ){
+          
+      //     localStorage.setItem('isLoggedIn', 'false' );
+      //     reject();
+      //   }else{
+          
+      //     rejectConection();
+      //   }
+      // };
+
+      // this.ws.onclose = ( res ) => localStorage.setItem('isLoggedIn', 'false' );
+    })
+  } 
+
+  initWS( ip ){
+
+    return new Promise( (resolve,  reject) => {
+
+      let ws;
+      ws = new WebSocket( ip );   
+      ws.onopen = (res) => {
+          
         let obs = this.observableServerWS.subscribe({
-
+          
           next: (res) => {
-
+            
             if( res.request.method == 'firstConnection' ){
-
+  
               obs.unsubscribe();
-              resolve( this.ws.url );
+              resolve( ws );
             }
           }
         });
       }
-      this.ws.onmessage = ( msg:MessageEvent ) => {
+
+      ws.onmessage = ( msg: MessageEvent ) => {
 
         this.observableServerWS.next( JSON.parse( msg.data ) );
 
@@ -185,20 +248,24 @@ export class ServiceProvider {
           localStorage.setItem( 'visitorToken', JSON.parse( msg.data ).request.data.token );
         };
       };
-      this.ws.onerror = (res) => {
+
+      ws.onerror = (res) => {
         
-        if( this.tentativasConection && !this.isConnected() ){
-          
+        let otherConnecting = this.tentativasIP.filter( ws => ws.CONNECTING );
+
+        if( !otherConnecting.length && !this.isConnected() ){
+
           localStorage.setItem('isLoggedIn', 'false' );
           reject();
-        }else{
-          
-          rejectConection();
         }
+
       };
-      this.ws.onclose = ( res ) => localStorage.setItem('isLoggedIn', 'false' );
+
+      ws.onclose = ( res ) => localStorage.setItem('isLoggedIn', 'false' );
+      this.tentativasIP.push( ws );
     })
-  } 
+
+  }
 
   getIpConection(){
 
@@ -226,15 +293,15 @@ export class ServiceProvider {
       if( this.isConnected() ){
 
         this.request( data )
-            .then( res => resolve( res ) )
-            .catch( res => reject( res ) );
+            .then( ( res: RequestInterface ) => resolve( res ) )
+            .catch( ( res: RequestInterface ) => reject( res ) );
       }else if( this.isConnecting() ){
 
         this.ws.onopen = () =>{
 
           this.request( data )
-              .then( res => resolve( res ) )
-              .catch( res => reject( res ) );
+              .then( ( res: RequestInterface ) => resolve( res ) )
+              .catch( ( res: RequestInterface ) => reject( res ) );
         };
       }else{
 
@@ -243,8 +310,8 @@ export class ServiceProvider {
             .then( res => {
 
               this.request( data )
-              .then( res => resolve( res ) )
-              .catch( res => reject( res ) );
+              .then( ( res: RequestInterface ) => resolve( res ) )
+              .catch( ( res: RequestInterface ) => reject( res ) );
             })
             .catch( res => reject( res ));
       }
@@ -275,11 +342,24 @@ export class ServiceProvider {
 
   isConnected(){
 
-    return this.ws.readyState == this.ws.OPEN ? true : false;
+    if( this.ws ){
+
+      return this.ws.readyState == this.ws.OPEN ? true : false;
+    }else{
+
+      return false;
+    }
+    
   }
 
   isConnecting(){
 
-     return this.ws.CONNECTING == this.ws.readyState? true: false;
+    if( this.ws ){
+
+      return this.ws.CONNECTING == this.ws.readyState? true: false;
+    }else{
+
+      return false;
+    }
   }
 }
