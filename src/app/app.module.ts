@@ -30,7 +30,7 @@ import { FoodPlanContentPage } from '../pages/food-plan-content/food-plan-conten
 import { Pro } from '@ionic/pro';
 
 Pro.init('378a7bfc', {
-  appVersion: '3bd4f1'
+  appVersion: 'e2d22e'
 })
 
 @Injectable()
