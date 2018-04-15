@@ -377,28 +377,33 @@ export class UserProvider {
         title: 'Cadastro',
         inputs: [
           {
+            value: dados.name? dados.name:'',
             name: 'name',
-            placeholder: dados.name? dados.name: 'Nome',
+            placeholder: 'Nome',
             type: 'text'
           },
           {
+            value: dados.cpf? dados.cpf: '',
             name: 'cpf',
-            placeholder: dados.cpf? dados.cpf: 'CPF',
+            placeholder: 'CPF',
             type: 'number'
           },
           {
+            value: dados.phone? dados.phone: '',
             name: 'phone',
-            placeholder: dados.phone? dados.phone: 'Telefone',
+            placeholder: 'Telefone',
             type: 'tel'
           },
           {
+            value: dados.email? dados.email: 'Email',
             name: 'email',
-            placeholder: dados.email? dados.email: 'Email',
+            placeholder: 'Email',
             type: 'email'
           },
           {
+            value: dados.password? dados.password: '',
             name: 'password',
-            placeholder: dados.password? dados.password: 'Senha',
+            placeholder: 'Senha',
             type: 'password'
           },
         ],
@@ -406,10 +411,21 @@ export class UserProvider {
           {
             text: 'Cadastrar',
             handler: data => {
+
+              if( this.validateEmail( data.email ).isValid ){
+
+                this.startSignUp( data )
+                  .then( res => resolve() )
+                  .catch( res => reject() )
+              }else{
+
+                dados = data;
+                this.presentToast( this.validateEmail( data.email ).message )
+                this.signUp( dados )
+                  .then( res => resolve() )
+                  .catch( res => reject() )
+              }
               
-              this.startSignUp( data )
-                .then( res => resolve() )
-                .catch( res => reject() )
             }
           }
         ]
@@ -542,5 +558,22 @@ export class UserProvider {
       return false;
     }
   }
+
+  validateEmail( email ) {
+
+    if( /(.+)@(.+){2,}\.(.+){2,}/.test(email.email) ){
+      return {
+        isValid: true,
+        message: ''
+      };
+    } else {
+       return {
+
+          isValid: false,
+          message: 'Insira um email válido'
+       }
+    }
+}
+
 
 }

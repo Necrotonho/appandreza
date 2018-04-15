@@ -28,11 +28,11 @@
       </ion-item>
       <ion-item>
         <ion-label floating color="orange">CPF:</ion-label>
-        <ion-input type="number"  name="cpf" [(ngModel)]="this.userData.cpf"></ion-input>
+        <ion-input type="number" disabled="true" name="cpf" [(ngModel)]="this.userData.cpf" [brmasker]="{person: true}"></ion-input>
       </ion-item>
       <ion-item>
         <ion-label floating color="orange">Telefone:</ion-label>
-        <ion-input type="tel"  name="tel" [(ngModel)]="this.userData.phone"></ion-input>
+        <ion-input type="tel"  name="tel" [brmasker]="{phone: true}" [(ngModel)]="this.userData.phone"></ion-input>
       </ion-item>
       <ion-item>
         <ion-label floating color="orange">Email:</ion-label>

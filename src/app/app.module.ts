@@ -26,6 +26,7 @@ import { SideMenuPage } from '../pages/side-menu/side-menu';
 import { MyProfilePage } from '../pages/my-profile/my-profile';
 import { FoodPlanPage } from '../pages/food-plan/food-plan';
 import { FoodPlanContentPage } from '../pages/food-plan-content/food-plan-content';
+import { BrMaskerModule } from 'brmasker-ionic-3';
 
 @NgModule({
   declarations: [
@@ -44,6 +45,7 @@ import { FoodPlanContentPage } from '../pages/food-plan-content/food-plan-conten
   imports: [
     BrowserModule,
     HttpModule,
+    BrMaskerModule,
     IonicModule.forRoot( MyApp, {
 
       monthNames: ['janeiro', 'fevereiro', 'março', 'abril', 'maio', 'junho', 'julho', 'agosto', 'setembro', 'outubro', 'novembro', 'dezembro'],

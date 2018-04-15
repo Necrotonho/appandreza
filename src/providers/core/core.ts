@@ -58,6 +58,15 @@ export interface RequestInterface{
   
 }
 
+export interface postNews{
+
+  imgAvatar: string;
+  userName: string;
+  date: string;
+  img?: string;
+  categories: string[];
+  content: string;
+}
 
 @Injectable()
 export class CoreProvider {
@@ -75,10 +84,13 @@ export class CoreProvider {
   public foodPlanObservable: Subject<any> = new Subject();
 
   private foodPlanSelected: FoodPlanInterface;
-  public foodPlanSelectedObservable: Subject<any> = new Subject();
+  public foodPlanSelectedObservable: Subject<FoodPlanInterface> = new Subject();
 
   private foodPlanContentSelected: FoodPlanItemInterface;
-  public foodPlanContentSelectedObservable: Subject<any> = new Subject();
+  public foodPlanContentSelectedObservable: Subject<FoodPlanItemInterface> = new Subject();
+
+  private news: postNews[];
+  public newObservable: Subject<postNews[]> = new Subject();
 
   constructor(public http: Http, private date: DateProvider, private server: ServiceProvider ) {
 
@@ -147,5 +159,17 @@ export class CoreProvider {
   getFoodPlanSelected(){
 
     return this.foodPlanSelected;
+  }
+
+  getNews(){
+
+    let news = [].concat(this.news);
+    return news;
+  }
+
+  setNews( news: postNews[] ){
+
+    this.news = news;
+    this.newObservable.next( news );
   }
 }
