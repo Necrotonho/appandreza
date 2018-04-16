@@ -28,6 +28,7 @@ import { FoodPlanPage } from '../pages/food-plan/food-plan';
 import { FoodPlanContentPage } from '../pages/food-plan-content/food-plan-content';
 import { BrMaskerModule } from 'brmasker-ionic-3';
 import { PopOverFilterCategoryNewsComponent } from '../components/pop-over-filter-category-news/pop-over-filter-category-news';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @NgModule({
   declarations: [
@@ -47,6 +48,7 @@ import { PopOverFilterCategoryNewsComponent } from '../components/pop-over-filte
   ],
   imports: [
     BrowserModule,
+    BrowserAnimationsModule,
     HttpModule,
     BrMaskerModule,
     IonicModule.forRoot( MyApp, {

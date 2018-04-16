@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { trigger, state, style, transition, animate } from '@angular/animations'
 import { NavController, Platform, PopoverController } from 'ionic-angular';
 
 import { ServiceProvider } from '../../providers/service/service';
@@ -8,7 +9,14 @@ import { PopOverFilterCategoryNewsComponent } from '../../components/pop-over-fi
 
 @Component({
   selector: 'page-home',
-  templateUrl: 'home.html'
+  templateUrl: 'home.html',
+  animations: [
+    trigger('visibilityChanged', [
+      state('shown', style({ opacity: 1, display: 'block' })),
+      state('hidden', style({ opacity: 0, display: 'none' })),
+      transition('* => *', animate('200ms'))
+    ])
+  ]
 })
 export class HomePage {
 
@@ -81,7 +89,6 @@ export class HomePage {
 
   presentPopover( event ){
 
-    console.log('popup'); 
     let popover = this.popoverCtrl.create( PopOverFilterCategoryNewsComponent );
     popover.present({
       ev: event

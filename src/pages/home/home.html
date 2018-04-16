@@ -13,7 +13,6 @@
     </ion-buttons> -->
     <ion-buttons end>
       <button ion-button icon-only (click)="presentPopover($event)">
-        asdasd
         <ion-icon name="ios-funnel"></ion-icon>
       </button>
       
@@ -24,7 +23,8 @@
 <ion-content no-padding style="background-color:#efe9e5">
 
 <div *ngFor=" let d of news ">
-  <ion-card *ngIf="filterCategory(d)">
+    <!-- *ngIf="filterCategory(d)" -->
+  <ion-card [@visibilityChanged]="filterCategory(d)? 'show' : 'hidden'">
 
     <ion-item>
       <ion-avatar item-start *ngIf="d.imgAvatar">
