@@ -91,6 +91,20 @@ export class CoreProvider {
 
   private news: postNews[];
   public newObservable: Subject<postNews[]> = new Subject();
+  public filterCategory = [{
+
+      name: 'Receiatas',
+      selected: true,
+    },{
+
+      name: 'Novidades',
+      selected: true,
+    },{
+
+      name: 'Pensamento do dia',
+      selected: true,
+    }
+  ];
 
   constructor(public http: Http, private date: DateProvider, private server: ServiceProvider ) {
 

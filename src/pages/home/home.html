@@ -1,29 +1,51 @@
-<navbarComponent></navbarComponent>
-<ion-content no-padding style="background-color:#efe9e5">
-<br/><br/><br/><br/>
-<ion-card *ngFor=" let d of news ">
-
-  <ion-item>
-    <ion-avatar item-start *ngIf="d.imgAvatar">
-      <img [src]="d.imgAvatar">
-    </ion-avatar>
-    <h2>{{ d.userName }}</h2>
-    <p>{{ d.date }}</p>
-  </ion-item> 
-
-  <img *ngIf="d.img" [src]="d.img">
-  <ion-row>
-    <ion-col >
-      <button ion-button icon-left clear small center text-center>
-        <ion-icon name="pricetag"></ion-icon>
-        <div > <span *ngFor=" let z of d.categories; let i=index ">{{ z }}<span *ngIf="d.categories.length-1 !== i">, </span> </span></div>
+<ion-header>
+  <ion-navbar color="light">
+    <ion-buttons start>
+      <button ion-button menuToggle icon-only>
+        <ion-icon name="menu"></ion-icon>
       </button>
-    </ion-col>
-  </ion-row>
-  <ion-card-content [innerHTML]="d.content"></ion-card-content>
+    </ion-buttons>
+    <ion-title> Olá {{ this.core.getUserData().name? this.core.getUserData().name.split(' ')[0] : 'visitante' }} </ion-title>
+    <!-- <ion-buttons end>
+      <button ion-button icon-only>
+        <ion-icon name="time"></ion-icon>
+      </button>
+    </ion-buttons> -->
+    <ion-buttons end>
+      <button ion-button icon-only (click)="presentPopover($event)">
+        asdasd
+        <ion-icon name="ios-funnel"></ion-icon>
+      </button>
+      
+    </ion-buttons>
+  </ion-navbar>
+</ion-header>
 
-</ion-card>
+<ion-content no-padding style="background-color:#efe9e5">
 
+<div *ngFor=" let d of news ">
+  <ion-card *ngIf="filterCategory(d)">
+
+    <ion-item>
+      <ion-avatar item-start *ngIf="d.imgAvatar">
+        <img [src]="d.imgAvatar">
+      </ion-avatar>
+      <h2>{{ d.userName }}</h2>
+      <p>{{ d.date }}</p>
+    </ion-item> 
+
+    <img *ngIf="d.img" [src]="d.img">
+    <ion-row>
+      <ion-col >
+        <button ion-button icon-left clear small center text-center>
+          <ion-icon name="pricetag"></ion-icon>
+          <div > <span *ngFor=" let z of d.categories; let i=index ">{{ z }}<span *ngIf="d.categories.length-1 !== i">, </span> </span></div>
+        </button>
+      </ion-col>
+    </ion-row>
+    <ion-card-content [innerHTML]="d.content"></ion-card-content>
+  </ion-card>
+</div>
 
 
 </ion-content>

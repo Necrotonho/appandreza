@@ -1,9 +1,10 @@
 import { Component } from '@angular/core';
-import { NavController, Platform } from 'ionic-angular';
+import { NavController, Platform, PopoverController } from 'ionic-angular';
 
 import { ServiceProvider } from '../../providers/service/service';
 import { CoreProvider, postNews } from '../../providers/core/core';
 import { UserProvider } from '../../providers/user/user';
+import { PopOverFilterCategoryNewsComponent } from '../../components/pop-over-filter-category-news/pop-over-filter-category-news';
 
 @Component({
   selector: 'page-home',
@@ -17,6 +18,7 @@ export class HomePage {
               public service: ServiceProvider, 
               private platform: Platform,
               private core: CoreProvider, 
+              public popoverCtrl: PopoverController,
               private user: UserProvider) {
 
     this.core.newObservable.subscribe({
@@ -26,7 +28,7 @@ export class HomePage {
         this.news = res;
       }
     })
-    
+
     let newsTest: postNews[] = [{
 
       imgAvatar: 'img/icon.png',
@@ -45,7 +47,7 @@ export class HomePage {
       </ul>
       <h2>Modo de preparo</h2><br/>
       <p>No fundo de uma taça grande ou em outro pote de vidro, arrume a metade dos morangos, o mirtilo e a banana. Por cima deles ponha a metade do germe-de-trigo e da granola. Coloque um pouco do iogurte por cima da granola. Novamnete faça uma camada com as frutas, depois ponha o germe-de-trigo e a granola. A última camada deve ser de iogurte. Coma imediatamente ou leve à geladeira até a hora de servir.</p>`,
-      categories: ['Receiaatas','Novidadesa']
+      categories: ['Receiatas','Novidades']
     },{
 
       imgAvatar: 'img/icon.png',
@@ -77,5 +79,27 @@ export class HomePage {
     this.service.observableServerWS.subscribe( observer );
   }
 
+  presentPopover( event ){
 
+    console.log('popup'); 
+    let popover = this.popoverCtrl.create( PopOverFilterCategoryNewsComponent );
+    popover.present({
+      ev: event
+    });
+
+    popover.onDidDismiss( data => {
+
+      console.log( data );
+      // this.news.filter( post => )
+    })
+  } 
+
+  filterCategory( post ){
+
+    return post.categories.filter( category => {
+      
+      return this.core.filterCategory.find( cat => cat.name == category ).selected
+    }).length
+
+  }
 }

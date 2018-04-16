@@ -27,6 +27,7 @@ import { MyProfilePage } from '../pages/my-profile/my-profile';
 import { FoodPlanPage } from '../pages/food-plan/food-plan';
 import { FoodPlanContentPage } from '../pages/food-plan-content/food-plan-content';
 import { BrMaskerModule } from 'brmasker-ionic-3';
+import { PopOverFilterCategoryNewsComponent } from '../components/pop-over-filter-category-news/pop-over-filter-category-news';
 
 @NgModule({
   declarations: [
@@ -40,7 +41,9 @@ import { BrMaskerModule } from 'brmasker-ionic-3';
     SideMenuPage,
     MyProfilePage,
     FoodPlanPage,
-    FoodPlanContentPage
+    FoodPlanContentPage,
+    PopOverFilterCategoryNewsComponent
+    
   ],
   imports: [
     BrowserModule,
@@ -65,7 +68,8 @@ import { BrMaskerModule } from 'brmasker-ionic-3';
     SideMenuPage,
     MyProfilePage,
     FoodPlanPage,
-    FoodPlanContentPage
+    FoodPlanContentPage,
+    PopOverFilterCategoryNewsComponent
   ],
   providers: [
     HeaderColor,

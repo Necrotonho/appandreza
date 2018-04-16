@@ -1,0 +1,7 @@
+<ion-list>
+  <ion-list-header>Filtrar categorias</ion-list-header>
+  <ion-item *ngFor="let d of core.filterCategory; let i=index">
+    <ion-label>{{ d.name }}</ion-label>
+    <ion-checkbox [(ngModel)]="d.selected"></ion-checkbox>
+  </ion-item>
+</ion-list>
