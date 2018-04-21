@@ -6,11 +6,11 @@
       </button>
     </ion-buttons>
     <ion-title> Olá {{ this.core.getUserData().name? this.core.getUserData().name.split(' ')[0] : 'visitante' }} </ion-title>
-    <!-- <ion-buttons end>
-      <button ion-button icon-only>
-        <ion-icon name="time"></ion-icon>
+    <ion-buttons end>
+      <button ion-button icon-only (click)="this.openPageMySchedule()">
+        <ion-icon name="time"><ion-badge style="margin-left: -10px;" color="danger">1</ion-badge></ion-icon>
       </button>
-    </ion-buttons> -->
+    </ion-buttons>
     <ion-buttons end>
       <button ion-button icon-only (click)="presentPopover($event)">
         <ion-icon name="ios-funnel"></ion-icon>

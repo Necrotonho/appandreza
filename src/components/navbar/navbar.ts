@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
 import { CoreProvider } from '../../providers/core/core';
-import { MenuController } from 'ionic-angular';
+import { MenuController, NavController } from 'ionic-angular';
 import { TabsPage } from '../../pages/tabs/tabs';
+import { FoodPlanContentPage } from '../../pages/food-plan-content/food-plan-content';
 
 /**
  * Generated class for the ToolbarComponent component.
@@ -17,6 +18,7 @@ export class NavbarComponent {
   
   name: String;
   constructor(
+    private navCtrl: NavController, 
     private core: CoreProvider,
     public menuCtrl: MenuController
   ) {
@@ -58,6 +60,11 @@ export class NavbarComponent {
 
     // (click)="this.toggleMenu()"
     this.menuCtrl.toggle();
+  }
+
+  openPageMySchedule(){
+
+    this.navCtrl.push( FoodPlanContentPage )
   }
 
 }

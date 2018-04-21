@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Http } from '@angular/http';
 import 'rxjs/add/operator/map';
 
-import { LoadingController, AlertController } from 'ionic-angular';
+import { LoadingController, AlertController, ToastController } from 'ionic-angular';
 import { Subject } from 'rxjs/Subject';
 import { RequestInterface } from '../core/core';
 
@@ -27,6 +27,7 @@ export class ServiceProvider {
   constructor(
     public http: Http, 
     private loadingCtrl: LoadingController,
+    private toastCtrl: ToastController,
     private alertCtrl: AlertController,
   ) {
       
@@ -51,6 +52,25 @@ export class ServiceProvider {
 
       return localStorage.getItem('visitorToken');
     }
+  }
+
+  startMonitoringConnection(){
+
+    setInterval( () => {
+      
+      let toast = this.toastCtrl.create({
+        message: 'Conexão perdida, reconectando',
+        position: 'top'
+      });
+      
+      if( !this.isConnected() && !this.isConnecting() ){
+        
+        toast.present();
+        this.connect()
+          .then( res => toast.dismiss() )
+          .catch( res => toast.dismiss() )
+      }
+    }, 3000);
   }
 
   request( dados ){
@@ -361,5 +381,19 @@ export class ServiceProvider {
 
       return false;
     }
+  }
+
+  presentToast( msg ) {
+
+    let toast = this.toastCtrl.create({
+      message: msg,
+      position: 'top'
+    });
+  
+    toast.onDidDismiss(() => {
+      console.log('Dismissed toast');
+    });
+  
+    toast.present();
   }
 }

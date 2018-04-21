@@ -6,15 +6,17 @@ import { ServiceProvider } from '../../providers/service/service';
 import { CoreProvider, postNews } from '../../providers/core/core';
 import { UserProvider } from '../../providers/user/user';
 import { PopOverFilterCategoryNewsComponent } from '../../components/pop-over-filter-category-news/pop-over-filter-category-news';
+import { NavbarComponent } from '../../components/navbar/navbar';
+import { MySchedulesPage } from '../my-schedules/my-schedules';
 
 @Component({
   selector: 'page-home',
   templateUrl: 'home.html',
   animations: [
     trigger('visibilityChanged', [
-      state('shown', style({ opacity: 1, display: 'block' })),
-      state('hidden', style({ opacity: 0, display: 'none' })),
-      transition('* => *', animate('200ms'))
+      state('shown', style({ display: 'block', height: 'auto' })),
+      state('hidden', style({ display: 'none', height: 0 })),
+      transition('* => *', animate('150ms'))
     ])
   ]
 })
@@ -68,6 +70,11 @@ export class HomePage {
     this.core.setNews( newsTest );
   } 
 
+  openPageMySchedule(){
+
+    this.navCtrl.push( MySchedulesPage );
+  }
+
   initOberserServer(){
 
     let observer = {
@@ -87,18 +94,14 @@ export class HomePage {
     this.service.observableServerWS.subscribe( observer );
   }
 
+
+
   presentPopover( event ){
 
     let popover = this.popoverCtrl.create( PopOverFilterCategoryNewsComponent );
     popover.present({
       ev: event
     });
-
-    popover.onDidDismiss( data => {
-
-      console.log( data );
-      // this.news.filter( post => )
-    })
   } 
 
   filterCategory( post ){

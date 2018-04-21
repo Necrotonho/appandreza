@@ -31,7 +31,8 @@ export class UserProvider {
     this.service.toConnect()
       .then( res => {
         
-        this.startSignIn( {restartSignIn: false} )
+        this.service.startMonitoringConnection();
+        this.startSignIn( { restartSignIn: false } )
           .then( res => localStorage.setItem( 'isLoggedIn', 'true' ) )
           .catch( res => console.log('erro ao conectar constructor class userprovider') )
       })

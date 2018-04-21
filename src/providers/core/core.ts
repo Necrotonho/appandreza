@@ -68,6 +68,20 @@ export interface postNews{
   content: string;
 }
 
+export interface scheduleItem{
+
+  id: number;
+  date: string;
+  time: string;
+  available: boolean;
+  mySchedule: boolean;
+  strAvailable: string;
+  titleAdress: string;
+  subTitleAdress: string;
+  destination: string;
+  imgDestination: string;
+}
+
 @Injectable()
 export class CoreProvider {
 
@@ -89,6 +103,10 @@ export class CoreProvider {
   private foodPlanContentSelected: FoodPlanItemInterface;
   public foodPlanContentSelectedObservable: Subject<FoodPlanItemInterface> = new Subject();
 
+  public mySchedules: scheduleItem[];
+  public mySchedulesObservable: Subject<scheduleItem[]> = new Subject();
+  public optSelectedScheduleOpt: scheduleItem;
+
   private news: postNews[];
   public newObservable: Subject<postNews[]> = new Subject();
   public filterCategory = [{
@@ -109,6 +127,18 @@ export class CoreProvider {
   constructor(public http: Http, private date: DateProvider, private server: ServiceProvider ) {
 
     console.log('classe core criada');
+  }
+
+  setMySchedule( value: scheduleItem[] ){
+
+    this.mySchedules = value;
+    this.mySchedulesObservable.next( value );
+  }
+
+  getMySchedule(){
+
+    let newMySchedule = [].concat( this.mySchedules? this.mySchedules: [] );
+    return newMySchedule;
   }
 
   setDateSelectedPgAgenda( value: string ){

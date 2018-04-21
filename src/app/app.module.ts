@@ -29,6 +29,9 @@ import { FoodPlanContentPage } from '../pages/food-plan-content/food-plan-conten
 import { BrMaskerModule } from 'brmasker-ionic-3';
 import { PopOverFilterCategoryNewsComponent } from '../components/pop-over-filter-category-news/pop-over-filter-category-news';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MySchedulesPage } from '../pages/my-schedules/my-schedules';
+import { PopOverOptPageMySchedulesComponent } from '../components/pop-over-opt-page-my-schedules/pop-over-opt-page-my-schedules';
+import { ScheduleProvider } from '../providers/schedule/schedule';
 
 @NgModule({
   declarations: [
@@ -43,7 +46,9 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     MyProfilePage,
     FoodPlanPage,
     FoodPlanContentPage,
-    PopOverFilterCategoryNewsComponent
+    MySchedulesPage,
+    PopOverFilterCategoryNewsComponent,
+    PopOverOptPageMySchedulesComponent
     
   ],
   imports: [
@@ -71,7 +76,9 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     MyProfilePage,
     FoodPlanPage,
     FoodPlanContentPage,
-    PopOverFilterCategoryNewsComponent
+    PopOverFilterCategoryNewsComponent,
+    PopOverOptPageMySchedulesComponent,
+    MySchedulesPage
   ],
   providers: [
     HeaderColor,
@@ -85,7 +92,9 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     DateProvider,
     CoreProvider,
     UserProvider,
-    ErrorsProvider
+    ErrorsProvider,
+    ScheduleProvider,
+    
   ]
 })
 export class AppModule {}
