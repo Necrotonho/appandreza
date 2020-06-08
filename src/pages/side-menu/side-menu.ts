@@ -75,7 +75,7 @@ export class SideMenuPage {
       this.user.signIn()
     }else if( page.title == 'Sair' ){
 
-      this.user.sginOut()
+      this.user.signOut()
         .then( res => {})
         .catch( res => {})
     }else if( page.title == 'Meu dados' ){
