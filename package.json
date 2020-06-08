@@ -49,7 +49,6 @@
     "ionic-angular": "^3.9.2",
     "ionicons": "3.0.0",
     "phonegap-plugin-multidex": "^1.0.0",
-    "phonegap-plugin-push": "^2.3.0",
     "rxjs": "5.5.11",
     "sw-toolbox": "3.6.0",
     "zone.js": "0.8.26"
@@ -71,11 +70,7 @@
       "cordova-plugin-ionic-webview": {},
       "cordova-plugin-ionic-keyboard": {},
       "com-badrit-base64": {},
-      "cordova-plugin-statusbar": {},
-      "phonegap-plugin-push": {
-        "ANDROID_SUPPORT_V13_VERSION": "27.+",
-        "FCM_VERSION": "17.0.+"
-      }
+      "cordova-plugin-statusbar": {}
     },
     "platforms": [
       "ios",
