@@ -1,0 +1,40 @@
+<!--
+  Generated template for the MyMeasurementsPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<!-- <ion-header>
+  <ion-navbar color="night">
+    <ion-buttons start>
+      <button ion-button menuToggle icon-only>
+        <ion-icon name="menu"></ion-icon>
+      </button>
+    </ion-buttons>
+    <ion-title> Olá {{ this.core.getUserData().name? this.core.getUserData().name.split(' ')[0] : 'visitante' }} </ion-title>
+    <ion-buttons end>
+      <button ion-button icon-only (click)="this.openPageMySchedule()">
+        <ion-icon name="time"><ion-badge style="margin-left: -10px;" color="danger">1</ion-badge></ion-icon>
+      </button>
+    </ion-buttons>
+    <ion-buttons end>
+      <button ion-button icon-only (click)="presentPopover($event)">
+        <ion-icon name="ios-funnel"></ion-icon>
+      </button>
+      
+    </ion-buttons>
+  </ion-navbar>
+</ion-header> -->
+
+<navbarComponent></navbarComponent>
+
+<ion-content no-padding>
+    <div style="height: constant(safe-area-inset-top); height: env(safe-area-inset-top);"></div>
+    <div style="height: 50px;"></div>
+
+    <ion-card>
+
+      <div id="container" style="display: block;"	></div>
+    </ion-card>
+
+</ion-content>

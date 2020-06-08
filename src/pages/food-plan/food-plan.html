@@ -1,53 +1,74 @@
+<!-- <ion-header>
+  <ion-navbar color="night">
+    <ion-buttons start>
+      <button ion-button menuToggle icon-only>
+        <ion-icon name="menu"></ion-icon>
+      </button>
+    </ion-buttons>
+    <ion-title> Olá {{ this.core.getUserData().name? this.core.getUserData().name.split(' ')[0] : 'visitante' }} </ion-title>
+    <ion-buttons end>
+      <button ion-button icon-only (click)="this.openPageMySchedule()">
+        <ion-icon name="time"><ion-badge style="margin-left: -10px;" color="danger">1</ion-badge></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+</ion-header> -->
+
 <navbarComponent></navbarComponent>
 
-<ion-content no-padding style="background-color:#efe9e5">
-
-  <br/><br/><br/> 
+<ion-content no-padding padding-top style="background-color:#efe9e5">
+  <div style="height: constant(safe-area-inset-top); height: env(safe-area-inset-top);"></div>
+  <div style="height: 50px;"></div>
   <div>
     <div style="float:left;   font-size: 50px; margin: 0px 15px;">
-  
-      <ion-icon name="nutrition"></ion-icon>
+
+      <ion-icon name="ios-nutrition"></ion-icon>
     </div>
     <div style="float:left; margin-top: -5px;">
       <p>
         <span style="color: #f15a2a; font-size: 22px">
           Plano Alimentar
-        </span><br/>
-        <span>
-          Pensar em alguma frase qui
-        </span>
+        </span><br />
       </p>
     </div>
   </div>
 
 
-  <ion-card>
-      <!-- *ngIf="foodPlan.length - 1" -->
-    <ion-card-header >
+  <ion-card *ngIf="foodPlan">
+    <ion-card-header>
 
-      <ion-segment [(ngModel)]="relationship" color="orange" (ionChange)="segmentChanged($event)">
-        <ion-segment-button *ngFor="let z of foodPlan; let i=index" [value]="z.title" ng-selected=" i? true: false">
+      <ion-segment *ngIf="foodPlan" [(ngModel)]="relationship" color="orange" (ionChange)="segmentChanged($event)">
+        <ion-segment-button *ngFor="let z of foodPlan; let i=index" [value]="z.title" (click)="relationship = z.title">
           {{ z.title }}
-        </ion-segment-button> 
-      </ion-segment>   
+        </ion-segment-button>
+      </ion-segment>
 
     </ion-card-header>
-  
+
     <ion-list>
-        <button ion-item *ngFor="let d of foodPlanSelected; let i=index" (click)="openFoodPlanContent(d)"> 
-          <span *ngIf="isConsumptioned( d )" style="text-decoration: line-through">
-            <ion-icon name="checkmark-circle" color="pink"></ion-icon>
-            {{ d.description }}
-          </span>
-          <span *ngIf="!isConsumptioned( d )">
-            <ion-icon name="ios-checkmark-circle-outline" color="pink"></ion-icon>
-            {{ d.description }}
-          </span>
-          <ion-note item-end>
-            {{ d.hour }}
-          </ion-note>
-        </button>
+      <button ion-item *ngFor="let d of foodPlanSelected; let i=index" (click)="openFoodPlanContent(d)">
+        <span *ngIf="isConsumptioned( d )" style="text-decoration: line-through">
+          <ion-icon name="checkmark-circle" color="pink"></ion-icon>
+          {{ d.description }}
+        </span>
+        <span *ngIf="!isConsumptioned( d )">
+          <ion-icon name="ios-checkmark-circle-outline" color="pink"></ion-icon>
+          {{ d.description }}
+        </span>
+        <ion-note item-end>
+          {{ d.hour }}
+        </ion-note>
+      </button>
     </ion-list>
+  </ion-card>
+
+  <ion-card *ngIf="!foodPlan">
+    <ion-card-content>
+      <p text-center style="font-size: 50px; color: #a3a3a3;"><ion-icon name="md-restaurant"></ion-icon></p>
+      <p text-center style="color: #a3a3a3;">
+        Nenhum plano alimentar disponível. Entre em contato com a nutricionista Andreza Matteussi para montar seu plano.
+      </p>
+    </ion-card-content>
   </ion-card>
 
 

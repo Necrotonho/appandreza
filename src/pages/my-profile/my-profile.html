@@ -1,7 +1,30 @@
+<!-- <ion-header>
+  <ion-navbar color="night">
+    <ion-buttons start>
+      <button ion-button menuToggle icon-only>
+        <ion-icon name="menu"></ion-icon>
+      </button>
+    </ion-buttons>
+    <ion-title> Olá {{ this.core.getUserData().name? this.core.getUserData().name.split(' ')[0] : 'visitante' }} </ion-title>
+    <ion-buttons end>
+      <button ion-button icon-only (click)="this.openPageMySchedule()">
+        <ion-icon name="time"><ion-badge style="margin-left: -10px;" color="danger">1</ion-badge></ion-icon>
+      </button>
+    </ion-buttons>
+    <ion-buttons end>
+      <button ion-button icon-only (click)="presentPopover($event)">
+        <ion-icon name="ios-funnel"></ion-icon>
+      </button>
+      
+    </ion-buttons>
+  </ion-navbar>
+</ion-header> -->
 <navbarComponent></navbarComponent>
 
-<ion-content style="background-color:#efe9e5" no-padding>
-  <br/><br/><br/><br/>
+
+<ion-content style="background-color:#efe9e5" no-padding padding-top>
+  <div style="height: constant(safe-area-inset-top); height: env(safe-area-inset-top);"></div>
+  <div style="height: 50px;"></div>
   <div>
     <div style="float:left;   font-size: 50px; margin: 0px 15px;">
   
@@ -20,7 +43,7 @@
   </div>
   <ion-card>
 
-    <img src="img/avatar.png" style="max-height: 150px;">
+    <img [src]="this.core.userData.img? this.core.userData.img: 'img/avatar.png'" (click)="chooseOptChangeImageAvatar()">
     <form text-center (change)="onChangeUserData()">
       <ion-item>
         <ion-label floating color="orange" >Nome:</ion-label>

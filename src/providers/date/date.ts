@@ -26,4 +26,26 @@ export class DateProvider {
     return date;
   }
 
+  changeDate( date ){
+
+    let newDate = date.split(' ')[0].split('-');
+
+    if( newDate.length == 3 ){
+
+      let hour = date.split(' ')[1]? ' ' + date.split(' ')[1] : '';
+      return newDate[2] + '/' + newDate[1] + '/' + newDate[0].replace(/^\s+|\s+$/g,"") + hour  ;
+    }else{
+
+      return false
+    }
+
+  }
+
+  compareHourNow( hour ){
+
+    let hourNow = new Date();
+    return parseFloat( hourNow.getHours()+'.'+hourNow.getMinutes() ) - ( parseFloat( hour.replace('h','.') ) )
+
+  }
+
 }

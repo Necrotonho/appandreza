@@ -1,35 +1,50 @@
+<!-- <ion-header>
+  <ion-navbar color="night">
+    <ion-buttons start>
+      <button ion-button menuToggle icon-only>
+        <ion-icon name="menu"></ion-icon>
+      </button>
+    </ion-buttons>
+    <ion-title> Olá {{ this.core.getUserData().name? this.core.getUserData().name.split(' ')[0] : 'visitante' }} </ion-title>
+    <ion-buttons end>
+      <button ion-button icon-only (click)="this.openPageMySchedule()">
+        <ion-icon name="time"><ion-badge style="margin-left: -10px;" color="danger">1</ion-badge></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+</ion-header> -->
+
 <navbarComponent></navbarComponent>
 
-<ion-content class="card-background-page" no-padding style="background-color:#efe9e5">
 
-<br/><br/><br/><br/>
+<ion-content class="card-background-page" no-padding padding-top style="background-color:#efe9e5">
+  <div style="height: constant(safe-area-inset-top); height: env(safe-area-inset-top);"></div>
+  <div style="height: 50px;"></div>
+
   <div>
     <div style="float:left;   font-size: 50px; margin: 0px 15px;">
   
-      <ion-icon name="clipboard"></ion-icon>
+      <ion-icon name="ios-clipboard"></ion-icon>
     </div>
     <div style="float:left; margin-top: -5px;">
       <p>
         <span style="color: #f15a2a; font-size: 22px">
               Atividades
         </span><br/>
-        <span>
-          Pensar em alguma frase para por aqui
-        </span>
       </p>
     </div>
   </div>
 
 
-  <ion-card>
+  <!-- <ion-card (click)="openMyMeasurementsPage()">
     <img src="img/minhasMedidas.jpg"/>
     <div class="card-title">Minhas medidas</div>
     <div class="card-subtitle">Última atualização em 21/03/2018</div>
-  </ion-card>
-  <ion-card (click)="openPage('foodPlan')">
+  </ion-card> -->
+  <ion-card (click)="openFoodPlanPage()">
     <img src="img/planoAlimentar.jpg"/>
     <div class="card-title">Plano Alimentar</div>
-    <div class="card-subtitle">Sua próxima refeição será em 2 horas</div>
+    <!-- <div class="card-subtitle">Sua próxima refeição será em 2 horas</div> -->
   </ion-card>
 
 </ion-content>

@@ -1,5 +1,5 @@
-<ion-header>
-  <ion-navbar color="light">
+<!-- <ion-header>
+  <ion-navbar color="night">
     <ion-buttons start>
       <button ion-button menuToggle icon-only>
         <ion-icon name="menu"></ion-icon>
@@ -18,20 +18,70 @@
       
     </ion-buttons>
   </ion-navbar>
-</ion-header>
+</ion-header> -->
 
-<ion-content no-padding style="background-color:#efe9e5">
+<navbarComponent></navbarComponent>
+<div style="height: 50px;"></div>
 
-<div *ngFor=" let d of news ">
+
+<ion-content no-padding style="background-color:#efe9e5;">
+  
+  <!-- AJUSTE ALTURA navbarComponent -->
+  <div style="height: constant(safe-area-inset-top); height: env(safe-area-inset-top);"></div>
+  <div style="height: 50px;"></div>
+  
+  
+  <ion-card *ngIf=" this.foodPlanService.nextFoodSelected.length && this.foodPlanService.nextFoodSelected[0].foodId !== '0' ">
+    
+      <ion-item>
+        <ion-avatar item-start>
+          <img src="img/icon.png">
+        </ion-avatar>
+        <h2>Próxima refeição</h2>
+        <p>Não perca o horário</p>
+      </ion-item>
+
+      <!-- <ion-segment *ngIf="foodPlan.length-1" color="orange" [(ngModel)]="relationship" (ionChange)="segmentChanged($event)" >
+        <ion-segment-button *ngFor="let z of foodPlan; let i=index" [value]="z.title" ng-selected=" i? true: false">
+          {{ z.title }}
+        </ion-segment-button> 
+      </ion-segment> -->
+
+    <ion-slides pager color="orange">
+  
+      <ion-slide *ngFor="let d of this.foodPlanService.nextFoodSelected; let i=index">
+        <ion-list>
+          <button ion-item (click)="openFoodPlanContent()"> 
+            <ion-thumbnail item-start>
+              <img [src]="d.imgFood">
+            </ion-thumbnail>
+            <h2>{{ d.foodName }}</h2>
+            <p>{{ this.foodPlanService.foodPlanSelected.hour }}</p>
+          </button>
+        </ion-list>
+      </ion-slide>
+
+    </ion-slides>
+    
+  </ion-card>
+
+  <!-- 
+  <br/>
+    <ion-card>
+      <ion-card-header>
+        <b>News</b>
+      </ion-card-header>
+    </ion-card> -->
+<div *ngFor=" let d of core.news ">
     <!-- *ngIf="filterCategory(d)" -->
-  <ion-card [@visibilityChanged]="filterCategory(d)? 'show' : 'hidden'">
+  <ion-card *ngIf="d.userName" [@visibilityChanged] = "filterCategory(d)? 'show' : 'hidden'">
 
     <ion-item>
       <ion-avatar item-start *ngIf="d.imgAvatar">
         <img [src]="d.imgAvatar">
       </ion-avatar>
       <h2>{{ d.userName }}</h2>
-      <p>{{ d.date }}</p>
+      <p>{{ this.date.changeDate( d.date ) }}</p>
     </ion-item> 
 
     <img *ngIf="d.img" [src]="d.img">

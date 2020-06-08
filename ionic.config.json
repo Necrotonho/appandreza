@@ -1,15 +1,9 @@
 {
-  "name": "appandreza",
-  "app_id": "378a7bfc",
-  "type": "ionic-angular",
+  "name": "Andreza Mateussi",
   "integrations": {
     "cordova": {}
   },
-  "proxies": [
-      {
-          "path": "/service",
-          "proxyUrl": "http://179.184.92.74:3396/"
-      }
-  ]
-
+  "type": "ionic-angular",
+  "pro_id": "d24d1487",
+  "id": "d24d1487"
 }

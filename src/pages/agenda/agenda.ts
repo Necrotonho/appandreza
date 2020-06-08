@@ -1,9 +1,12 @@
 import { Component } from '@angular/core';
-import { NavController, LoadingController, AlertController, ToastController } from 'ionic-angular';
+import { NavController, LoadingController, AlertController, ToastController, ActionSheetController } from 'ionic-angular';
 import { ServiceProvider } from '../../providers/service/service';
-import { CoreProvider } from '../../providers/core/core';
+import { CoreProvider, reasonForCancellationInterface, RequestInterface, scheduleItem } from '../../providers/core/core';
 import { DateProvider } from '../../providers/date/date';
 import { UserProvider } from '../../providers/user/user';
+import { ScheduleProvider } from '../../providers/schedule/schedule';
+import { DatePicker } from '@ionic-native/date-picker';
+
 
 
 @Component({
@@ -18,7 +21,10 @@ export class AgendaPage {
   private observer;
 
   constructor(
-    public navCtrl: NavController, 
+    public navCtrl: NavController,
+    private datePicker: DatePicker,
+    public actionSheetCtrl: ActionSheetController,
+    private scheduleProv: ScheduleProvider, 
     private server: ServiceProvider, 
     private core: CoreProvider, 
     private date: DateProvider,
@@ -29,6 +35,7 @@ export class AgendaPage {
     
   ) {
   
+    this.schedule = [''];
     this.initOberserServer();
     this.updateSchedule( this.date.getToday() );
     this.core.dateSelectedPgAgendaObservable.subscribe({
@@ -46,6 +53,24 @@ export class AgendaPage {
       error: error => console.log(error),
       complete: () => console.log('completo')
     })
+
+
+    
+
+    
+  }
+  
+  testedatepicker(){
+    
+    this.datePicker.show({
+      date: new Date(),
+      mode: 'date',
+      androidTheme: this.datePicker.ANDROID_THEMES.THEME_HOLO_DARK
+    }).then(
+      date => console.log('Got date: ', date),
+      err => console.log('Error occurred while getting date: ', err)
+    );
+
   }
 
   initOberserServer(){
@@ -81,8 +106,6 @@ export class AgendaPage {
 
   setSchedule( schedule ){
 
-    console.log('set Schedule');
-    console.log(schedule);
     this.user.signIn()
       .then( res => {
 
@@ -99,10 +122,16 @@ export class AgendaPage {
             hour: schedule.time
           }
         })
-          .then( (res: any) => {
+          .then( ( res: RequestInterface ) => {
             
             loading.dismiss();
-            this.presentToast( 'Agendamento realizado com sucesso' );
+            if( res.request.data.isSchedule ){
+
+              this.presentToast( 'Agendamento realizado com sucesso' );
+            }else{
+
+              this.presentToast( 'Erro ao realizar o agendamento' );
+            }
           })
           .catch( res => {
             
@@ -121,36 +150,72 @@ export class AgendaPage {
     })
     loading.present();
 
-    this.server.send({
-
-      method: 'reasonForCancellation',
-      data:{}
-    })
-      .then( (res:any) => {
-
-        loading.dismiss();
-        if( res ){
-
-          schedule.listReasonForCancellation = res.request.data;
-          this.presentReasonForCancellation( schedule );
-        }
-      })
-      .catch( res => {
-
+    this.scheduleProv.loadReasonForCancellation()
+      .then( ( res: reasonForCancellationInterface ) => {
+        
+        schedule.reasonForCancellation = res;
+        this.presentReasonForCancellation( schedule );
         loading.dismiss();
       })
+      .catch( res =>{
+
+        console.log('erro ao carrgar razões para o cancelamento');
+        loading.dismiss();
+      });
+        
+    
 
   }
+
+  presentActionSheet( schedule: scheduleItem ) {
+
+    let buttons = [];
+    if( schedule.available ){
+
+      buttons.push({
+        text: 'Agendar horário',
+        icon: 'calendar',
+          handler: () => {
+          this.setSchedule( schedule );
+        }
+      })
+    }else{
+      
+      buttons.push({
+        text: 'Cancelar agendamento',
+        icon: 'calendar',
+        role: 'destructive',
+        handler: () => {
+          this.cancelSchedule( schedule );
+        }
+      })
+    }
+
+    buttons.push({
+      text: 'Fechar',
+      icon: 'close',
+      role: 'cancel'
+    })
+
+    let actionSheet = this.actionSheetCtrl.create({
+
+      title: 'Data: ' + this.date.changeDate( schedule.date ).toString() + ' - Horário: ' + schedule.time,
+      buttons: buttons
+    });
+
+    if(schedule.mySchedule || schedule.available){
+
+      actionSheet.present();
+    }
+  }
+
 
   presentReasonForCancellation( schedule ){
 
     let alert = this.alertCtrl.create();
           alert.setTitle('Motivo do cancelamento');
-      
-          
-          schedule.listReasonForCancellation.forEach( element => {
+          schedule.reasonForCancellation.forEach( element => {
             
-
             alert.addInput({
               type: 'radio',
               label: element.description,
@@ -158,12 +223,12 @@ export class AgendaPage {
               checked: false,
             });
           });      
+          
           alert.addButton('Cancel');
           alert.addButton({
             text: 'OK',
             handler: data => {
             
-              let reasonForCancellation;
               let idOtherCancellation = '-1';
               data = {
                 id: data,
@@ -232,32 +297,25 @@ export class AgendaPage {
     })
   }
 
-  startCancelSchedule( data ){
+  startCancelSchedule( schedule ){
 
     let loading = this.loadingCtrl.create({
 
       content: 'Cancelando agendamento'
     })
     loading.present();
-    this.server.send({
+    this.scheduleProv.cancelSchedule( schedule )
+    .then( (res: RequestInterface ) => {
 
-      method: 'cancelSchedule',
-      data: {
-        id: data.id,
-        date: data.date,
-        reasonForCancellation: data.reasonForCancellation 
-      }
-    })
-      .then( (res: any) => {
-        
         loading.dismiss();
         this.presentToast( 'Agendamento cancelado com sucesso' );
-      })
-      .catch( res => {
-        
-        loading.dismiss();
-        this.presentConfirmErrorUpdateSchedule();//Corrigir essa mensagem  pra erro ao cancelar agendamento
-      })
+    })
+    .catch( ( res: RequestInterface ) => {
+
+      loading.dismiss();
+      this.presentConfirmErrorUpdateSchedule();//Corrigir essa mensagem  pra erro ao cancelar agendamento
+    })
+
   }
 
   updateSchedule( date ){

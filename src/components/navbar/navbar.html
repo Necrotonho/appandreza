@@ -1,23 +1,31 @@
-  
-    <ion-header>
-      <ion-navbar color="light">
-        <ion-buttons start>
-          <button ion-button menuToggle icon-only>
-            <ion-icon name="menu"></ion-icon>
-          </button>
-        </ion-buttons>
-        <ion-title> Olá {{ this.name? this.name : 'visitante' }} </ion-title>
-        <ion-buttons end>
-          <button ion-button icon-only>
-            <ion-icon name="time"></ion-icon>
-          </button>
-        </ion-buttons>
-        <ion-buttons end>
-          <button ion-button icon-only>
-            <ion-icon name="ios-funnel" (click)="presentPopover($event)"></ion-icon>
-          </button>
-        </ion-buttons>
-      </ion-navbar>
-    </ion-header>
+<ion-header>
+  <div   style="height: constant(safe-area-inset-top); height: env(safe-area-inset-top); background-color: #282828"></div>
+  <ion-navbar color="night">
 
+    <ion-buttons style="float: left">
+      <button ion-button menuToggle icon-only>
+        <ion-icon name="ios-menu"></ion-icon>
+      </button>
+    </ion-buttons>
+
+    <ion-title start> Olá {{ this.core.getUserData().name? this.core.getUserData().name.split(' ')[0] : 'visitante' }}
+    </ion-title>
+
+    <ion-buttons end>
+      <button ion-button icon-only (click)="this.openPageMySchedule()">
+        <ion-icon name="ios-alarm-outline">
+          <ion-badge *ngIf="this.core.mySchedules" style="margin-left: -10px;" color="danger">{{
+            this.core.mySchedules.length }}</ion-badge>
+        </ion-icon>
+      </button>
+    </ion-buttons>
+
+    <ion-buttons end *ngIf="this.navCtrl.first().component.name == 'HomePage' ">
+      <button ion-button icon-only (click)="presentPopover($event)">
+        <ion-icon name="ios-funnel"></ion-icon>
+      </button>
+    </ion-buttons>
+
+  </ion-navbar>
+</ion-header>
 

@@ -1,13 +1,76 @@
+<!-- <ion-header>
+  <ion-navbar color="night">
+    <ion-buttons start>
+      <button ion-button menuToggle icon-only>
+        <ion-icon name="menu"></ion-icon>
+      </button>
+    </ion-buttons>
+    <ion-title> Olá {{ this.core.getUserData().name? this.core.getUserData().name.split(' ')[0] : 'visitante' }} </ion-title>
+    <ion-buttons end>
+      <button ion-button icon-only (click)="this.openPageMySchedule()">
+        <ion-icon name="time"><ion-badge style="margin-left: -10px;" color="danger">1</ion-badge></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+</ion-header> -->
+
 <navbarComponent></navbarComponent>
 
-<ion-content no-padding no-bounce style="background-color:#efe9e5">
+<ion-content no-padding padding-top no-bounce style="background-color:#efe9e5">
+  <div style="height: 40px;"></div>
 
-  <br/><br/><br/>
   <date-selector></date-selector> 
 
-  <ion-list >
+
+
+  <ion-card>
+    
+      <ion-item-divider color="light">        
+        <p>Local de atendimento</p>
+        <h2>{{ this.schedule[0].titleAdress }}</h2>
+      </ion-item-divider>
+      <!-- <ion-list-header>
+        Local: {{ this.schedule[0].titleAdress }}
+        </ion-list-header> -->
+    </ion-card>
+    <ion-card>
+      <!-- <ion-list > -->
+          <ion-item-group>
+        <button ion-item *ngFor="let d of schedule; let i=index" (click)="presentActionSheet( d )">
+          <ion-col col-5 >
+            {{d.time}}
+          </ion-col>
+          <ion-col col-7 >
+            <ion-note 
+              item-end 
+              style="margin-right: 30px; font-size: 16px"
+              [style.color]="d.available ? 'seagreen' : d.mySchedule ? 'black':'gray'"
+              [style.font-weight]="d.mySchedule ? 'bold' : 'normal'">
+              {{ d.strAvailable }}
+            </ion-note>
+          </ion-col>
+        </button>
+    
+      </ion-item-group>
+      <!-- </ion-list> -->
+    </ion-card>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <!-- <ion-list >
     <div *ngFor="let d of schedule; let i=index" text-wrap>
-    <ion-item (click)="toggleGroup(i)" [ngClass]="{active: isGroupShown(i)}">
+    <ion-item (click)="toggleGroup(i)" [ngClass]="{active: isGroupShown(i)}"> -->
 
       <!-- <div>
           <span col-4>{{d.time}}</span>
@@ -18,7 +81,25 @@
           </span>
 
       </div> -->
-      <ion-grid>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      <!-- <ion-grid>
         <ion-row>
           <ion-col col-5 >
             {{d.time}}
@@ -49,6 +130,6 @@
       </div>
     </ion-item>
   </div>
-  </ion-list>
+  </ion-list> -->
 
 </ion-content>

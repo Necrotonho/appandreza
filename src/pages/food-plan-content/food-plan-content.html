@@ -1,25 +1,43 @@
+<!-- <ion-header>
+  <ion-navbar color="night">
+    <ion-buttons start>
+      <button ion-button menuToggle icon-only>
+        <ion-icon name="menu"></ion-icon>
+      </button>
+    </ion-buttons>
+    <ion-title> Olá {{ this.core.getUserData().name? this.core.getUserData().name.split(' ')[0] : 'visitante' }} </ion-title>
+    <ion-buttons end>
+      <button ion-button icon-only (click)="this.openPageMySchedule()">
+        <ion-icon name="time"><ion-badge style="margin-left: -10px;" color="danger">1</ion-badge></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+</ion-header> -->
+
 <navbarComponent></navbarComponent>
 
-<ion-content no-padding style="background-color:#efe9e5" class="card-background-page">
+<ion-content no-padding padding-top style="background-color:#efe9e5" class="card-background-page">
 
-  <br/><br/><br/><br/>
+  <div style="height: constant(safe-area-inset-top); height: env(safe-area-inset-top);"></div>
+  <div style="height: 50px;"></div>
 
   <div>
     <div style="float:left;   font-size: 50px; margin: 0px 15px;">
   
-      <ion-icon name="nutrition"></ion-icon>
+      <ion-icon name="ios-nutrition"></ion-icon>
     </div>
     <div style="float:left; margin-top: -5px;">
-      <div text-left>
-        <span style="color: #f15a2a; font-size: 22px;">
+      <p style="text-indent: 0%;">
+        <span style="color: #f15a2a; font-size: 22px">
           {{ foodPlanContent.description }}
         </span><br/>
-        <span >
+        <span>
           {{ foodPlanContent.hour }}
         </span>
-      </div>
+      </p>
     </div>
-  </div >
+  </div>
+
   <ion-slides pager color="orange">
     
     <ion-slide *ngFor=" let d of foodPlanContent.content ">
@@ -33,7 +51,7 @@
             <div class="card-title2" style="text-shadow: 1px 1px 1px #000000;">{{ d.foodName }}</div>
             <ion-card-content text-left>
 
-              <div *ngIf="d.ingredients.length">
+              <div *ngIf="d.ingredients && d.ingredients.length">
                 <ion-row no-padding text-center>
                   <ion-col >
                     <ion-spinner *ngIf="d.loadingConsumption" name="bubbles" color=orange ></ion-spinner>
@@ -56,7 +74,7 @@
                 <br/>
               </div>
 
-              <div *ngIf="d.modePrepare.length">
+              <div *ngIf="d.modePrepare && d.modePrepare.length">
                 <ion-card-title>
                   Modo de preparo
                 </ion-card-title>
@@ -66,7 +84,7 @@
                 <br/>
               </div>
 
-              <div *ngIf="d.obs.length">
+              <div *ngIf="d.obs && d.obs.length">
                 <ion-card-title>
                   Observações
                 </ion-card-title>

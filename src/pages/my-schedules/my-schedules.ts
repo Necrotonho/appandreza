@@ -1,7 +1,10 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, PopoverController, Platform } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, PopoverController, Platform, ToastController } from 'ionic-angular';
 import { PopOverOptPageMySchedulesComponent } from '../../components/pop-over-opt-page-my-schedules/pop-over-opt-page-my-schedules';
-import { CoreProvider } from '../../providers/core/core';
+import { CoreProvider, RequestInterface, scheduleItem } from '../../providers/core/core';
+import { ServiceProvider } from '../../providers/service/service';
+import { DateProvider } from '../../providers/date/date';
+import { ScheduleProvider } from '../../providers/schedule/schedule';
 
 /**
  * Generated class for the MySchedulesPage page.
@@ -19,54 +22,31 @@ export class MySchedulesPage {
 
   constructor(public navCtrl: NavController, 
               public platform: Platform,
+              public date: DateProvider, 
               private core: CoreProvider,
+              private toastCtrl: ToastController,
+              private schedule: ScheduleProvider,
+              public service: ServiceProvider,
               public popoverCtrl: PopoverController,
               public navParams: NavParams) {
 
-    this.core.setMySchedule( [
-
-      {
-        id: 1234,
-        date: ' 2018-01-01',
-        time: '10h00 às 11h00',
-        available: false,
-        mySchedule: true,
-        strAvailable: '',
-        titleAdress: 'Edifício tal tal, sala nº tal',
-        subTitleAdress: '14 S. Hop Avenue, Madison, WI 53703',
-        destination: '14,14',
-        imgDestination: 'img/predio.jpg'
-      },
-      {
-        id: 1234,
-        date: ' 2018-01-01',
-        time: '10h00 às 11h00',
-        available: false,
-        mySchedule: true,
-        strAvailable: '',
-        titleAdress: 'Edifício tal tal, sala nº tal',
-        subTitleAdress: '14 S. Hop Avenue, Madison, WI 53703',
-        destination: '14,14',
-        imgDestination: 'img/predio.jpg'
-      },
-    ] );
   }
 
   ionViewDidLoad() {
-    console.log('ionViewDidLoad MySchedulesPage');
+    
+    this.schedule.updateMySchedules()
+    this.core.mySchedules
   }
-
-  openTraceRoute(){
-
-    let destination = '14' + ',' + '14';
+  openTraceRoute( d ){
 
     if( this.platform.is( 'ios' ) ){
 
-      window.open('maps://?q=' + destination, '_system');
+      window.open('http://maps.apple.com/?sll=' + d.destination, '_system');
     } else {
 
-      let label = encodeURI('My Label');
-      window.open('geo:0,0?q=' + destination + '(' + label + ')', '_system');
+      let label = encodeURI(d.titleAdress);
+      window.open('geo:0,0?q=' + d.destination + '(' + label + ')', '_system');
+
     }
 
   }
@@ -78,5 +58,45 @@ export class MySchedulesPage {
     popover.present({
       ev: event
     });
+  }
+
+  confirmPresence( schedule: scheduleItem ){
+
+    this.service.send({
+
+      method: 'setConfirmedSchedule',
+      data: schedule
+    })
+    .then( ( res: RequestInterface ) => {
+
+      if( res.request.data.isSetConfirmedSchedule ){
+
+        this.presentToast( 'Confirmação de presença realizada com sucesso' );
+        this.ionViewDidLoad()
+      }else{
+        
+        this.presentToast( 'Erro ao realizar confirmação' );
+      }
+    })
+    .catch( ( res: RequestInterface ) => {
+
+      console.log(res);
+      this.presentToast( 'Erro ao realizar procedimento' );
+    })
+  }
+
+  presentToast( msg ) {
+
+    let toast = this.toastCtrl.create({
+      message: msg,
+      duration: 3000,
+      position: 'top'
+    });
+  
+    toast.onDidDismiss(() => {
+      console.log('Dismissed toast');
+    });
+  
+    toast.present();
   }
 }

@@ -1,1 +1,24 @@
-<ion-nav [root]="rootPage"></ion-nav>
+<ion-menu [content]="content">
+    <ion-content padding style="background: linear-gradient(to right, #f15a2a, #ef3f6b);">
+
+        <ion-item text-center style="background-color: transparent" *ngIf="this.core.userData">
+
+            <img width="80" height="80" [src]="this.core.userData.img? this.core.userData.img: 'img/avatar.png'" style="border-radius: 100%; border: 4px solid #ff3f6b; ">
+            <h2 ion-text color="light">{{ this.core.getUserData().name ? this.core.getUserData().name : 'Visitante' }}</h2>
+        </ion-item>
+        <ion-list>
+            <div *ngFor="let p of pages">
+                <button ion-item menuClose (click)="openPage(p)" *ngIf="p.show" style="background-color: transparent; color: white">
+                    <ion-icon item-start [name]="p.icon" color="light"></ion-icon>
+                    {{ p.title }}
+                </button>
+            </div>
+        </ion-list>
+    </ion-content>
+</ion-menu>
+
+<ion-nav [root]="rootPage" #content></ion-nav>
+
+
+
+<!-- <ion-nav [root]="rootPage"></ion-nav> -->

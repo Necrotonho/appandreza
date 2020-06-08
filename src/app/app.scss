@@ -14,3 +14,38 @@
 // To declare rules for a specific mode, create a child rule
 // for the .md, .ios, or .wp mode classes. The mode class is
 // automatically applied to the <body> element in the app.
+
+.show-tabbar{
+    background: linear-gradient(to right,#f15a2a, #ec008c)  !important;
+ }
+ $tabs-color-active: #fff !default;
+ $tabs-color: #282828 !default;
+ 
+ .tabs-md .tab-button[aria-selected=true] .tab-button-icon {
+    color: $tabs-color-active !important;
+  }
+ .tabs-md .tab-button[aria-selected=true] {
+    color: $tabs-color-active !important;
+  }
+  
+  .tabs-ios .tab-button[aria-selected=true] .tab-button-icon {
+    color: $tabs-color-active !important;
+  }
+  .tabs-ios .tab-button[aria-selected=true] {
+    color: $tabs-color-active !important;
+  }
+
+
+ .tabs-md .tab-button[aria-selected=false] .tab-button-icon {
+    color: $tabs-color !important;
+  }
+ .tabs-md .tab-button[aria-selected=false] {
+    color: $tabs-color !important;
+  }
+  
+  .tabs-ios .tab-button[aria-selected=false] .tab-button-icon {
+    color: $tabs-color !important;
+  }
+  .tabs-ios .tab-button[aria-selected=false] {
+    color: $tabs-color !important;
+  }

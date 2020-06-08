@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
-import { AgendaPage } from '../../pages/agenda/agenda';
 import { CoreProvider } from '../../providers/core/core';
+import { ScheduleProvider } from '../../providers/schedule/schedule';
 
 /**
  * Generated class for the PopOverOptPageMySchedulesComponent component.
@@ -14,15 +14,12 @@ import { CoreProvider } from '../../providers/core/core';
 })
 export class PopOverOptPageMySchedulesComponent {
 
-  text: string;
+  constructor( private core: CoreProvider, public agenda: ScheduleProvider ) {
 
-  constructor( private agenda: AgendaPage, private core: CoreProvider ) {
-    console.log('Hello PopOverOptPageMySchedulesComponent Component');
-    this.text = 'Hello World';
   }
 
   cancelSchedule(){
 
-    this.agenda.cancelSchedule( this.core.optSelectedScheduleOpt );
+    this.agenda.presentCancelDefault( this.core.optSelectedScheduleOpt );
   }
 }

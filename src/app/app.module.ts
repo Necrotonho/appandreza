@@ -22,7 +22,6 @@ import { DateProvider } from '../providers/date/date';
 import { CoreProvider } from '../providers/core/core';
 import { UserProvider } from '../providers/user/user';
 import { ErrorsProvider } from '../providers/errors/errors';
-import { SideMenuPage } from '../pages/side-menu/side-menu';
 import { MyProfilePage } from '../pages/my-profile/my-profile';
 import { FoodPlanPage } from '../pages/food-plan/food-plan';
 import { FoodPlanContentPage } from '../pages/food-plan-content/food-plan-content';
@@ -32,6 +31,14 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MySchedulesPage } from '../pages/my-schedules/my-schedules';
 import { PopOverOptPageMySchedulesComponent } from '../components/pop-over-opt-page-my-schedules/pop-over-opt-page-my-schedules';
 import { ScheduleProvider } from '../providers/schedule/schedule';
+import { MyMeasurementsPage } from '../pages/my-measurements/my-measurements';
+import { GetImageProvider } from '../providers/get-image/get-image';
+import { Camera } from '@ionic-native/camera';
+import { Crop } from '@ionic-native/crop';
+import { DatePicker } from '@ionic-native/date-picker';
+import { Base64 } from '@ionic-native/base64';
+import { Push } from '../../node_modules/@ionic-native/push';
+import { FoodPlanProvider } from '../providers/food-plan/food-plan';
 
 @NgModule({
   declarations: [
@@ -42,13 +49,13 @@ import { ScheduleProvider } from '../providers/schedule/schedule';
     TabsPage,
     NavbarComponent,
     DateSelectorComponent,
-    SideMenuPage,
     MyProfilePage,
     FoodPlanPage,
     FoodPlanContentPage,
     MySchedulesPage,
     PopOverFilterCategoryNewsComponent,
-    PopOverOptPageMySchedulesComponent
+    PopOverOptPageMySchedulesComponent,
+    MyMeasurementsPage
     
   ],
   imports: [
@@ -58,6 +65,7 @@ import { ScheduleProvider } from '../providers/schedule/schedule';
     BrMaskerModule,
     IonicModule.forRoot( MyApp, {
 
+      statusbarPadding: true,
       monthNames: ['janeiro', 'fevereiro', 'março', 'abril', 'maio', 'junho', 'julho', 'agosto', 'setembro', 'outubro', 'novembro', 'dezembro'],
       monthShortNames: ['jan', 'fev', 'mar', 'abr', 'mai', 'jun', 'jul', 'ago', 'set', 'out', 'nov', 'dez'],
       dayNames: ['domingo', 'segunda-feira', 'terça-feira', 'quarta-feira', 'quinta-feira', 'sexta-feira', 'sábado'],
@@ -72,13 +80,13 @@ import { ScheduleProvider } from '../providers/schedule/schedule';
     ContactPage,
     HomePage,
     TabsPage,
-    SideMenuPage,
     MyProfilePage,
     FoodPlanPage,
     FoodPlanContentPage,
     PopOverFilterCategoryNewsComponent,
     PopOverOptPageMySchedulesComponent,
-    MySchedulesPage
+    MySchedulesPage,
+    MyMeasurementsPage
   ],
   providers: [
     HeaderColor,
@@ -94,6 +102,13 @@ import { ScheduleProvider } from '../providers/schedule/schedule';
     UserProvider,
     ErrorsProvider,
     ScheduleProvider,
+    GetImageProvider,
+    Camera,
+    Crop,
+    Base64,
+    DatePicker,
+    Push,
+    FoodPlanProvider
     
   ]
 })

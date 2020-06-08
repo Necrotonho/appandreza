@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { ViewController } from 'ionic-angular';
-import { CoreProvider } from '../../providers/core/core';
+import { CoreProvider, filterCategory } from '../../providers/core/core';
+import { ServiceProvider } from '../../providers/service/service';
 
 /**
  * Generated class for the PopOverFilterCategoryNewsComponent component.
@@ -14,8 +15,19 @@ import { CoreProvider } from '../../providers/core/core';
 })
 export class PopOverFilterCategoryNewsComponent {
 
-  constructor(public viewCtrl: ViewController, private core: CoreProvider) {
+  constructor(public viewCtrl: ViewController, private core: CoreProvider, private service: ServiceProvider) {
 
+  }
+
+  updateCategoriesNewsSelected( category: filterCategory ){
+
+    this.service.send({
+
+      method: 'updateCategoriesNewsSelected',
+      data: category
+    })
+    console.log('atualizar categories');
+    console.log(category);
   }
 
   close() {

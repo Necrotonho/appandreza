@@ -3,9 +3,7 @@ import { IonicPageModule } from 'ionic-angular';
 import { MySchedulesPage } from './my-schedules';
 
 @NgModule({
-  declarations: [
-    MySchedulesPage,
-  ],
+  declarations: [],
   imports: [
     IonicPageModule.forChild(MySchedulesPage),
   ],

@@ -11,167 +11,183 @@ import { RequestInterface } from '../core/core';
 
   See https://angular.io/guide/dependency-injection for more info on providers
   and Angular DI.
-*/ 
+*/
+export interface SendInterface {
+
+  method: string,
+  data: any;
+}
+
+
 @Injectable()
 export class ServiceProvider {
 
 
-  private localIp = 'ws://192.168.1.32:8000';
-  private externalIP = 'ws://179.184.92.74:3396';
+  // private localIp = 'ws://192.168.1.32:8000';
+  private externalIP = 'ws://54.197.79.122:8000';
   private tentativasIP = [];
-  private tentativasConection = 0;
   private timeOutRequest = 15000;
+  public appFocus: boolean;
   public ws: WebSocket;
   public observableServerWS: Subject<any> = new Subject();
 
   constructor(
-    public http: Http, 
+
+    public http: Http,
     private loadingCtrl: LoadingController,
     private toastCtrl: ToastController,
     private alertCtrl: AlertController,
   ) {
-      
+
   }
 
-  private getRequestKey(){
+  private getRequestKey() {
 
-    return new Date().getTime().toString(); 
+    return new Date().getTime().toString() + (Math.random() * 1000);
   }
 
-  private getVersion(){
+  private getVersion() {
 
     return '1.0.0';
   }
-  
-  private getToken(){
 
-    if( localStorage.getItem('token') ){
+  private getToken() {
+
+    if (localStorage.getItem('token') && (localStorage.getItem('isLoggedIn') == 'true' || localStorage.getItem('confirmNewUser') == 'true')) {
 
       return localStorage.getItem('token');
-    }else{
+    } else {
 
       return localStorage.getItem('visitorToken');
     }
   }
 
-  startMonitoringConnection(){
+  startMonitoringConnection() {
 
-    setInterval( () => {
-      
+    setInterval(() => {
+
       let toast = this.toastCtrl.create({
         message: 'Conexão perdida, reconectando',
         position: 'top'
       });
-      
-      if( !this.isConnected() && !this.isConnecting() ){
-        
+
+      if (!this.appFocus) {
+
+        // setTimeout( () => console.log('não tem focus'), 1000);
+      }
+      if (!this.isConnected() && !this.isConnecting() && this.appFocus) {
+
         toast.present();
         this.connect()
-          .then( res => toast.dismiss() )
-          .catch( res => toast.dismiss() )
+          .then(res => {
+
+            localStorage.setItem('isLoggedIn', 'true');
+            toast.dismiss();
+          })
+          .catch(res => toast.dismiss())
       }
     }, 3000);
   }
 
-  request( dados ){
+  request(dados) {
 
-    return new Promise( (resolve, reject) => {
+    return new Promise((resolve, reject) => {
 
       let requestData = {
         token: this.getToken(),
         request: {
-            client: 1,
-            id: this.getRequestKey(),
-            version: this.getVersion(),
-            method: dados.method,
-            data: dados.data
-          }
-        };
+          client: 1,
+          id: this.getRequestKey(),
+          version: this.getVersion(),
+          method: dados.method,
+          data: dados.data
+        }
+      };
 
-      this.ws.send( JSON.stringify(requestData) );
+      this.ws.send(JSON.stringify(requestData));
 
       let observer = {
 
-        next: ( value ) => {
-          
-          if( value.request.id == requestData.request.id ){
+        next: (value) => {
 
-            if( value.request.status.cod == '200' ){
+          if (value.request.id == requestData.request.id) {
 
-              clearTimeout( setTime );
-              resolve( value );
+            if (value.request.status.cod == '200') {
+
+              clearTimeout(setTime);
+              resolve(value);
               obs.unsubscribe();
-            }else{
-              
-              clearTimeout( setTime );
-              resolve( value );
+            } else {
+
+              clearTimeout(setTime);
+              resolve(value);
               obs.unsubscribe();
             }
-          }else{
+          } else {
 
-            console.log( 'resposta de requisição não tem o mesmo ID' );
+            console.log('resposta de requisição não tem o mesmo ID');
           }
         },
-        error: ( value ) => console.log( 'Erro no error do observer[Request]' ),
-        complete: () => console.log( 'resquest ' + requestData.request.id + ' completo' )
+        error: (value) => console.log('Erro no error do observer[Request]'),
+        complete: () => console.log('resquest ' + requestData.request.id + ' completo')
       };
 
-      let obs = this.observableServerWS.subscribe( observer );
-  
-      let setTime = setTimeout( () => {
-        
+      let obs = this.observableServerWS.subscribe(observer);
+
+      let setTime = setTimeout(() => {
+
         console.log('setTimeOut da requisição: ' + requestData.request.id);
         obs.unsubscribe();
         reject()
-      }, this.timeOutRequest );
+      }, this.timeOutRequest);
     });
   }
 
-  toConnect(){
+  toConnect() {
 
-    return new Promise( (resolve, reject) => {
+    return new Promise((resolve, reject) => {
 
       let loading = this.loadingCtrl.create({
-  
+
         content: 'Conectando'
       })
       loading.present();
       this.connect()
-        .then( res => {
-        
+        .then(res => {
+
           resolve();
           loading.dismiss();
-          console.log('conectado no endereço: ' + res ) 
+          console.log('conectado no endereço: ' + res)
         })
-        .catch( res => {
-          
+        .catch(res => {
+
           reject();
           loading.dismiss();
           this.presentConfirmErrorToConnect();
-          console.log( res );
+          console.log(res);
           console.log('Nenhuma conexão possível com o servidor!');
-  
+
         });
     })
   }
 
-  connect(){
-    
-    return new Promise( (resolve, reject) => {
+  connect() {
 
-      this.initWS( this.localIp )
-        .then( (res:WebSocket) => {
-          this.ws = res 
-          resolve( this.localIp );
-        })
-        .catch( res => reject() );
+    return new Promise((resolve, reject) => {
 
-      this.initWS( this.externalIP )
-        .then( (res:WebSocket) => {
-          this.ws = res 
-          resolve( this.externalIP );
+      // this.initWS( this.localIp )
+      //   .then( (res:WebSocket) => {
+      //     this.ws = res 
+      //     resolve( this.localIp );
+      //   })
+      //   .catch( res => reject() );
+
+      this.initWS(this.externalIP)
+        .then((res: WebSocket) => {
+          this.ws = res
+          resolve(this.externalIP);
         })
-        .catch( res => reject() );
+        .catch(res => reject());
 
 
       // let rejectConection = () => {
@@ -180,13 +196,13 @@ export class ServiceProvider {
 
       //     this.connect()
       //       .then( res => {
-              
+
       //         this.tentativasIP = [];
       //         localStorage.setItem('lastIpConnected', this.ws.url);
       //         resolve( this.ws.url );
       //       })
       //       .catch( res => {
-              
+
       //         reject()
       //       });
       //   }else{
@@ -197,12 +213,12 @@ export class ServiceProvider {
 
 
       // this.ws.onopen = (res) => {
-        
+
       //   this.tentativasIP = [];
       //   let obs = this.observableServerWS.subscribe({
-          
+
       //     next: (res) => {
-            
+
       //       if( res.request.method == 'firstConnection' ){
 
       //         obs.unsubscribe();
@@ -223,121 +239,129 @@ export class ServiceProvider {
       // };
 
       // this.ws.onerror = (res) => {
-        
+
       //   if( this.tentativasConection && !this.isConnected() ){
-          
+
       //     localStorage.setItem('isLoggedIn', 'false' );
       //     reject();
       //   }else{
-          
+
       //     rejectConection();
       //   }
       // };
 
       // this.ws.onclose = ( res ) => localStorage.setItem('isLoggedIn', 'false' );
     })
-  } 
+  }
 
-  initWS( ip ){
+  initWS(ip) {
 
-    return new Promise( (resolve,  reject) => {
+    return new Promise((resolve, reject) => {
 
       let ws;
-      ws = new WebSocket( ip );   
+      ws = new WebSocket(ip);
       ws.onopen = (res) => {
-          
+
         let obs = this.observableServerWS.subscribe({
-          
+
           next: (res) => {
-            
-            if( res.request.method == 'firstConnection' ){
-  
+
+            if (res.request.method == 'firstConnection') {
+
               obs.unsubscribe();
-              resolve( ws );
+              resolve(ws);
             }
           }
         });
       }
 
-      ws.onmessage = ( msg: MessageEvent ) => {
+      ws.onmessage = (msg: MessageEvent) => {
 
-        this.observableServerWS.next( JSON.parse( msg.data ) );
+        this.observableServerWS.next(JSON.parse(msg.data));
 
-        if( JSON.parse( msg.data ).request.method == 'firstConnection' ){
+        if (JSON.parse(msg.data).request.method == 'firstConnection') {
 
-          localStorage.setItem( 'visitorToken', JSON.parse( msg.data ).request.data.token );
+          localStorage.setItem('visitorToken', JSON.parse(msg.data).request.data.token);
         };
       };
 
       ws.onerror = (res) => {
-        
-        let otherConnecting = this.tentativasIP.filter( ws => ws.CONNECTING );
 
-        if( !otherConnecting.length && !this.isConnected() ){
+        let otherConnecting = this.tentativasIP.filter(ws => ws.CONNECTING);
 
-          localStorage.setItem('isLoggedIn', 'false' );
+        if (!otherConnecting.length && !this.isConnected()) {
+
+          localStorage.setItem('isLoggedIn', 'false');
           reject();
         }
 
       };
 
-      ws.onclose = ( res ) => localStorage.setItem('isLoggedIn', 'false' );
-      this.tentativasIP.push( ws );
+      ws.onclose = (res) => {
+
+        if (!this.isConnected) {
+
+          localStorage.setItem('isLoggedIn', 'false')
+        }
+
+      };
+      this.tentativasIP.push(ws);
     })
 
   }
 
-  getIpConection(){
+  getIpConection() {
 
-    if( localStorage.getItem('lastIpConnected') && !this.tentativasIP.length ){
+    if (localStorage.getItem('lastIpConnected') && !this.tentativasIP.length) {
 
-      this.tentativasIP.push( localStorage.getItem('lastIpConnected') );
+      this.tentativasIP.push(localStorage.getItem('lastIpConnected'));
       return localStorage.getItem('lastIpConnected');
-    }else if( this.tentativasIP.indexOf(this.externalIP) > -1 ){
+      // }
+      // else if( this.tentativasIP.indexOf(this.externalIP) > -1 ){
 
-      this.tentativasIP.push(this.localIp);
-      console.log( this.tentativasIP );
-      return this.localIp;
-    }else{
+      //   this.tentativasIP.push(this.localIp);
+      //   console.log( this.tentativasIP );
+      //   return this.localIp;
+    } else {
 
       this.tentativasIP.push(this.externalIP);
-      console.log( this.tentativasIP );
+      console.log(this.tentativasIP);
       return this.externalIP;
     }
   }
 
-  send( data ){
+  send(data: SendInterface) {
 
-    return new Promise( (resolve, reject) => {
+    return new Promise((resolve, reject) => {
 
-      if( this.isConnected() ){
+      if (this.isConnected()) {
 
-        this.request( data )
-            .then( ( res: RequestInterface ) => resolve( res ) )
-            .catch( ( res: RequestInterface ) => reject( res ) );
-      }else if( this.isConnecting() ){
+        this.request(data)
+          .then((res: RequestInterface) => resolve(res))
+          .catch((res: RequestInterface) => reject(res));
+      } else if (this.isConnecting()) {
 
-        this.ws.onopen = () =>{
+        this.ws.onopen = () => {
 
-          this.request( data )
-              .then( ( res: RequestInterface ) => resolve( res ) )
-              .catch( ( res: RequestInterface ) => reject( res ) );
+          this.request(data)
+            .then((res: RequestInterface) => resolve(res))
+            .catch((res: RequestInterface) => reject(res));
         };
-      }else{
+      } else {
 
         this.tentativasIP = [];
         this.toConnect()
-            .then( res => {
+          .then(res => {
 
-              this.request( data )
-              .then( ( res: RequestInterface ) => resolve( res ) )
-              .catch( ( res: RequestInterface ) => reject( res ) );
-            })
-            .catch( res => reject( res ));
+            this.request(data)
+              .then((res: RequestInterface) => resolve(res))
+              .catch((res: RequestInterface) => reject(res));
+          })
+          .catch(res => reject(res));
       }
     });
   }
-  
+
   presentConfirmErrorToConnect() {
 
     let alert = this.alertCtrl.create({
@@ -355,45 +379,45 @@ export class ServiceProvider {
     alert.present();
   }
 
-  toClosed(){
+  toClosed() {
 
     this.ws.close();
   }
 
-  isConnected(){
+  isConnected() {
 
-    if( this.ws ){
+    if (this.ws) {
 
       return this.ws.readyState == this.ws.OPEN ? true : false;
-    }else{
+    } else {
 
       return false;
     }
-    
+
   }
 
-  isConnecting(){
+  isConnecting() {
 
-    if( this.ws ){
+    if (this.ws) {
 
-      return this.ws.CONNECTING == this.ws.readyState? true: false;
-    }else{
+      return this.ws.CONNECTING == this.ws.readyState ? true : false;
+    } else {
 
       return false;
     }
   }
 
-  presentToast( msg ) {
+  presentToast(msg) {
 
     let toast = this.toastCtrl.create({
       message: msg,
       position: 'top'
     });
-  
+
     toast.onDidDismiss(() => {
       console.log('Dismissed toast');
     });
-  
+
     toast.present();
   }
 }

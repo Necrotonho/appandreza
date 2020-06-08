@@ -4,7 +4,7 @@ import 'rxjs/add/operator/map';
 import { Subject } from 'rxjs/Subject';
 import { DateProvider } from '../date/date';
 import { ServiceProvider } from '../service/service';
-import { HtmlParser, HtmlTagDefinition } from '@angular/compiler';
+import { SafeUrl } from '@angular/platform-browser';
 
 export interface FoodPlanItemContentInterface{
 
@@ -30,7 +30,6 @@ export interface FoodPlanInterface{
   foodPlan: Array<FoodPlanItemInterface>;
   planId: string;
 }
-
 export interface UserInterface{
 
   cpf: string;
@@ -38,8 +37,8 @@ export interface UserInterface{
   id: number;
   name: string;
   phone: string;
+  img: string | SafeUrl;
 }
-
 export interface RequestStatusInterface{
 
   cod: number;
@@ -57,7 +56,6 @@ export interface RequestInterface{
   request: RequestContentInterface;
   
 }
-
 export interface postNews{
 
   imgAvatar: string;
@@ -67,7 +65,12 @@ export interface postNews{
   categories: string[];
   content: string;
 }
+export interface filterCategory{
 
+  id: number,
+  name: string,
+  selected: boolean,
+}
 export interface scheduleItem{
 
   id: number;
@@ -80,6 +83,15 @@ export interface scheduleItem{
   subTitleAdress: string;
   destination: string;
   imgDestination: string;
+  reasonForCancellation?: reasonForCancellationInterface[];
+  confirmPresence: boolean;
+  presentConfirmPresence: boolean;
+
+}
+export interface reasonForCancellationInterface{
+
+  description: string;
+  id: number;
 }
 
 @Injectable()
@@ -91,7 +103,7 @@ export class CoreProvider {
   private scheduleLoaded;
   public scheduleLoadedObservable: Subject<any> = new Subject();
 
-  private userData: UserInterface = {cpf: '', email: '', id: 0, name: '', phone: ''};
+  public userData: UserInterface = {cpf: '', email: '', id: 0, name: '', phone: '', img: ''};
   public userDataObservable: Subject<any> = new Subject();
 
   private foodPlan;
@@ -107,27 +119,38 @@ export class CoreProvider {
   public mySchedulesObservable: Subject<scheduleItem[]> = new Subject();
   public optSelectedScheduleOpt: scheduleItem;
 
-  private news: postNews[];
+  public news: postNews[] = [{categories:[''],content:'',date:'',imgAvatar:'', userName:''}];
   public newObservable: Subject<postNews[]> = new Subject();
-  public filterCategory = [{
+  public filterCategory: filterCategory[] = [{id: 0, name:'', selected: true}];
 
-      name: 'Receiatas',
-      selected: true,
-    },{
-
-      name: 'Novidades',
-      selected: true,
-    },{
-
-      name: 'Pensamento do dia',
-      selected: true,
-    }
-  ];
-
-  constructor(public http: Http, private date: DateProvider, private server: ServiceProvider ) {
+  
+  
+  constructor(public http: Http, private date: DateProvider, private service: ServiceProvider ) {
 
     console.log('classe core criada');
+    this.initOberserFoodPlan()
   }
+
+  initOberserFoodPlan(){
+
+    let observer = {
+
+      next: ( value ) => {
+
+
+        if( value.request.method == 'updateFoodPlan' ){
+
+          this.setFoodPlan( value.request.data );
+        }
+      },
+      error: ( error ) => console.log( 'error oberserver foodPlan: ' + error ),
+      complete: () => console.log('observer foodplan completo')
+    }
+
+    this.service.observableServerWS.subscribe( observer );
+  }
+
+
 
   setMySchedule( value: scheduleItem[] ){
 
@@ -166,6 +189,7 @@ export class CoreProvider {
       id: 0 + this.userData.id,
       name: '' + this.userData.name,
       phone: '' + this.userData.phone,
+      img: ''
     };
 
     return newUserdata;
@@ -214,6 +238,13 @@ export class CoreProvider {
   setNews( news: postNews[] ){
 
     this.news = news;
-    this.newObservable.next( news );
+    //this.newObservable.next( news );
   }
+
+  setFilterCategories( categories: filterCategory[] ){
+
+    this.filterCategory = categories;
+  }
+
+  
 }

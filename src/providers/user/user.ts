@@ -1,9 +1,12 @@
 import { Injectable } from '@angular/core';
 import { Http } from '@angular/http';
 import 'rxjs/add/operator/map';
-import { CoreProvider } from '../core/core';
+import { CoreProvider, RequestInterface } from '../core/core';
 import { AlertController, ToastController, LoadingController } from 'ionic-angular';
 import { ServiceProvider } from '../service/service';
+import { FoodPlanProvider } from '../food-plan/food-plan';
+import { DateProvider } from '../date/date';
+import { BehaviorSubject } from 'rxjs';
 
 /*
   Generated class for the UserProvider provider.
@@ -16,50 +19,149 @@ export class UserProvider {
 
   private attemptsConfirmUser: number;
   private limitattemptsConfirmUser: number = 5;
+  public changeUserObs = new BehaviorSubject(this.core.userData);
 
-  constructor(  public http: Http, 
-                private core: CoreProvider, 
-                private alertCtrl: AlertController, 
-                private service: ServiceProvider,
-                private toastCtrl: ToastController,
-                public loadingCtrl: LoadingController,
-  ){
+  constructor(public http: Http,
+    private core: CoreProvider,
+    private alertCtrl: AlertController,
+    private service: ServiceProvider,
+    private foodPlanService: FoodPlanProvider,
+    private date: DateProvider,
+    private toastCtrl: ToastController,
+    public loadingCtrl: LoadingController,
+  ) {
 
     //localStorage.setItem('isLoggedIn', 'false' );
     // localStorage.removeItem('token');
     // localStorage.removeItem('visitorToken');
-    this.service.toConnect()
-      .then( res => {
-        
-        this.service.startMonitoringConnection();
-        this.startSignIn( { restartSignIn: false } )
-          .then( res => localStorage.setItem( 'isLoggedIn', 'true' ) )
-          .catch( res => console.log('erro ao conectar constructor class userprovider') )
-      })
-      .catch( res => console.log ('erro ao conectar ao servidor, no constructos da classe UserProvider') );
 
   }
 
-  signIn(){
+  initOberserServer() {
 
-    return new Promise( (resolve, reject) => {
+    let observer = {
 
-      if( this.isLoggedIn() ){
-  
+      next: (value) => {
+
+        if (value.request.method == 'signIn') {
+
+          if (value.request.data.isSignIn) {
+
+            console.log('chegou atualização do initOberserServer User', value)
+            this.core.setUserData(value.request.data.user);
+          }
+        }
+      },
+      error: (error) => console.log('error oberserver updateNews: ' + error),
+      complete: () => console.log('observer updateNews completo')
+    }
+
+    this.service.observableServerWS.subscribe(observer);
+  }
+
+  signIn() {
+
+    return new Promise((resolve, reject) => {
+
+      if (this.isLoggedIn()) {
+
+        this.changeUserObs.next(this.core.userData);
         resolve();
-      }else{
-        
-        this.presentPrompt( {} )
-          .then( res => resolve() )
-          .catch( res => reject() );
+      } else {
+
+        this.presentPrompt({})
+          .then(res => resolve())
+          .catch(res => reject());
       }
     })
 
   }
 
-  sginOut(){
+  initSession() {
 
-    return new Promise( (resolve, reject) => {
+    this.service.toConnect()
+      .then(res => {
+
+        this.service.send({
+
+          method: 'updateCategoriesNews',
+          data: {}
+        })
+          .then((res: RequestInterface) => {
+
+            if (res.request.data && res.request.data.length) {
+
+              this.core.setFilterCategories(res.request.data);
+            }
+
+            this.service.send({ method: 'updateNews', data: {} })
+              .then((res: RequestInterface) => console.log('Chegou atualização de newss', res))
+              .catch((res: RequestInterface) => console.log(res));
+          })
+          .catch((res: RequestInterface) => console.log(res));
+
+
+        this.service.send({
+
+          method: 'updateFoodPlan',
+          data: {}
+        })
+          .then((res: any) => {
+
+            this.foodPlanService.foodPlan = res.request.data;
+            let nextFood = res.request.data[0].foodPlan.find(item => this.date.compareHourNow(item.hour) < 0);
+
+            if (nextFood) {
+
+              this.foodPlanService.foodPlanSelected = nextFood;
+              this.core.setFoodPlanSelected(res.request.data[0]);
+              this.foodPlanService.nextFoodSelected = nextFood.content;
+              // this.relationship = res.request.data[0].title;
+            }
+
+          })
+          .catch(res => console.log(res));
+
+        this.service.send({
+
+          method: 'updateMySchedules',
+          data: {}
+        })
+          .then((res: RequestInterface) => {
+
+            if (res.request.data && res.request.data.length) {
+
+              this.core.setMySchedule(res.request.data);
+            }
+          })
+
+        // this.service.startMonitoringConnection();
+        this.startSignIn({ restartSignIn: false })
+          .then(res => {
+
+            localStorage.setItem('isLoggedIn', 'true')
+            this.service.send({
+
+              method: 'updateMySchedules',
+              data: {}
+            })
+              .then((res: RequestInterface) => {
+
+                if (res.request.data && res.request.data.length) {
+
+                  this.core.setMySchedule(res.request.data);
+                }
+              })
+          })
+          .catch(res => console.log('erro ao conectar constructor class userprovider'))
+      })
+      .catch(res => console.log('erro ao conectar ao servidor, no constructos da classe UserProvider', res));
+
+  }
+
+  signOut() {
+
+    return new Promise((resolve, reject) => {
 
       let alert = this.alertCtrl.create({
         title: 'Sair',
@@ -68,40 +170,29 @@ export class UserProvider {
           {
             text: 'Cancelar',
             handler: data => {
-              
+
             }
           },
           {
             text: 'Sim',
             handler: data => {
-              
-              this.core.setUserData( null );
-              localStorage.removeItem( 'token' );
-              localStorage.setItem( 'isLoggedIn', 'false' );
+
+              this.core.setUserData({ cpf: '', email: '', id: 0, name: '', phone: '', img: '' });
+              localStorage.removeItem('token');
+              localStorage.setItem('isLoggedIn', 'false');
               resolve();
             }
           }
         ]
       });
-      
+
       alert.present();
     })
   }
 
-  starSignOut(){
+  presentPrompt(data) {
 
-    return new Promise( (resolve, reject) => {
-
-      this.core.setUserData( null )
-      localStorage.removeItem( 'token' );
-      localStorage.setItem( 'isLoggedIn', 'false' );
-      resolve();
-    })
-  }
-
-  presentPrompt( data ) {
-
-    return new Promise( (resolve, reject) => {
+    return new Promise((resolve, reject) => {
 
       let alert = this.alertCtrl.create({
         title: 'Login',
@@ -109,79 +200,79 @@ export class UserProvider {
           {
             name: 'cpf',
             placeholder: 'CPF',
-            type: 'number',
-            value: data.cpf? data.cpf: false
+            type: 'tel',
+            value: data.cpf ? data.cpf : ''
           },
           {
             name: 'password',
             placeholder: 'Senha',
             type: 'password',
-            value: data.password? data.password: false
+            value: data.password ? data.password : ''
           }
         ],
         buttons: [
           {
             text: 'Esqueci a senha',
             handler: data => {
-              
+
               this.forgotPassword()
-                .then( res => {
-                  
-                  this.presentToast( 'Senha recuperada com sucesso' )
+                .then(res => {
+
+                  this.presentToast('Senha recuperada com sucesso')
                   resolve();
                 })
-                .catch( res => this.presentToast( 'Erro ao recuperar senha' ));
+                .catch(res => this.presentToast('Erro ao recuperar senha'));
             }
           },
           {
             text: 'Cadastrar-se',
             handler: data => {
-              
-              this.signUp( {} )
-                  .then( res => {
-                    
-                    this.startSignIn( {restartSignIn: true} )
-                        .then( res => resolve() )
-                        .catch( res => reject( res ) )
-                  })
-                  .catch( res => reject() );
+
+              this.signUp({})
+                .then(res => {
+
+                  this.startSignIn({ restartSignIn: true })
+                    .then(res => resolve())
+                    .catch(res => reject(res))
+                })
+                .catch(res => reject());
             }
           },
           {
             text: 'Entrar',
             handler: data => {
-              
+
               data.restartSignIn = true;
-              this.startSignIn( data )
-                .then( res => resolve() )
-                .catch( res => reject( res ));
+              this.startSignIn(data)
+                .then(res => resolve())
+                .catch(res => reject(res));
             }
           },
         ]
       });
-      
+
       alert.present();
     });
   }
 
-  presentToast( msg ) {
+  presentToast(msg) {
 
     let toast = this.toastCtrl.create({
       message: msg,
       duration: 3000,
       position: 'top'
     });
-  
+
     toast.onDidDismiss(() => {
       console.log('Dismissed toast');
     });
-  
+
     toast.present();
   }
 
-  forgotPassword(){
+  forgotPassword() {
 
-    return new Promise( (resolve, reject) => {
+    return new Promise((resolve, reject) => {
 
       let alert = this.alertCtrl.create({
         title: 'Esqueci a senha',
@@ -197,21 +288,21 @@ export class UserProvider {
           {
             text: 'recuperar senha',
             handler: data => {
-              
-              this.startforgotPassword( data )
-                .then( res => resolve() )
-                .catch( res => reject() )
+
+              this.startforgotPassword(data)
+                .then(res => resolve())
+                .catch(res => reject())
             }
           }
         ]
       });
-      
+
       alert.present();
     });
-    
+
   }
 
-  startforgotPassword( data ){
+  startforgotPassword(data) {
 
     let loading = this.loadingCtrl.create({
 
@@ -219,7 +310,7 @@ export class UserProvider {
     })
     loading.present();
 
-    return new Promise( (resolve, reject) => {
+    return new Promise((resolve, reject) => {
 
       this.service.send({
 
@@ -228,36 +319,42 @@ export class UserProvider {
           cpf: data.cpf,
         }
       })
-        .then( (res:any) => {
-          
-          loading.dismiss();
-          if( res.request.data.isKey ){
+        .then((res: any) => {
 
-            this.verifyCodPassword( res.request.data.email )
-              .then( res => {
-                
-                this.presentToast( 'Senha recuperada com sucesso' );
-                this.startSignIn( {restartSignIn: true} )
-                  .then( res => resolve() )
-                  .catch( res => reject() )//Verificar isso mais tardes
+          loading.dismiss();
+          if (res.request.data.isKey) {
+
+            this.verifyCodPassword(res.request.data.email)
+              .then(res => {
+
+                this.presentToast('Senha recuperada com sucesso');
+                this.startSignIn({ restartSignIn: true })
+                  .then(res => resolve())
+                  .catch(res => reject())//Verificar isso mais tardes
               })
-              .catch( res => console.log('cod incorreto') )
-          }else{
+              .catch(res => console.log('cod incorreto'))
+          } else {
 
             reject()
           }
         })
-        .catch( res => {
-         
+        .catch(res => {
+
           loading.dismiss();
-          console.log( 'erro no catch do Start Sign In')
+          const alert = this.alertCtrl.create({
+            title: 'Erro!',
+            subTitle: 'Erro ao enviar email de confirmação!',
+            buttons: ['OK']
+          });
+          alert.present();
+          console.log('erro no catch do Start Sign In')
         });
     });
   }
 
-  verifyCodPassword( email ){
+  verifyCodPassword(email) {
 
-    return new Promise( (resolve, reject) => {
+    return new Promise((resolve, reject) => {
 
       let alert = this.alertCtrl.create({
         title: 'Esqueci a senha',
@@ -278,26 +375,26 @@ export class UserProvider {
           {
             text: 'Confirmar nova senha',
             handler: data => {
-              
-              this.startConfirmNewPassword( data )
-                .then( res => resolve() )
-                .catch( res => {
-                  
-                  this.verifyCodPassword( email )
-                    .then( res => resolve() )
-                    .catch( res => reject() )
+
+              this.startConfirmNewPassword(data)
+                .then(res => resolve())
+                .catch(res => {
+
+                  this.verifyCodPassword(email)
+                    .then(res => resolve())
+                    .catch(res => reject())
                 })
             }
           }
         ]
       });
-      
+
       alert.present();
     });
 
   }
 
-  startConfirmNewPassword( data ){
+  startConfirmNewPassword(data) {
 
     let loading = this.loadingCtrl.create({
 
@@ -305,7 +402,7 @@ export class UserProvider {
     })
     loading.present();
 
-    return new Promise( (resolve, reject) => {
+    return new Promise((resolve, reject) => {
 
       this.service.send({
 
@@ -315,94 +412,110 @@ export class UserProvider {
           password: data.password
         }
       })
-        .then( (res:any) => {
-          
-          loading.dismiss();
-          if( res.request.data.isRecovered ){
+        .then((res: any) => {
 
-            localStorage.setItem('token', res.request.data.token );
+          loading.dismiss();
+          if (res.request.data.isRecovered) {
+
+            localStorage.setItem('token', res.request.data.token);
             resolve();
-          }else{
-            
+          } else {
+
             reject()
           }
         })
-        .catch( res => {
-          
+        .catch(res => {
+
           loading.dismiss();
-          console.log( 'erro no startConfirmNewPassword')
+          const alert = this.alertCtrl.create({
+            title: 'Erro!',
+            subTitle: 'Erro ao verificar email!',
+            buttons: ['OK']
+          });
+          alert.present();
+          console.log('erro no startConfirmNewPassword')
         });
     });
   }
 
-  startSignIn( data ){
+  startSignIn(data) {
 
-    return new Promise( (resolve, reject) => {
+    return new Promise((resolve, reject) => {
 
       this.service.send({
 
         method: 'signIn',
         data: {
-          user: data.cpf? data.cpf: 'x',
-          password: data.password? data.password: 'x'
+          user: data.cpf ? data.cpf : 'x',
+          password: data.password ? data.password : 'x'
         }
       })
-        .then( (res:any) => {
-          
-          if( res.request.data.isSignIn ){
+        .then((res: any) => {
 
-            this.core.setUserData( res.request.data.user );
-            localStorage.setItem('isLoggedIn', 'true' );
-            localStorage.setItem('token', res.request.data.token );
+          if (res.request.data.isSignIn) {
 
+            this.core.setUserData(res.request.data.user);
+            localStorage.setItem('isLoggedIn', 'true');
+            localStorage.setItem('token', res.request.data.token);
             resolve();
-          }else{
+          } else {
 
-            if( data.restartSignIn ){
+            if (res.request.status.message) {
+              const toast = this.toastCtrl.create({
+                message: res.request.status.message,
+                duration: 3000
+              });
+              toast.present();
+            }
+            if (data.restartSignIn) {
 
-              this.presentPrompt( data )
-                .then( res => resolve() )
-                .catch( res => reject() );
+              this.presentPrompt(data)
+                .then(res => {
+
+                  localStorage.setItem('isLoggedIn', 'true');
+                  resolve()
+                })
+                .catch(res => reject());
             }
           }
         })
-        .catch( res => console.log( 'erro no catch do Start Sign In'));
+        .catch(res => console.log('erro no catch do Start Sign In', res));
     });
   }
 
-  signUp( dados ){
+  signUp(dados) {
 
-    return new Promise( (resolve, reject) => {
+    return new Promise((resolve, reject) => {
 
       let alert = this.alertCtrl.create({
         title: 'Cadastro',
         inputs: [
           {
-            value: dados.name? dados.name:'',
+            value: dados.name ? dados.name : '',
             name: 'name',
             placeholder: 'Nome',
             type: 'text'
           },
           {
-            value: dados.cpf? dados.cpf: '',
+            value: dados.cpf ? dados.cpf : '',
             name: 'cpf',
             placeholder: 'CPF',
             type: 'number'
           },
           {
-            value: dados.phone? dados.phone: '',
+            value: dados.phone ? dados.phone : '',
             name: 'phone',
             placeholder: 'Telefone',
             type: 'tel'
           },
           {
-            value: dados.email? dados.email: 'Email',
+            value: dados.email ? dados.email : '',
             name: 'email',
             placeholder: 'Email',
             type: 'email'
           },
           {
-            value: dados.password? dados.password: '',
+            value: dados.password ? dados.password : '',
             name: 'password',
             placeholder: 'Senha',
             type: 'password'
@@ -413,67 +526,87 @@ export class UserProvider {
             text: 'Cadastrar',
             handler: data => {
 
-              if( this.validateEmail( data.email ).isValid ){
+              if (this.validateEmail(data.email).isValid) {
 
-                this.startSignUp( data )
-                  .then( res => resolve() )
-                  .catch( res => reject() )
-              }else{
+                this.startSignUp(data)
+                  .then(res => resolve())
+                  .catch(res => reject())
+              } else {
 
                 dados = data;
-                this.presentToast( this.validateEmail( data.email ).message )
-                this.signUp( dados )
-                  .then( res => resolve() )
-                  .catch( res => reject() )
+                this.presentToast(this.validateEmail(data.email).message)
+                this.signUp(dados)
+                  .then(res => resolve())
+                  .catch(res => reject())
               }
-              
+
             }
           }
         ]
       });
-      
+
       alert.present();
     });
   }
 
-  startSignUp( data ){
+  startSignUp(data) {
 
-    return new Promise( (resolve, reject) => {
+    return new Promise((resolve, reject) => {
+
+      let loading = this.loadingCtrl.create({
+
+        content: 'Cadastrando'
+      })
+      loading.present();
 
       this.service.send({
-  
-        method: 'setUser',
-          data: data
-      })
-      .then( (res:any) => {
-        
-        if( res.request.data.isUser ){
-  
-          localStorage.setItem('token', res.request.data.token );
-          this.attemptsConfirmUser = 0;
-          this.confirmUser()
-              .then( res =>{
 
+        method: 'setUser',
+        data: data
+      })
+        .then((res: any) => {
+
+          loading.dismiss();
+          if (res.request.data.isUser) {
+
+            localStorage.setItem('token', res.request.data.token);
+            localStorage.setItem('confirmNewUser', 'true');
+            this.attemptsConfirmUser = 0;
+            this.confirmUser()
+              .then(res => {
+
+                console.log('data', data);
+                this.startSignIn(data);
                 resolve();
               })
-              .catch( res => {
+              .catch(res => {
 
                 //this.presentToast( 'Erro na confirmação do usuário' )
-                reject();  
+                reject();
               })
-        }else{
+          } else {
 
-          this.presentToast( res.request.status.message );
-          this.signUp( data );
-        }
-      })
-      .catch( res => console.log('deu merda no cadastro'))
+            this.presentToast(res.request.status.message);
+            this.signUp(data);
+          }
+        })
+        .catch(res => {
+
+          loading.dismiss();
+          const alert = this.alertCtrl.create({
+            title: 'Erro!',
+            subTitle: 'Erro ao realizar o cadastro!',
+            buttons: ['OK']
+          });
+          alert.present();
+          console.log('deu merda no cadastro');
+        })
     })
   }
 
-  confirmUser( ){
+  confirmUser() {
 
-    return new Promise ( (resolve, reject) =>{
+    return new Promise((resolve, reject) => {
 
       let alert = this.alertCtrl.create({
         title: 'Confirmação de email',
@@ -497,84 +630,104 @@ export class UserProvider {
           {
             text: 'Finalizar cadastro',
             handler: data => {
-              
-              this.startConfirmUser( data )
-                  .then( res => resolve() )
-                  .catch( res => {
 
-                    if( ( this.attemptsConfirmUser <= this.limitattemptsConfirmUser ) ){
+              this.startConfirmUser(data)
+                .then(res => resolve())
+                .catch(res => {
 
-                      this.attemptsConfirmUser ++;
-                      this.presentToast( res.request.status.message );
-                      this.confirmUser()
-                        .then( res => resolve() )
-                        .catch( res => reject( res ) )
-                    }else{
+                  if ((this.attemptsConfirmUser <= this.limitattemptsConfirmUser)) {
 
-                      this.presentToast( 'Número se tentativas excedidas, refaça o login' );
-                      reject();
-                    }
-                  });
+                    this.attemptsConfirmUser++;
+                    this.presentToast(res.request.status.message);
+                    this.confirmUser()
+                      .then(res => {
+
+                        localStorage.removeItem('confirmNewUser');
+                        resolve()
+                      })
+                      .catch(res => reject(res))
+                  } else {
+
+                    this.presentToast('Número se tentativas excedidas, refaça o login');
+                    reject();
+                  }
+                });
             }
           }
         ]
       });
-      
+
       alert.present();
     })
   }
 
-  startConfirmUser( dados ){
+  startConfirmUser(dados) {
 
-    return new Promise ( (resolve, reject) =>{
+    return new Promise((resolve, reject) => {
 
+      let loading = this.loadingCtrl.create({
+
+        content: 'Confirmando'
+      })
+      loading.present();
       this.service.send({
 
         method: 'confirmUser',
         data: dados
       })
-        .then( (res:any) => {
+        .then((res: any) => {
 
-          if( res.request.data.isConfirmed ){
+          loading.dismiss();
+          if (res.request.data.isConfirmed) {
 
-            this.presentToast( 'Cadastro finalizado com sucesso' );
+            this.presentToast('Cadastro finalizado com sucesso');
             resolve();
-          }else{
-            
-            reject( res );
+          } else {
+
+            reject(res);
           }
         })
-        .catch( res => console.log( res ) )
+        .catch(res => {
+
+          loading.dismiss();
+          const alert = this.alertCtrl.create({
+            title: 'Erro!',
+            subTitle: 'Erro ao finalizar o cadastro!',
+            buttons: ['OK']
+          });
+          alert.present();
+          console.log(res)
+        })
     })
 
   }
 
-  isLoggedIn(){
+  isLoggedIn() {
 
-    if( this.service.isConnected && ( localStorage.getItem('isLoggedIn') == 'true' ) ){
+    if (this.service.isConnected && (localStorage.getItem('isLoggedIn') == 'true')) {
 
       return true;
-    }else{
-      
+    } else {
+
       return false;
     }
   }
 
-  validateEmail( email ) {
+  validateEmail(email) {
 
-    if( /(.+)@(.+){2,}\.(.+){2,}/.test(email.email) ){
+    if (/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(email)) {
       return {
         isValid: true,
         message: ''
       };
     } else {
-       return {
+      return {
 
-          isValid: false,
-          message: 'Insira um email válido'
-       }
+        isValid: false,
+        message: 'Insira um email válido'
+      }
     }
-}
+  }
 
 
 }
