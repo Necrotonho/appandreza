@@ -98,10 +98,6 @@
         <resource-file src="GoogleService-Info.plist" />
     </platform>
     <allow-navigation href="http://192.168.1.112:8100" />
-    <engine name="android" spec="^7.1.0" />
-    <plugin name="phonegap-plugin-push" spec="^2.2.3">
-        <variable name="SENDER_ID" value="945569614132" />
-    </plugin>
     <plugin name="cordova-plugin-headercolor" spec="^1.0.0" />
     <plugin name="cordova-plugin-camera" spec="^4.0.3" />
     <plugin name="cordova-plugin-crop" spec="^0.4.0" />
@@ -112,4 +108,8 @@
     <plugin name="cordova-plugin-ionic-keyboard" spec="^2.1.2" />
     <plugin name="cordova-plugin-statusbar" spec="^2.4.2" />
     <engine name="ios" spec="~6.0.0" />
+    <engine name="android" spec="~7.1.0" />
+    <plugin name="phonegap-plugin-push" spec="^2.3.0">
+        <variable name="SENDER_ID" value="945569614132" />
+    </plugin>
 </widget>
