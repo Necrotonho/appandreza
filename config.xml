@@ -97,7 +97,7 @@
     <platform name="ios">
         <resource-file src="GoogleService-Info.plist" />
     </platform>
-    <plugin name="phonegap-plugin-push" spec="^2.2.3">
+    <plugin name="phonegap-plugin-push" spec="2.3.0">
         <variable name="SENDER_ID" value="945569614132" />
     </plugin>
     <allow-navigation href="http://192.168.1.112:8100" />
