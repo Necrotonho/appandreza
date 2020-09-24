@@ -1,0 +1,98 @@
+ionic cordova build android --prod --release
+
+keytool -genkey -v -keystore my-release-key.jks -keyalg RSA -keysize 2048 -validity 10000 -alias invest
+
+jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore my-release-key.jks platforms\android\app\build\outputs\apk\release\app-release-unsigned.apk my-alias
+
+zipalign -v 4 platforms\android\app\build\outputs\apk\release\app-release-unsigned.apk platforms\android\app\build\outputs\apk\release\HelloWorld.apk
+
+ionic cordova build android --prod --release -- -- --keystore=androidanfarmagsc.keystore --alias=AndroidAnfarmagSC
+
+ionic cordova run android -l -c -s --debug
+
+
+*****Para aplicativo Anfarmag Android*******
+		ATUALIZAR appVersion no appService.
+
+ionic cordova build android --prod --release --keystore=my-release-key.jks --alias=my-alias
+
+jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore my-release-key.jks platforms\android\app\build\outputs\apk\release\app-release-unsigned.apk my-alias
+
+zipalign -v 4 platforms\android\app\build\outputs\apk\release\app-release-unsigned.apk platforms\android\app\build\outputs\apk\release\HelloWorld.apk
+
+*****Para aplicativo InvestAndroid*******
+ionic cordova build android --prod --release --keystore=invest.keystore --alias=invest
+
+jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore invest.keystore platforms\android\app\build\outputs\apk\release\app-release-unsigned.apk invest
+
+Windows 7 enterprise
+Internet SC
+
+contato@loggi.com
+
+Scroll no F2 e F3
+Textarea na nota fiscal
+Alterar de switch tributa no município do prestador para dropdown
+
+PolimizeGroup 35%
+
+1782
+1793
+5451
+
+
+Pagamento
+	Boleto			50%
+	Depósito		27,5$	1
+	Cartão			7,5%
+	Depósito + Cartão	5%
+	Depósito + Boleto	10%
+
+Boleto
+	Confirmação do prazo
+	*Verificação dos documentos necessários para aprovação de crédito
+		Aviso informando da necessidade de envio de documentos para abertura de crédito
+	Status de aprovação de crédito
+		Em caso de reprovação de crédito
+			Prazo para ajuste da opção de pagamento
+			Prazo final para cancelamento automático do pedido
+	Disponibilizar PDF do boleto no pedido
+
+Depósito
+	Disponibilizar dados para depósito
+	Local para enviar o comprovante de pagamento
+	Status de aprovação do pagamento
+
+Cartão de crédito
+	Acompanhamento do status do pagamento
+	Fornecer link de pagamento no app
+	Local para enviar o comprovante de pagamento
+	Status de aprovação do pagamento
+
+Premissas
+	Fornecedor deve usar nosso sistema para 
+		consulta aos pedidos
+		atualizar status de pagamento
+		atualizar status de envio
+		atualizar status de faturamento
+
+Alterações
+	Incluir WhatsApp no client
+	Criar tipos de pagamento por campanha
+	Alterar app para 
+		Confirmação dos dados de faturamento
+		Confirmação dos dados de entrega
+		Confirmação dos dados de pagamento
+		Apresentação dos status de pagamento
+	Envio de emails e notificações aos compradores
+	Envio de emails e notificações aos fornecedores
+	Melhorar apresentação dos contatos do fornecedor
+	Prazo final para cancelamento do pedido
+	Controle dos prazos de pagamento/faturamento/envio
+	Check out venda
+		Confirmação dos dados de faturamento (Em caso de dados incorretos, ligar na Anfarmag para atualizar)
+		Controle dos dados de entrega
+		Confirmação do prazo de pagamento em caso de boleto
+	
+LIGAR KILIAN
+FALAR DANI SOBRE DUPLICIDADE CHAMADOS

@@ -32,7 +32,7 @@
     "@ionic/storage": "2.1.3",
     "brmasker-ionic-3": "1.1.0",
     "com-badrit-base64": "0.2.0",
-    "cordova-android": "6.3.0",
+    "cordova-android": "^7.1.4",
     "cordova-ios": "5.1.1",
     "cordova-plugin-camera": "4.0.3",
     "cordova-plugin-crop": "0.4.0",
@@ -44,12 +44,12 @@
     "cordova-plugin-splashscreen": "5.0.2",
     "cordova-plugin-statusbar": "2.4.2",
     "cordova-plugin-whitelist": "1.3.3",
-    "cordova-support-google-services": "1.1.0",
+    "cordova-support-google-services": "^1.3.2",
     "highcharts": "6.1.1",
     "ionic-angular": "3.9.2",
     "ionicons": "3.0.0",
     "phonegap-plugin-multidex": "1.0.0",
-    "phonegap-plugin-push": "2.3.0",
+    "phonegap-plugin-push": "^2.3.0",
     "rxjs": "5.5.11",
     "sw-toolbox": "3.6.0",
     "zone.js": "0.8.26"
@@ -62,7 +62,9 @@
   "cordova": {
     "plugins": {
       "phonegap-plugin-push": {
-        "SENDER_ID": "945569614132"
+        "SENDER_ID": "945569614132",
+        "ANDROID_SUPPORT_V13_VERSION": "27.+",
+        "FCM_VERSION": "17.0.+"
       },
       "cordova-plugin-headercolor": {},
       "cordova-plugin-camera": {},
@@ -76,7 +78,8 @@
       "cordova-plugin-statusbar": {},
       "cordova-plugin-ionic-webview": {
         "ANDROID_SUPPORT_ANNOTATIONS_VERSION": "27.+"
-      }
+      },
+      "cordova-support-google-services": {}
     },
     "platforms": [
       "ios",

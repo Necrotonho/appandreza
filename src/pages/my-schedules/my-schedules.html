@@ -27,14 +27,14 @@
   <div style="height: 50px;"></div>
   <div>
     <div style="float:left;   font-size: 50px; margin: 0px 15px;">
-  
+
       <ion-icon name="ios-clock-outline"></ion-icon>
     </div>
     <div style="float:left; margin-top: -5px;">
       <p style="text-indent: 0%;">
         <span style="color: #f15a2a; font-size: 22px">
           Acompanhe suas consultas
-        </span><br/>
+        </span><br />
         <span>
           Não perca o horário
         </span>
@@ -46,30 +46,32 @@
     <ion-card>
       <ion-card-title padding>
         <span item-left>{{ this.date.changeDate( d.date )? this.date.changeDate( d.date ): d.date }} {{ d.time}}</span>
-        <span style="float: right;" (click)="this.presentPopover( $event, d )"><ion-icon name="more"></ion-icon></span>
+        <span style="float: right;" (click)="this.presentPopover( $event, d )">
+          <ion-icon name="more"></ion-icon>
+        </span>
       </ion-card-title>
 
-        <img [src]="d.imgDestination">
-        <ion-item>
-          <ion-icon name="locate" item-left large ></ion-icon>
-          <h2>{{ d.titleAdress }}</h2>
-          <p>{{ d.subTitleAdress }}</p>
-        </ion-item>
-        <button ion-button icon-left clear item-end color="pink" (click)="openTraceRoute( d )">
-          <ion-icon name="navigate" color="pink"></ion-icon>
-          traçar rota
+      <img [src]="d.imgDestination">
+      <ion-item>
+        <ion-icon name="locate" item-left large></ion-icon>
+        <h2>{{ d.titleAdress }}</h2>
+        <p>{{ d.subTitleAdress }}</p>
+      </ion-item>
+      <button ion-button icon-left clear item-end color="pink" (click)="openTraceRoute( d )">
+        <ion-icon name="navigate" color="pink"></ion-icon>
+        traçar rota
+      </button>
+
+
+      <!-- <p padding *ngIf="d.presentConfirmPresence && !d.confirmPresence" > -->
+      <p padding *ngIf=" !d.confirmedSchedule ">
+
+        <button ion-button icon-left block color="danger" (click)="confirmPresence( d )">
+          <ion-icon name="checkmark"></ion-icon>
+          Confirmar presença na consulta
         </button>
-      
-
-        <!-- <p padding *ngIf="d.presentConfirmPresence && !d.confirmPresence" > -->
-        <p padding *ngIf=" !d.confirmedSchedule ">
-
-          <button ion-button icon-left block color="danger" (click)="confirmPresence( d )" >
-            <ion-icon name="checkmark"></ion-icon>
-            Confirmar presença na consulta
-          </button>
-        </p>
-      </ion-card>
+      </p>
+    </ion-card>
   </div>
 
   <ion-card *ngIf=" !this.core.mySchedules ">
@@ -82,3 +84,37 @@
   </ion-card>
 
 </ion-content>
+
+<p>FRETE FOB ou FRETE CIF para os combos</p>
+
+<ol>
+  <li>Cartão de crédito em até 6 vezes sem juros ou em até 10 vezes com juros</li>
+  <li>Boleto </li>
+  <ul>
+    <li>Até R$1.000,00 boleto 28/35</li>
+    <li>R$1.000,01 a R$5.000,00 Boleto 28/35/42/56/70/84 ou 28/56/84</li>
+    <li>R$5.000,01 a 10.000,00 = Boleto 10 vezes 15 em 15 ou 30/60/90/120/150</li>
+  </ul>
+</ol>
+
+
+
+
+
+
+
+<ul>
+  <li>Faixa de medição: 0 a 14</li>
+  <li>Temperatura de operação: 0 a 90°C</li>
+  <li>Bulbo sensor: Circular</li>
+  <li>Diafragma: Pontual</li>
+  <li>Compart. de referência: Recarregável</li>
+  <li>Sistema de referência :Ag/AgCl</li>
+  <li>Eletrólito de referência: KCl 3Mol. (AgCl)</li>
+  <li>Construção: Vidro</li>
+  <li>Cabo coaxial: 1,00 m</li>
+  <li>Conector: BNC</li>
+  <li>Dimensões: 120 mm x Ø 12 mm</li>
+  <li>Termocompensador: Opcional</li>
+  <li>6 meses de garantia</li>
+</ul>

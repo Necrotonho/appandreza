@@ -24,6 +24,7 @@ import { UserProvider } from '../providers/user/user';
 import { ErrorsProvider } from '../providers/errors/errors';
 import { MyProfilePage } from '../pages/my-profile/my-profile';
 import { FoodPlanPage } from '../pages/food-plan/food-plan';
+import { SideMenuPage } from '../pages/side-menu/side-menu';
 import { FoodPlanContentPage } from '../pages/food-plan-content/food-plan-content';
 import { BrMaskerModule } from 'brmasker-ionic-3';
 import { PopOverFilterCategoryNewsComponent } from '../components/pop-over-filter-category-news/pop-over-filter-category-news';
@@ -55,8 +56,8 @@ import { FoodPlanProvider } from '../providers/food-plan/food-plan';
     MySchedulesPage,
     PopOverFilterCategoryNewsComponent,
     PopOverOptPageMySchedulesComponent,
-    MyMeasurementsPage
-    
+    MyMeasurementsPage,
+    SideMenuPage
   ],
   imports: [
     BrowserModule,
