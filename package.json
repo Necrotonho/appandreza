@@ -39,6 +39,7 @@
     "cordova-plugin-datepicker": "0.9.3",
     "cordova-plugin-device": "2.0.2",
     "cordova-plugin-headercolor": "1.0.0",
+    "cordova-plugin-ionic": "^5.4.7",
     "cordova-plugin-ionic-keyboard": "2.1.2",
     "cordova-plugin-ionic-webview": "^4.2.1",
     "cordova-plugin-splashscreen": "5.0.2",
@@ -79,7 +80,15 @@
       "cordova-plugin-ionic-webview": {
         "ANDROID_SUPPORT_ANNOTATIONS_VERSION": "27.+"
       },
-      "cordova-support-google-services": {}
+      "cordova-support-google-services": {},
+      "cordova-plugin-ionic": {
+        "APP_ID": "d24d1487",
+        "CHANNEL_NAME": "Master",
+        "UPDATE_METHOD": "background",
+        "MAX_STORE": "2",
+        "MIN_BACKGROUND_DURATION": "30",
+        "UPDATE_API": "https://api.ionicjs.com"
+      }
     },
     "platforms": [
       "ios",
