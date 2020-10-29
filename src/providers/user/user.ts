@@ -136,26 +136,26 @@ export class UserProvider {
           })
 
         // this.service.startMonitoringConnection();
-        this.startSignIn({ restartSignIn: false })
-          .then(res => {
+        if (localStorage.getItem('token')) {
 
-            localStorage.setItem('isLoggedIn', 'true')
-            this.service.send({
+          this.startSignIn({ restartSignIn: false })
+            .then(res => {
 
-              method: 'updateMySchedules',
-              data: {}
-            })
-              .then((res: RequestInterface) => {
+              localStorage.setItem('isLoggedIn', 'true')
+              this.service.send({
+
+                method: 'updateMySchedules',
+                data: {}
+              }).then((res: RequestInterface) => {
 
                 if (res.request.data && res.request.data.length) {
 
                   this.core.setMySchedule(res.request.data);
                 }
               })
-          })
-          .catch(res => console.log('erro ao conectar constructor class userprovider'))
-      })
-      .catch(res => console.log('erro ao conectar ao servidor, no constructos da classe UserProvider', res));
+            }).catch(res => console.log('erro ao conectar constructor class userprovider'));
+        }
+      }).catch(res => console.log('erro ao conectar ao servidor, no constructos da classe UserProvider', res));
 
   }
 

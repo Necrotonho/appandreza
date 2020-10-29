@@ -29,12 +29,24 @@
 <navbarComponent></navbarComponent>
 
 <ion-content no-padding>
-    <div style="height: constant(safe-area-inset-top); height: env(safe-area-inset-top);"></div>
-    <div style="height: 50px;"></div>
+  <div style="height: constant(safe-area-inset-top); height: env(safe-area-inset-top);"></div>
+  <div style="height: 60px;"></div>
 
-    <ion-card>
+  <ion-card *ngIf="!measurements?.length">
 
-      <div id="container" style="display: block;"	></div>
-    </ion-card>
+    <ion-card-content >
+      <p text-center style="font-size: 50px; color: #a3a3a3;">
+        <ion-icon name="stats"></ion-icon>
+      </p>
+      <p text-center style="color: #a3a3a3;">
+        Nenhuma medida disponível. Entre em contato com a nutricionista Andreza Matteussi para realizar uma consulta.
+      </p>
+    </ion-card-content>
+  </ion-card>
+
+  <ion-card *ngFor="let mea of measurements; let i = index">
+
+    <div [id]="'container' + i" style="display: block;"></div>
+  </ion-card>
 
 </ion-content>

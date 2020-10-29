@@ -48,4 +48,31 @@ export class DateProvider {
 
   }
 
+  toBrazilDate(dataServer) {
+
+    const dataSplit = {
+      data: dataServer.split(' ')[0],
+      hora: dataServer.split(' ')[1]
+    };
+
+    const data = {
+      dia: dataSplit.data.split('-')[2],
+      mes: dataSplit.data.split('-')[1],
+      ano: dataSplit.data.split('-')[0]
+    };
+
+    if (!parseInt(dataSplit.data, 10)) {
+
+      return dataServer;
+    }
+
+    if (dataSplit.hora) {
+
+      return data.dia + '/' + data.mes + '/' + data.ano + ' ' + dataSplit.hora;
+    } else {
+
+      return data.dia + '/' + data.mes + '/' + data.ano;
+    }
+  }
+
 }

@@ -94,6 +94,23 @@ export interface reasonForCancellationInterface{
   id: number;
 }
 
+export interface UsuarioMedidaItem {
+
+  measurementId: number;
+  date: string;
+  value: number;
+  selected: boolean;
+}
+
+export interface UsuarioMedidaInterface {
+
+  values?: UsuarioMedidaItem[];
+  descriptionMeasure: string;
+  idMeasure: number;
+  active?: boolean;
+  unityMeasure: string;
+}
+
 @Injectable()
 export class CoreProvider {
 
@@ -127,7 +144,6 @@ export class CoreProvider {
   
   constructor(public http: Http, private date: DateProvider, private service: ServiceProvider ) {
 
-    console.log('classe core criada');
     this.initOberserFoodPlan()
   }
 

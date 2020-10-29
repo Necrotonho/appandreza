@@ -16,7 +16,7 @@ import { CoreProvider } from '../../providers/core/core';
 })
 export class DateSelectorComponent {
 
-  private dateStr: string;
+  public dateStr: string;
 
   constructor(private date: DateProvider, private core: CoreProvider) {
     
