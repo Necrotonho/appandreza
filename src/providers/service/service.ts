@@ -24,7 +24,7 @@ export class ServiceProvider {
 
 
   // private localIp = 'ws://192.168.1.32:8000';
-  private externalIP = 'ws://54.197.79.122:8000';
+  private externalIP = 'ws://52.2.33.193:8000';
   private tentativasIP = [];
   private timeOutRequest = 15000;
   public appFocus: boolean;

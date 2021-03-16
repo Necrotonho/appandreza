@@ -96,3 +96,23 @@ Alterações
 	
 LIGAR KILIAN
 FALAR DANI SOBRE DUPLICIDADE CHAMADOS
+
+
+
+Bom dia a todos, 
+
+Formou-se na quinta-feira, dia 29 de outubro de 2020 o Comitê LPDG para acompanhar e orientar a implantação da Lei Geral de proteção de dados na Anfarmag. Este comitê é formado por quatro membros, Júlio César da Silva, Taís Ahouagi, Daniela Borszcz e André Menezes que assumiram o compromisso de dar encaminhamento a todas as tarefas devidas para a correta implantação dos requisitos da lei.
+
+Para o andamento das atividades do projeto de implantação das políticas da Lei Geral de Proteção de Dados (LGPD) na Anfarmag, um importante passo é o levantamento da fontes de dados que alimentam nosso processos internos. Essas fontes podem ser provenientes de meios digitais, como sites e aplicativo, ou fontes de dados físicas, como preenchimento de fichas de inscrição em eventos ou cadastros para participação em sorteios ou até mesmo por meios como o telefone, ao solicitar-se informações de terceiros. 
+
+Sendo assim, solicito a todos os Gestores que preencham a planilha abaixo, que está em edição compartilhada, com as fontes de dados conhecidas que o seus respectivos setores com o objetivo de reunir em um só local todos os dados que a Anfarmag armazena, para que esses dados sejam tratados da fora prevista pela LGPD.
+
+Caso tenham dúvidas no preenchimento ou se o dado que você tem deve ser preenchido na planilha, fique a vontade para expor sua dúvida neste tópico, aqui mesmo no Teams, para esclarecimento a todos.
+
+Para que não haja atrasos no calendário de entregas deste projeto, solicito que esta tarefa seja entregue até o dia 04 de outubro as 15h.
+
+O Comitê conta com o apoio de todos para a entrega desta tarefa
+
+Grato 
+
+Júlio César da Silva
