@@ -34,6 +34,7 @@ export class MyApp {
     { title: 'Meus dados', pageName: 'tabsPagesss', tabComponent: 'Tab1Page', index: 0, icon: 'person', show: false },
     { title: 'Entrar', pageName: 'tabsPagesss', tabComponent: 'Tab2Page', index: 1, icon: 'create', show: true },
     { title: 'Sair', pageName: 'tabsPagesss', tabComponent: 'Tab2Page', index: 1, icon: 'exit', show: false },
+    { title: 'Versão', pageName: 'tabsPagesss', tabComponent: 'Tab2Page', index: 1, icon: 'exit', show: false },
 
   ]
 
