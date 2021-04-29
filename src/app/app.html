@@ -1,5 +1,5 @@
 <ion-menu [content]="content">
-    <ion-content padding style="background: linear-gradient(to right, #f15a2a, #ef3f6b);">
+    <ion-content padding style="position: relative; background: linear-gradient(to right, #f15a2a, #ef3f6b);">
 
         <ion-item text-center style="background-color: transparent" *ngIf="this.core.userData">
 
@@ -14,6 +14,7 @@
                 </button>
             </div>
         </ion-list>
+        <span style="position: absolute; bottom: 6px; right: 10px; opacity: 40%;">Release: 2</span>
     </ion-content>
 </ion-menu>
 
