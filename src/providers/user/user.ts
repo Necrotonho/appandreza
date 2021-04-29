@@ -135,10 +135,10 @@ export class UserProvider {
         // this.service.startMonitoringConnection();
         if (localStorage.getItem('token')) {
 
+          localStorage.setItem('isLoggedIn', 'true')
           this.startSignIn({ restartSignIn: false })
             .then(res => {
 
-              localStorage.setItem('isLoggedIn', 'true')
               this.service.send({
 
                 method: 'updateMySchedules',
@@ -150,7 +150,11 @@ export class UserProvider {
                   this.core.setMySchedule(res.request.data);
                 }
               })
-            }).catch(res => console.log('erro ao conectar constructor class userprovider'));
+            }).catch(res => {
+
+              localStorage.setItem('isLoggedIn', 'false');
+              console.log('erro ao conectar constructor class userprovider')
+            });
         }
       }).catch(res => console.log('erro ao conectar ao servidor, no constructos da classe UserProvider', res));
 
