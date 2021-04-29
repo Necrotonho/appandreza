@@ -71,7 +71,11 @@ import { FoodPlanProvider } from '../providers/food-plan/food-plan';
       monthShortNames: ['jan', 'fev', 'mar', 'abr', 'mai', 'jun', 'jul', 'ago', 'set', 'out', 'nov', 'dez'],
       dayNames: ['domingo', 'segunda-feira', 'terça-feira', 'quarta-feira', 'quinta-feira', 'sexta-feira', 'sábado'],
       dayShortNames: ['dom', 'seg', 'ter', 'qua', 'qui', 'sex', 'sáb'],
-
+      platforms: {
+        ios: {
+          backButtonText: 'Voltar'
+        }
+      }
     })
   ],
   bootstrap: [IonicApp],

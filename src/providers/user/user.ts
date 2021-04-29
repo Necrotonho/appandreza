@@ -86,18 +86,17 @@ export class UserProvider {
 
           method: 'updateCategoriesNews',
           data: {}
+        }).then((res: RequestInterface) => {
+
+          if (res.request.data && res.request.data.length) {
+
+            this.core.setFilterCategories(res.request.data);
+          }
+
+          this.service.send({ method: 'updateNews', data: {} })
+            .then((res: RequestInterface) => console.log('Chegou atualização de newss', res))
+            .catch((res: RequestInterface) => console.log(res));
         })
-          .then((res: RequestInterface) => {
-
-            if (res.request.data && res.request.data.length) {
-
-              this.core.setFilterCategories(res.request.data);
-            }
-
-            this.service.send({ method: 'updateNews', data: {} })
-              .then((res: RequestInterface) => console.log('Chegou atualização de newss', res))
-              .catch((res: RequestInterface) => console.log(res));
-          })
           .catch((res: RequestInterface) => console.log(res));
 
 
@@ -105,35 +104,33 @@ export class UserProvider {
 
           method: 'updateFoodPlan',
           data: {}
+        }).then((res: any) => {
+
+          this.foodPlanService.foodPlan = res.request.data;
+          let nextFood = res.request.data[0].foodPlan.find(item => this.date.compareHourNow(item.hour) < 0);
+
+          if (nextFood) {
+
+            this.foodPlanService.foodPlanSelected = nextFood;
+            this.core.setFoodPlanSelected(res.request.data[0]);
+            this.foodPlanService.nextFoodSelected = nextFood.content;
+            // this.relationship = res.request.data[0].title;
+          }
+
         })
-          .then((res: any) => {
-
-            this.foodPlanService.foodPlan = res.request.data;
-            let nextFood = res.request.data[0].foodPlan.find(item => this.date.compareHourNow(item.hour) < 0);
-
-            if (nextFood) {
-
-              this.foodPlanService.foodPlanSelected = nextFood;
-              this.core.setFoodPlanSelected(res.request.data[0]);
-              this.foodPlanService.nextFoodSelected = nextFood.content;
-              // this.relationship = res.request.data[0].title;
-            }
-
-          })
           .catch(res => console.log(res));
 
         this.service.send({
 
           method: 'updateMySchedules',
           data: {}
+        }).then((res: RequestInterface) => {
+
+          if (res.request.data && res.request.data.length) {
+
+            this.core.setMySchedule(res.request.data);
+          }
         })
-          .then((res: RequestInterface) => {
-
-            if (res.request.data && res.request.data.length) {
-
-              this.core.setMySchedule(res.request.data);
-            }
-          })
 
         // this.service.startMonitoringConnection();
         if (localStorage.getItem('token')) {
@@ -324,9 +321,11 @@ export class UserProvider {
           loading.dismiss();
           if (res.request.data.isKey) {
 
-            this.verifyCodPassword(res.request.data.email)
+            res.request.data.cpf = data.cpf;
+            this.verifyCodPassword(res.request.data)
               .then(res => {
 
+                localStorage.setItem('isLoggedIn', 'true');
                 this.presentToast('Senha recuperada com sucesso');
                 this.startSignIn({ restartSignIn: true })
                   .then(res => resolve())
@@ -352,13 +351,13 @@ export class UserProvider {
     });
   }
 
-  verifyCodPassword(email) {
+  verifyCodPassword(data) {
 
     return new Promise((resolve, reject) => {
 
       let alert = this.alertCtrl.create({
         title: 'Esqueci a senha',
-        subTitle: 'Foi enviado para o email ' + email + ' um código com 4 dígitos,  informe-o abaixo, juntamente com sua nova senha',
+        subTitle: 'Foi enviado para o email ' + data.email + ' um código com 4 dígitos,  informe-o abaixo, juntamente com sua nova senha',
         inputs: [
           {
             name: 'cod',
@@ -374,13 +373,15 @@ export class UserProvider {
         buttons: [
           {
             text: 'Confirmar nova senha',
-            handler: data => {
+            handler: data2 => {
 
-              this.startConfirmNewPassword(data)
+              // data.password = data2.password;
+              // data.cod = data2.cod;
+              this.startConfirmNewPassword(data2)
                 .then(res => resolve())
                 .catch(res => {
 
-                  this.verifyCodPassword(email)
+                  this.verifyCodPassword(data.email)
                     .then(res => resolve())
                     .catch(res => reject())
                 })
@@ -411,19 +412,18 @@ export class UserProvider {
           cod: data.cod,
           password: data.password
         }
+      }).then((res: any) => {
+
+        loading.dismiss();
+        if (res.request.data.isRecovered) {
+
+          localStorage.setItem('token', res.request.data.token);
+          resolve();
+        } else {
+
+          reject()
+        }
       })
-        .then((res: any) => {
-
-          loading.dismiss();
-          if (res.request.data.isRecovered) {
-
-            localStorage.setItem('token', res.request.data.token);
-            resolve();
-          } else {
-
-            reject()
-          }
-        })
         .catch(res => {
 
           loading.dismiss();
@@ -446,8 +446,8 @@ export class UserProvider {
 
         method: 'signIn',
         data: {
-          user: data.cpf ? data.cpf : 'x',
-          password: data.password ? data.password : 'x'
+          user: data.cpf ? data.cpf : undefined,
+          password: data.password ? data.password : undefined
         }
       })
         .then((res: any) => {
@@ -460,6 +460,10 @@ export class UserProvider {
             resolve();
           } else {
 
+            if (localStorage.getItem('token')) {
+
+              localStorage.removeItem('token')
+            }
             if (res.request.status.message) {
               const toast = this.toastCtrl.create({
                 message: res.request.status.message,
