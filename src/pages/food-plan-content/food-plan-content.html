@@ -23,14 +23,14 @@
 
   <div>
     <div style="float:left;   font-size: 50px; margin: 0px 15px;">
-  
+
       <ion-icon name="ios-nutrition"></ion-icon>
     </div>
     <div style="float:left; margin-top: -5px;">
       <p style="text-indent: 0%;">
         <span style="color: #f15a2a; font-size: 22px">
           {{ foodPlanContent.description }}
-        </span><br/>
+        </span><br />
         <span>
           {{ foodPlanContent.hour }}
         </span>
@@ -38,68 +38,87 @@
     </div>
   </div>
 
+  <div *ngIf="foodPlanContent.content.length > 1" style="margin-top: 50px;">
+    <ion-grid>
+      <ion-row>
+          <ion-col *ngIf="!this.slides.isBeginning()">
+          <button ion-button block color="orange" (click)="prevSlide()">
+            <ion-icon name="arrow-back"></ion-icon>
+            Receita anterior
+          </button>
+        </ion-col>
+        <ion-col *ngIf="!this.slides.isEnd()">
+          <button ion-button block color="orange" (click)="nextSlide()">
+            Próxima receita
+            <ion-icon name="arrow-forward"></ion-icon>
+          </button>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </div>
+
+
   <ion-slides pager color="orange">
-    
+
     <ion-slide *ngFor=" let d of foodPlanContent.content ">
-        <ion-card>
-            
-            <div  [style.height.px]="( this.platform.width() - 54 )/1.5" 
-                  [style.background-image]="'url(' + d.imgFood + ')'"
-                  style="width: auto; background-color: darkgray; background-repeat:no-repeat; background-size:cover;">
-            </div>
-            <!-- <img [src]="this.imgTeste"> -->
-            <div class="card-title2" style="text-shadow: 1px 1px 1px #000000;">{{ d.foodName }}</div>
-            <ion-card-content text-left>
+      <ion-card>
 
-              <div *ngIf="d.ingredients && d.ingredients.length">
-                <ion-row no-padding text-center>
-                  <ion-col >
-                    <ion-spinner *ngIf="d.loadingConsumption" name="bubbles" color=orange ></ion-spinner>
-                    
-                    <button *ngIf="!d.loadingConsumption" 
-                            ion-button clear small color="danger"
-                            [color]="d.consumption ? 'danger' : 'green'"
-                            icon-start (click)="switchConsumption( foodPlanContent ,d )">
-                      <ion-icon [name]=" d.consumption ? 'checkbox' : 'checkbox-outline' " ></ion-icon>
-                      {{ d.consumption? 'Cancelar consumo' : 'Marcar como consumido' }}
-                    </button>
-                  </ion-col>
-                </ion-row>
-                <ion-card-title>
-                  Alimentos
-                </ion-card-title>
-                <ul>
-                  <li *ngFor=" let z of d.ingredients " style="margin-top: 10px; margin-left: -25px;" text-justify [innerHTML]="z"></li>
-                </ul>
-                <br/>
-              </div>
+        <div [style.height.px]="( this.platform.width() - 54 )/1.5" [style.background-image]="'url(' + d.imgFood + ')'"
+          style="width: auto; background-color: darkgray; background-repeat:no-repeat; background-size:cover;">
+        </div>
+        <!-- <img [src]="this.imgTeste"> -->
+        <div class="card-title2" style="text-shadow: 1px 1px 1px #000000;">{{ d.foodName }}</div>
+        <ion-card-content text-left>
 
-              <div *ngIf="d.modePrepare && d.modePrepare.length">
-                <ion-card-title>
-                  Modo de preparo
-                </ion-card-title>
-                <div text-justify [innerHTML]="d.modePrepare"></div>
+          <div *ngIf="d.ingredients && d.ingredients.length">
+            <ion-row no-padding text-center>
+              <ion-col>
+                <ion-spinner *ngIf="d.loadingConsumption" name="bubbles" color=orange></ion-spinner>
+
+                <button *ngIf="!d.loadingConsumption" ion-button clear small color="danger"
+                  [color]="d.consumption ? 'danger' : 'green'" icon-start
+                  (click)="switchConsumption( foodPlanContent ,d )">
+                  <ion-icon [name]=" d.consumption ? 'checkbox' : 'checkbox-outline' "></ion-icon>
+                  {{ d.consumption? 'Cancelar consumo' : 'Marcar como consumido' }}
+                </button>
+              </ion-col>
+            </ion-row>
+            <ion-card-title>
+              Alimentos
+            </ion-card-title>
+            <ul>
+              <li *ngFor=" let z of d.ingredients " style="margin-top: 10px; margin-left: -25px;" text-justify
+                [innerHTML]="z"></li>
+            </ul>
+            <br />
+          </div>
+
+          <div *ngIf="d.modePrepare && d.modePrepare.length">
+            <ion-card-title>
+              Modo de preparo
+            </ion-card-title>
+            <div text-justify [innerHTML]="d.modePrepare"></div>
 
 
-                <br/>
-              </div>
+            <br />
+          </div>
 
-              <div *ngIf="d.obs && d.obs.length">
-                <ion-card-title>
-                  Observações
-                </ion-card-title>
-                <p style="text-indent: 25px;"  text-justify [innerHTML]="d.obs"></p>
-                  <br/>
-              </div>
-      
-            </ion-card-content>
-            
-          </ion-card>
+          <div *ngIf="d.obs && d.obs.length">
+            <ion-card-title>
+              Observações
+            </ion-card-title>
+            <p style="text-indent: 25px;" text-justify [innerHTML]="d.obs"></p>
+            <br />
+          </div>
+
+        </ion-card-content>
+
+      </ion-card>
     </ion-slide>
-  
+
   </ion-slides>
 
-  
+
 
 
 </ion-content>

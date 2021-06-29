@@ -16,21 +16,31 @@ export class FoodPlanContentPage {
   private foodPlanContent: FoodPlanItemInterface;
   private imgTeste: any;
 
-  constructor(  public navCtrl: NavController, 
-                public navParams: NavParams, 
-                public loadingCtrl: LoadingController,
-                private platform: Platform,
-                private core: CoreProvider, private serve: ServiceProvider ) {
+  constructor(public navCtrl: NavController,
+    public navParams: NavParams,
+    public loadingCtrl: LoadingController,
+    private platform: Platform,
+    private core: CoreProvider, private serve: ServiceProvider) {
 
     this.foodPlanContent = this.core.getFoodPlanContentSelected();
     this.core.foodPlanObservable.subscribe({
 
-      next: ( res ) => {
+      next: (res) => {
 
-        this.foodPlanContent = res.find( foodplan => foodplan.title == this.core.getFoodPlanSelected().title ).foodPlan
-                                  .find( foodPlanContent => foodPlanContent.mealId == this.foodPlanContent.mealId );
+        this.foodPlanContent = res.find(foodplan => foodplan.title == this.core.getFoodPlanSelected().title).foodPlan
+          .find(foodPlanContent => foodPlanContent.mealId == this.foodPlanContent.mealId);
       }
     })
+  }
+
+  nextSlide() {
+
+    this.slides.slideNext();
+  }
+
+  prevSlide() {
+
+    this.slides.slidePrev();
   }
 
   ionViewDidLoad() {
@@ -46,13 +56,13 @@ export class FoodPlanContentPage {
     // });
   }
 
-  switchConsumption( meal, food ){
+  switchConsumption(meal, food) {
 
-    this.foodPlanContent.content.find( content => content.foodId == food.foodId ).loadingConsumption = true;
+    this.foodPlanContent.content.find(content => content.foodId == food.foodId).loadingConsumption = true;
 
-    this.serve.send( {
+    this.serve.send({
 
-      method: food.consumption? 'cancelConsumption' : 'addConsumption',
+      method: food.consumption ? 'cancelConsumption' : 'addConsumption',
       data: {
 
         planId: this.core.getFoodPlanSelected().planId,
@@ -60,18 +70,18 @@ export class FoodPlanContentPage {
         foodId: food.foodId,
       }
     })
-    .then( (res: any) => {})
-    .catch( res => console.log( res ) );
+      .then((res: any) => { })
+      .catch(res => console.log(res));
   }
 
 
-  ngAfterViewInit(){
+  ngAfterViewInit() {
 
     this.slides.autoHeight = true;
     this.slides.pager = true;
     this.slides.parallax = true;
     this.slides.paginationType = 'progress';
     this.slides.spaceBetween = -15;
-}
+  }
 
 }
