@@ -286,7 +286,7 @@ export class ServiceProvider {
 
         if (JSON.parse(msg.data).request.status.cod == "605") {
 
-          localStorage.clear();
+          localStorage.setItem('isLoggedIn', 'false');
         }
       };
 
