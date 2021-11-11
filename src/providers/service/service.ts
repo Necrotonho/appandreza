@@ -283,6 +283,11 @@ export class ServiceProvider {
 
           localStorage.setItem('visitorToken', JSON.parse(msg.data).request.data.token);
         };
+
+        if (JSON.parse(msg.data).request.status.cod == "605") {
+
+          localStorage.clear();
+        }
       };
 
       ws.onerror = (res) => {
