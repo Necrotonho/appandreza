@@ -282,7 +282,7 @@ export class UserProvider {
           {
             name: 'cpf',
             placeholder: 'CPF',
-            type: 'number'
+            type: 'tel'
           }
         ],
         buttons: [
@@ -366,12 +366,12 @@ export class UserProvider {
           {
             name: 'cod',
             placeholder: 'Código',
-            type: 'number'
+            type: 'tel'
           },
           {
             name: 'password',
             placeholder: 'Nova senha',
-            type: 'text'
+            type: 'password'
           },
         ],
         buttons: [
@@ -381,11 +381,12 @@ export class UserProvider {
 
               // data.password = data2.password;
               // data.cod = data2.cod;
+              data2.cpf = data.cpf
               this.startConfirmNewPassword(data2)
                 .then(res => resolve())
                 .catch(res => {
 
-                  this.verifyCodPassword(data.email)
+                  this.verifyCodPassword(data)
                     .then(res => resolve())
                     .catch(res => reject())
                 })
@@ -414,7 +415,9 @@ export class UserProvider {
         method: 'recoverPassword',
         data: {
           cod: data.cod,
-          password: data.password
+          password: data.password,
+          cpf: data.cpf
+
         }
       }).then((res: any) => {
 
