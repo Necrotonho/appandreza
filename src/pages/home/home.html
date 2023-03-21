@@ -38,7 +38,7 @@
           <img src="img/icon.png">
         </ion-avatar>
         <h2>Próxima refeição</h2>
-        <p>Não perca o horário</p>
+        <p>{{ this.foodPlanService.foodPlanSelected.description }}</p>
       </ion-item>
 
       <!-- <ion-segment *ngIf="foodPlan.length-1" color="orange" [(ngModel)]="relationship" (ionChange)="segmentChanged($event)" >

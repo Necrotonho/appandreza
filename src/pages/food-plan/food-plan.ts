@@ -27,29 +27,38 @@ export class FoodPlanPage {
 
       content: 'Carregando'
     })
-    loading.present();
+
+    if (!localStorage.getItem('foodPlan')) {
+
+      loading.present();
+    }
+
     this.serve.send({
 
       method: 'updateFoodPlan',
       data: {}
-    })
-      .then((res: RequestInterface) => {
+    }).then((res: RequestInterface) => {
 
-        loading.dismiss();
-        this.foodPlan = res.request.data.length ? res.request.data : undefined;
+      loading.dismiss();
+      // this.foodPlan = res.request.data.length ? res.request.data : undefined;
 
-        if (res.request.data[0]) {
-          this.foodPlanSelected = res.request.data[0].foodPlan;
-          this.core.setFoodPlanSelected(res.request.data[0]);
-          this.relationship = res.request.data[0].title;
-        }
+      if (res.request.data.length) {
 
-      })
-      .catch(res => {
+        this.foodPlan = res.request.data;
+        localStorage.setItem('foodPlan', JSON.stringify(res.request.data));
+      }
 
-        loading.dismiss();
-        console.log(res);
-      });
+      if (res.request.data[0]) {
+        this.foodPlanSelected = res.request.data[0].foodPlan;
+        this.core.setFoodPlanSelected(res.request.data[0]);
+        this.relationship = res.request.data[0].title;
+      }
+
+    }).catch(res => {
+
+      loading.dismiss();
+      console.log(res);
+    });
 
     this.core.foodPlanObservable.subscribe({
 
@@ -65,6 +74,25 @@ export class FoodPlanPage {
         }
       }
     })
+
+    this.preload();
+  }
+
+  preload() {
+
+    if (localStorage.getItem('foodPlan')) {
+
+      console.log('Tem preload');
+      let preload = JSON.parse(localStorage.getItem('foodPlan'));
+      this.foodPlan = preload;
+
+      if (preload[0]) {
+        console.log('Tem preload2');
+        this.foodPlanSelected = preload[0].foodPlan;
+        this.core.setFoodPlanSelected(preload[0]);
+        this.relationship = preload[0].title;
+      }
+    }
   }
 
   isConsumptioned(food) {
