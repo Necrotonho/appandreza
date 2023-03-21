@@ -3,6 +3,8 @@ import { IonicPage, NavController, NavParams, LoadingController } from 'ionic-an
 import { CoreProvider, FoodPlanInterface, FoodPlanItemInterface, RequestInterface } from '../../providers/core/core';
 import { FoodPlanContentPage } from '../food-plan-content/food-plan-content';
 import { ServiceProvider } from '../../providers/service/service';
+import { FoodPlanProvider } from '../../providers/food-plan/food-plan';
+import { DateProvider } from '../../providers/date/date';
 
 @IonicPage()
 @Component({
@@ -20,7 +22,9 @@ export class FoodPlanPage {
     public navParams: NavParams,
     private core: CoreProvider,
     private serve: ServiceProvider,
-    private loadingCtrl: LoadingController
+    private date: DateProvider,
+    private loadingCtrl: LoadingController,
+    public foodPlanService: FoodPlanProvider
   ) {
 
     let loading = this.loadingCtrl.create({
@@ -83,7 +87,7 @@ export class FoodPlanPage {
     if (localStorage.getItem('foodPlan')) {
 
       console.log('Tem preload');
-      let preload = JSON.parse(localStorage.getItem('foodPlan'));
+      let preload: FoodPlanInterface[] = JSON.parse(localStorage.getItem('foodPlan'));
       this.foodPlan = preload;
 
       if (preload[0]) {
@@ -91,6 +95,20 @@ export class FoodPlanPage {
         this.foodPlanSelected = preload[0].foodPlan;
         this.core.setFoodPlanSelected(preload[0]);
         this.relationship = preload[0].title;
+
+
+        // let nextFood = preload[0].foodPlan.find(item => this.date.compareHourNow(item.hour) < 0);
+        let nextFood = preload[0].foodPlan[0];
+
+          if (nextFood) {
+
+            this.foodPlanService.foodPlanSelected = nextFood;
+            this.core.setFoodPlanSelected(preload[0]);
+            this.foodPlanService.nextFoodSelected = nextFood.content;
+            // this.relationship = res.request.data[0].title;
+          }
+
+        this.foodPlanService.nextFoodSelected = nextFood.content;
       }
     }
   }

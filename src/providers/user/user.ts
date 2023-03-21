@@ -100,25 +100,24 @@ export class UserProvider {
           .catch((res: RequestInterface) => console.log(res));
 
 
-        this.service.send({
+        // this.service.send({
 
-          method: 'updateFoodPlan',
-          data: {}
-        }).then((res: any) => {
+        //   method: 'updateFoodPlan',
+        //   data: {}
+        // }).then((res: any) => {
 
-          this.foodPlanService.foodPlan = res.request.data;
-          let nextFood = res.request.data[0].foodPlan.find(item => this.date.compareHourNow(item.hour) < 0);
+        //   this.foodPlanService.foodPlan = res.request.data;
+        //   let nextFood = res.request.data[0].foodPlan.find(item => this.date.compareHourNow(item.hour) < 0);
 
-          if (nextFood) {
+        //   if (nextFood) {
 
-            this.foodPlanService.foodPlanSelected = nextFood;
-            this.core.setFoodPlanSelected(res.request.data[0]);
-            this.foodPlanService.nextFoodSelected = nextFood.content;
-            // this.relationship = res.request.data[0].title;
-          }
+        //     this.foodPlanService.foodPlanSelected = nextFood;
+        //     this.core.setFoodPlanSelected(res.request.data[0]);
+        //     this.foodPlanService.nextFoodSelected = nextFood.content;
+        //     // this.relationship = res.request.data[0].title;
+        //   }
 
-        })
-          .catch(res => console.log(res));
+        // }).catch(res => console.log(res));
 
         this.service.send({
 
@@ -139,17 +138,17 @@ export class UserProvider {
           this.startSignIn({ restartSignIn: false })
             .then(res => {
 
-              this.service.send({
+              // this.service.send({
 
-                method: 'updateMySchedules',
-                data: {}
-              }).then((res: RequestInterface) => {
+              //   method: 'updateMySchedules',
+              //   data: {}
+              // }).then((res: RequestInterface) => {
 
-                if (res.request.data && res.request.data.length) {
+              //   if (res.request.data && res.request.data.length) {
 
-                  this.core.setMySchedule(res.request.data);
-                }
-              })
+              //     this.core.setMySchedule(res.request.data);
+              //   }
+              // })
             }).catch(res => {
 
               localStorage.setItem('isLoggedIn', 'false');

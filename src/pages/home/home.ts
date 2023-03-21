@@ -38,7 +38,33 @@ export class HomePage {
                 console.log('useragent', navigator.userAgent)
 
     this.initOberserServer();
+    this.preloadFoodPlan();
     this.user.initSession()
+  }
+
+  
+  preloadFoodPlan() {
+
+    console.log('Preload')
+
+    if (localStorage.getItem('foodPlan')) {
+
+      console.log('Tem preload');
+      let preload: FoodPlanInterface[] = JSON.parse(localStorage.getItem('foodPlan'));
+
+      if (preload[0]) {
+        let nextFood = preload[0].foodPlan.find(item => this.date.compareHourNow(item.hour) < 0);
+
+          if (nextFood) {
+
+            this.foodPlanService.foodPlanSelected = nextFood;
+            this.core.setFoodPlanSelected(preload[0]);
+            this.foodPlanService.nextFoodSelected = nextFood.content;
+          }
+
+        this.foodPlanService.nextFoodSelected = nextFood.content;
+      }
+    }
   }
 
 
